@@ -16,8 +16,10 @@ ortodontista Karina Salgado, baseado no briefing em vídeo da cliente.
   chegar
 - `blog.html` — Grid de posts (capa, título, data)
 - `assets/css/style.css` — estilos compartilhados (luxo minimalista, fundo
-  branco, Cormorant Garamond + Inter)
-- `assets/js/main.js` — menu mobile e formulário de contato
+  branco, Cormorant Garamond + Jost, animações de entrada/scroll-reveal)
+- `assets/js/main.js` — menu mobile, formulário de contato e scroll-reveal
+- `assets/img/favicon.svg` — favicon "KS" minimalista
+- `robots.txt` / `sitemap.xml` — indexação básica para buscadores
 
 ## Visualizar localmente
 
@@ -53,6 +55,21 @@ um mapa **incorporado** (iframe). Assim que o endereço completo em texto
 (rua, número, bairro, cidade) for informado, dá pra trocar o botão por um
 embed real.
 
+## SEO / metadados
+
+Já aplicados em todas as páginas, mas com placeholders que **precisam
+ser trocados quando o domínio real for definido** (marcados com
+`PENDENTE` no HTML):
+
+- Favicon "KS" (`assets/img/favicon.svg`).
+- Meta tags Open Graph / Twitter Card (título, descrição, imagem) para
+  preview bonito ao compartilhar o link no WhatsApp/Instagram — hoje
+  apontam para `https://www.karinasalgado.com.br/...` como placeholder.
+- `robots.txt` e `sitemap.xml` — mesmo placeholder de domínio.
+- Botão flutuante de WhatsApp em todas as páginas + link do WhatsApp no
+  rodapé da Início — hoje usam o número placeholder `5500000000000`
+  (formato esperado: `55` + DDD + número, sem espaços/traços).
+
 ## Pendências antes de publicar
 
 Estes itens estão marcados no próprio HTML/CSS com placeholders e devem
@@ -65,9 +82,16 @@ ser substituídos por conteúdo real da cliente:
 - Endereço completo em texto do consultório, para gerar o mapa
   incorporado (embed) em vez do botão de link (ver seção acima).
 - Integração real do formulário de contato (atualmente usa `mailto:` como
-  fallback — ver `TODO` em `assets/js/main.js`) e os links de redes
-  sociais (Facebook/WhatsApp/Instagram) no rodapé.
+  fallback — ver `TODO` em `assets/js/main.js`) e o link do Facebook no
+  rodapé.
+- Número de WhatsApp real (ver seção "SEO / metadados" acima).
+- Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,
+  `robots.txt` e `sitemap.xml`).
 - Datas de formação (lista atualmente com `—` como placeholder de ano).
 - Conteúdo real dos posts do blog (atualmente com título de exemplo e
   "Em breve" como data).
 - Especialidades dos parceiros Dra. Bianca e Dr. Rodrigo.
+- Cadastro no Google Perfil da Empresa (Google Business Profile) — não é
+  algo que se faz pelo código, mas é o principal fator para a clínica
+  aparecer nas buscas locais do Google; recomendo fazer isso assim que o
+  endereço estiver definido.
