@@ -42,8 +42,8 @@ aplicadas:
   vídeo)
 - `karina-perfil.jpg` — foto circular "quem sou eu" na Início
 - `karina-formacao.jpg` — foto ao lado da lista de formação na Início
-- `karina-consultorio-1.jpg` / `karina-consultorio-2.jpg` — 2 das 4 fotos
-  da galeria em Consultório
+- `karina-consultorio-1.jpg` a `karina-consultorio-4.jpg` — as 4 fotos da
+  galeria em Consultório (completa)
 
 ## Sobre / Formação
 
@@ -56,14 +56,13 @@ pós-graduação no Instituto Odontológico das Américas. E-mail de contato:
 
 ## Mapa / localização
 
-O link do Google Maps enviado pela cliente
-(`https://maps.app.goo.gl/aQv5k465MCF19TEn8`) já está aplicado como botão
-"Ver localização no Google Maps" nas páginas Início e Consultório
-(`.map-frame`). Esse link curto não pôde ser resolvido automaticamente
-(bloqueado pelo proxy de rede do ambiente de desenvolvimento) para gerar
-um mapa **incorporado** (iframe). Assim que o endereço completo em texto
-(rua, número, bairro, cidade) for informado, dá pra trocar o botão por um
-embed real.
+Endereço real aplicado (Travessa 14 de Março, 1155 — Umarizal, Belém - PA,
+66055-490), com mapa **incorporado** (iframe do Google Maps via busca por
+endereço, sem precisar de API key) nas páginas Início e Consultório, mais
+um link "Abrir no Google Maps" apontando pro link curto original da
+cliente. Também adicionei dados estruturados (Schema.org `Dentist`) na
+Início com nome, endereço, telefone e e-mail — ajuda o Google a entender
+que é uma clínica odontológica local.
 
 ## SEO / metadados
 
@@ -77,26 +76,24 @@ ser trocados quando o domínio real for definido** (marcados com
   apontam para `https://www.karinasalgado.com.br/...` como placeholder.
 - `robots.txt` e `sitemap.xml` — mesmo placeholder de domínio.
 - Botão flutuante de WhatsApp em todas as páginas + link do WhatsApp no
-  rodapé da Início — hoje usam o número placeholder `5500000000000`
-  (formato esperado: `55` + DDD + número, sem espaços/traços).
+  rodapé da Início — já usam o número real (`5591920054813` / +55 91
+  92005-4813).
 
 ## Pendências antes de publicar
 
 Estes itens estão marcados no próprio HTML/CSS com placeholders e devem
 ser substituídos por conteúdo real da cliente:
 
-- 2 fotos que faltam na galeria do Consultório (`.img-placeholder` em
-  `consultorio.html`) — só havia 5 fotos disponíveis no total.
-- Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo) e capas dos
-  posts do blog.
-- Endereço completo em texto do consultório, para gerar o mapa
-  incorporado (embed) em vez do botão de link (ver seção acima).
+- Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo).
 - Integração real do formulário de contato (atualmente usa `mailto:` para
   `karinasalgado7@hotmail.com` como fallback — ver `TODO` em
-  `assets/js/main.js`) e o link do Facebook no rodapé.
-- Número de WhatsApp real (ver seção "SEO / metadados" acima).
+  `assets/js/main.js`) e o link real do Facebook no rodapé (sabemos que a
+  página se chama "Dra Karina Salgado" no Facebook, mas não temos a URL).
 - Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,
   `robots.txt` e `sitemap.xml`).
+- Horário de funcionamento completo (só vimos terça-feira 08h-12h /
+  14h-18h numa captura de tela; não coloquei horário no site pra não
+  sugerir que só atende às terças).
 - Anos de cada etapa da formação (a lista já tem instituições reais —
   UFPA, ABO-PA, Instituto Odontológico das Américas — mas sem ano
   individual; só sabemos que ela atua na odontologia desde 2014).
