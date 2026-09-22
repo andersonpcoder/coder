@@ -44,6 +44,45 @@ a {
   text-decoration: none;
 }
 
+/* Motion: hero entrance, scroll reveal, hover lift/zoom.
+   Safe by default (.reveal is fully visible) so content never depends on
+   JS running; .js (added by main.js) opts into the animated states. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.js .hero-enter {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: hero-enter 0.8s ease forwards;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+@keyframes hero-enter {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .hero-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-weight: 500;
@@ -270,6 +309,12 @@ h1, h2, h3, h4 {
   background: #fff;
   padding: 3rem 2rem;
   text-align: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.teaser-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.35);
 }
 
 .teaser-card .num {
@@ -369,6 +414,12 @@ h1, h2, h3, h4 {
 .area-card {
   background: #fff;
   padding: clamp(2.5rem, 5vw, 4rem);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.area-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.35);
 }
 
 .area-card h3 {
@@ -493,6 +544,17 @@ h1, h2, h3, h4 {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.6s ease;
+}
+
+.photo-frame:hover .photo {
+  transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    transition: none;
+  }
 }
 
 /* Treatment pages */
@@ -509,6 +571,12 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.treatment-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.35);
 }
 
 .treatment-card .thumb {
@@ -573,6 +641,11 @@ h1, h2, h3, h4 {
 .beyond-card {
   background: var(--color-dark);
   padding: 2.5rem;
+  transition: transform 0.35s ease;
+}
+
+.beyond-card:hover {
+  transform: translateY(-6px);
 }
 
 .beyond-card h3 {
@@ -601,6 +674,11 @@ h1, h2, h3, h4 {
 
 .partner-card {
   text-align: center;
+  transition: transform 0.35s ease;
+}
+
+.partner-card:hover {
+  transform: translateY(-4px);
 }
 
 .partner-photo {
@@ -692,6 +770,14 @@ h1, h2, h3, h4 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.blog-card {
+  transition: transform 0.35s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px);
 }
 
 .blog-card .thumb {
