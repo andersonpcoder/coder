@@ -83,6 +83,39 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	}
 
+	var filterBtns = document.querySelectorAll(".filter-btn");
+	var blogCards = document.querySelectorAll(".blog-card");
+	var blogEmpty = document.getElementById("blogEmpty");
+
+	if (filterBtns.length && blogCards.length) {
+		filterBtns.forEach(function (btn) {
+			btn.addEventListener("click", function () {
+				var filter = btn.getAttribute("data-filter");
+
+				filterBtns.forEach(function (b) {
+					b.classList.remove("is-active");
+					b.setAttribute("aria-pressed", "false");
+				});
+				btn.classList.add("is-active");
+				btn.setAttribute("aria-pressed", "true");
+
+				var visibleCount = 0;
+				blogCards.forEach(function (card) {
+					var categories = (card.getAttribute("data-category") || "").split(
+						" ",
+					);
+					var matches = filter === "todos" || categories.indexOf(filter) !== -1;
+					card.hidden = !matches;
+					if (matches) visibleCount++;
+				});
+
+				if (blogEmpty) {
+					blogEmpty.hidden = visibleCount !== 0;
+				}
+			});
+		});
+	}
+
 	if (copyBtn && confirmText) {
 		copyBtn.addEventListener("click", function () {
 			var text = confirmText.textContent;

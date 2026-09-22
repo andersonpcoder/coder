@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Blog | Karina Salgado</title>
-<meta name="description" content="Artigos sobre ortodontia, saúde bucal e cuidados com o sorriso." />
+<title>Blog | Karina Salgado Ortodontia — Belém, PA</title>
+<meta name="description" content="Artigos sobre ortodontia, aparelhos, alinhadores e cuidados com o sorriso, escritos pela ortodontista Karina Salgado. Tire suas dúvidas e agende sua avaliação." />
+<link rel="canonical" href="https://www.karinasalgado.com.br/blog.html" />
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
 <!-- PENDENTE: trocar por URL absoluta quando o dominio real estiver definido -->
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="pt_BR" />
 <meta property="og:site_name" content="Karina Salgado Ortodontia" />
 <meta property="og:url" content="https://www.karinasalgado.com.br/blog.html" />
-<meta property="og:title" content="Blog | Karina Salgado" />
-<meta property="og:description" content="Artigos sobre ortodontia, saúde bucal e cuidados com o sorriso." />
+<meta property="og:title" content="Blog | Karina Salgado Ortodontia" />
+<meta property="og:description" content="Artigos sobre ortodontia, aparelhos, alinhadores e cuidados com o sorriso, escritos pela ortodontista Karina Salgado." />
 <meta property="og:image" content="assets/img/karina-hero.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,35 +47,137 @@
 
 <main>
 
-  <section class="page-hero">
+  <section class="page-hero blog-hero">
     <div class="container">
-      <h1 class="hero-enter" style="--enter-delay: 0s;">Conteúdo sobre ortodontia e sorrisos saudáveis</h1>
-      <p class="hero-enter" style="--enter-delay: 0.1s;">Artigos e novidades. Os posts abaixo são exemplos de estrutura — substitua pelo conteúdo real antes de publicar.</p>
+      <p class="eyebrow hero-enter" style="--enter-delay: 0s;">Blog</p>
+      <h1 class="hero-enter" style="--enter-delay: 0.05s;">Tudo o que você precisa saber sobre ortodontia</h1>
+      <p class="hero-enter" style="--enter-delay: 0.1s;">Artigos escritos para responder as dúvidas mais comuns de quem está pensando em começar (ou já está em) um tratamento ortodôntico — com linguagem clara e sem enrolação.</p>
+      <a href="index.html#contato" class="btn hero-enter" style="--enter-delay: 0.15s;">Agendar avaliação</a>
     </div>
   </section>
 
   <section class="section" style="padding-top: 0;">
     <div class="container">
-      <div class="blog-grid">
-        <article class="blog-card reveal" style="--reveal-delay: 0s;">
-          <div class="thumb img-placeholder"><span>Capa do post</span></div>
-          <p class="date">Em breve</p>
-          <h2>Quando levar seu filho ao ortodontista pela primeira vez</h2>
-          <p>Exemplo de post — conteúdo a ser escrito.</p>
-        </article>
-        <article class="blog-card reveal" style="--reveal-delay: 0.1s;">
-          <div class="thumb img-placeholder"><span>Capa do post</span></div>
-          <p class="date">Em breve</p>
-          <h2>Invisalign: como funciona o tratamento com alinhadores</h2>
-          <p>Exemplo de post — conteúdo a ser escrito.</p>
-        </article>
-        <article class="blog-card reveal" style="--reveal-delay: 0.2s;">
-          <div class="thumb img-placeholder"><span>Capa do post</span></div>
-          <p class="date">Em breve</p>
-          <h2>Respiração bucal: como identificar e tratar</h2>
-          <p>Exemplo de post — conteúdo a ser escrito.</p>
-        </article>
+
+      <div class="blog-filters" role="group" aria-label="Filtrar artigos por categoria">
+        <button type="button" class="filter-btn is-active" data-filter="todos" aria-pressed="true">Todos</button>
+        <button type="button" class="filter-btn" data-filter="ortodontia" aria-pressed="false">Ortodontia</button>
+        <button type="button" class="filter-btn" data-filter="aparelhos" aria-pressed="false">Aparelhos</button>
+        <button type="button" class="filter-btn" data-filter="cuidados" aria-pressed="false">Cuidados</button>
+        <button type="button" class="filter-btn" data-filter="saude-bucal" aria-pressed="false">Saúde Bucal</button>
+        <button type="button" class="filter-btn" data-filter="duvidas-frequentes" aria-pressed="false">Dúvidas Frequentes</button>
+        <button type="button" class="filter-btn" data-filter="tratamentos" aria-pressed="false">Tratamentos</button>
       </div>
+
+      <div class="blog-grid">
+
+        <article class="blog-card reveal" style="--reveal-delay: 0s;" data-category="ortodontia duvidas-frequentes">
+          <a href="blog/quando-usar-aparelho.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-consultorio-1.jpg" alt="Consultório de Karina Salgado" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Ortodontia</span>
+            <span class="reading-time">5 min de leitura</span>
+          </div>
+          <h2><a href="blog/quando-usar-aparelho.html">Quando é necessário usar aparelho ortodôntico?</a></h2>
+          <p>Os sinais que indicam a hora certa de procurar um ortodontista, em crianças, adolescentes e adultos.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0.08s;" data-category="aparelhos tratamentos">
+          <a href="blog/aparelho-fixo-vs-alinhador.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-consultorio-2.jpg" alt="Consultório de Karina Salgado" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Aparelhos</span>
+            <span class="reading-time">6 min de leitura</span>
+          </div>
+          <h2><a href="blog/aparelho-fixo-vs-alinhador.html">Aparelho fixo ou alinhador invisível: qual escolher?</a></h2>
+          <p>As diferenças reais entre o aparelho metálico tradicional e os alinhadores transparentes tipo Invisalign.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0.16s;" data-category="tratamentos duvidas-frequentes">
+          <a href="blog/quanto-tempo-dura-tratamento.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-formacao.jpg" alt="Karina Salgado, ortodontista" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Tratamentos</span>
+            <span class="reading-time">5 min de leitura</span>
+          </div>
+          <h2><a href="blog/quanto-tempo-dura-tratamento.html">Quanto tempo dura o tratamento ortodôntico?</a></h2>
+          <p>Os fatores que influenciam a duração do tratamento e por que cada caso tem seu próprio ritmo.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0s;" data-category="aparelhos duvidas-frequentes">
+          <a href="blog/aparelho-doi.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-consultorio-3.jpg" alt="Sala de atendimento do consultório" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Aparelhos</span>
+            <span class="reading-time">4 min de leitura</span>
+          </div>
+          <h2><a href="blog/aparelho-doi.html">Colocar aparelho dói? O que esperar em cada fase</a></h2>
+          <p>Desmistificando o medo da dor: o que é normal sentir e como aliviar o desconforto nos primeiros dias.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0.08s;" data-category="cuidados saude-bucal">
+          <a href="blog/higiene-com-aparelho.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-consultorio-4.jpg" alt="Sala de atendimento do consultório" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Cuidados</span>
+            <span class="reading-time">6 min de leitura</span>
+          </div>
+          <h2><a href="blog/higiene-com-aparelho.html">Como cuidar da higiene bucal durante o tratamento</a></h2>
+          <p>Escovação, fio dental e os acessórios que facilitam a limpeza de quem usa aparelho fixo.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0.16s;" data-category="cuidados aparelhos">
+          <a href="blog/alimentos-para-evitar.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-perfil.jpg" alt="Karina Salgado, ortodontista" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Cuidados</span>
+            <span class="reading-time">4 min de leitura</span>
+          </div>
+          <h2><a href="blog/alimentos-para-evitar.html">Alimentos para evitar durante o uso do aparelho</a></h2>
+          <p>Uma lista prática do que pode danificar o aparelho e comprometer o andamento do tratamento.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0s;" data-category="ortodontia duvidas-frequentes">
+          <a href="blog/idade-ideal-para-comecar.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-hero.jpg" alt="Consultório de Karina Salgado" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Ortodontia</span>
+            <span class="reading-time">5 min de leitura</span>
+          </div>
+          <h2><a href="blog/idade-ideal-para-comecar.html">Qual a idade ideal para começar o tratamento?</a></h2>
+          <p>Por que a primeira avaliação ortodôntica é recomendada ainda na infância, mesmo sem indicação de aparelho.</p>
+        </article>
+
+        <article class="blog-card reveal" style="--reveal-delay: 0.08s;" data-category="tratamentos cuidados">
+          <a href="blog/importancia-da-contencao.html">
+            <div class="thumb photo-frame"><img class="photo" src="assets/img/karina-consultorio-1.jpg" alt="Consultório de Karina Salgado" /></div>
+          </a>
+          <div class="card-meta">
+            <span class="category-tag">Tratamentos</span>
+            <span class="reading-time">5 min de leitura</span>
+          </div>
+          <h2><a href="blog/importancia-da-contencao.html">Por que usar a contenção depois de tirar o aparelho</a></h2>
+          <p>O motivo pelo qual pular essa etapa pode colocar em risco todo o resultado conquistado no tratamento.</p>
+        </article>
+
+      </div>
+
+      <p class="blog-empty" id="blogEmpty" hidden>Nenhum artigo encontrado nesta categoria por enquanto.</p>
+
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container">
+      <h2 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin-bottom: 1.5rem;">Ficou com alguma dúvida sobre o seu sorriso?</h2>
+      <a href="index.html#contato" class="btn">Agende sua avaliação</a>
     </div>
   </section>
 

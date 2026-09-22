@@ -15,7 +15,12 @@ ortodontista Karina Salgado, baseado no briefing em vídeo da cliente.
   extração, cárie)
 - `consultorio.html` — Galeria de fotos do consultório e mapa de como
   chegar
-- `blog.html` — Grid de posts (capa, título, data)
+- `blog.html` — Landing page do blog: hero com CTA, filtros de categoria
+  funcionais e grid com os 8 artigos (imagem, categoria, título, descrição,
+  tempo de leitura)
+- `blog/` — os 8 artigos completos, cada um como página própria (breadcrumb,
+  categoria, título, subtítulo, imagem, corpo do texto, FAQ expansível,
+  artigos relacionados e CTA de agendamento)
 - `assets/css/style.css` — estilos compartilhados (luxo minimalista, fundo
   branco, Cormorant Garamond + Jost, animações de entrada/scroll-reveal)
 - `assets/js/main.js` — menu mobile, formulário de contato e scroll-reveal
@@ -64,6 +69,28 @@ cliente. Também adicionei dados estruturados (Schema.org `Dentist`) na
 Início com nome, endereço, telefone e e-mail — ajuda o Google a entender
 que é uma clínica odontológica local.
 
+## Blog
+
+O blog foi redesenhado como uma seção completa de educação, autoridade e
+conversão, não apenas uma lista de posts:
+
+- `blog.html` é uma landing page: hero com título, subtítulo e CTA de
+  agendamento, seguido de filtros de categoria (Ortodontia, Aparelhos,
+  Cuidados, Saúde Bucal, Dúvidas Frequentes, Tratamentos) que mostram/escondem
+  os cards via JS puro (`data-category` no card + `data-filter` no botão),
+  sem depender de backend.
+- 8 artigos completos em `blog/`, cada um respondendo uma dúvida comum de
+  paciente (quando usar aparelho, aparelho fixo x alinhador, duração do
+  tratamento, dor, higiene, alimentos a evitar, idade ideal, e a importância
+  da contenção). Cada artigo é uma página própria com breadcrumb, categoria,
+  título, subtítulo, imagem de capa (fotos reais do consultório/perfil da
+  cliente), corpo do texto, FAQ expansível (`<details>`/`<summary>`, sem JS) e
+  2 artigos relacionados antes do CTA final.
+- SEO: título e descrição únicos por artigo, URL amigável por slug,
+  `rel="canonical"`, e dados estruturados Schema.org (`BreadcrumbList` e
+  `FAQPage`) em cada página de artigo. `sitemap.xml` já lista todas as 9
+  páginas do blog.
+
 ## SEO / metadados
 
 Já aplicados em todas as páginas, mas com placeholders que **precisam
@@ -97,8 +124,6 @@ ser substituídos por conteúdo real da cliente:
 - Anos de cada etapa da formação (a lista já tem instituições reais —
   UFPA, ABO-PA, Instituto Odontológico das Américas — mas sem ano
   individual; só sabemos que ela atua na odontologia desde 2014).
-- Conteúdo real dos posts do blog (atualmente com título de exemplo e
-  "Em breve" como data).
 - Cadastro no Google Perfil da Empresa (Google Business Profile) — não é
   algo que se faz pelo código, mas é o principal fator para a clínica
   aparecer nas buscas locais do Google; recomendo fazer isso assim que o
