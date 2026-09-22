@@ -56,8 +56,24 @@ Bio ("Quem sou eu") e a lista de formação na Início já usam dados reais
 enviados pela cliente: atua desde 2014, graduação e mestrado pela UFPA,
 especialização em Ortodontia e Ortopedia Facial pela ABO-PA, e docência de
 pós-graduação no Instituto Odontológico das Américas. E-mail de contato:
-`karinasalgado7@hotmail.com` (já aplicado no formulário e no fallback
-`mailto:`).
+`karinasalgado7@hotmail.com`.
+
+## Formulário de contato
+
+O formulário do rodapé (`#contactForm` na Início) já está preparado para
+envio automático via [Web3Forms](https://web3forms.com) (serviço gratuito,
+sem backend próprio):
+
+1. Crie uma conta gratuita em web3forms.com com o e-mail
+   `karinasalgado7@hotmail.com` e copie a "Access Key" gerada.
+2. Em `index.html`, troque o valor `PENDENTE_WEB3FORMS_ACCESS_KEY` do campo
+   `<input type="hidden" name="access_key" ...>` pela chave real.
+
+Enquanto a chave não for trocada, ou se a chamada à API falhar por qualquer
+motivo (sem internet, serviço fora do ar), o formulário cai automaticamente
+no fallback `mailto:` já existente — abre o cliente de e-mail do visitante
+e mostra a mensagem na tela com um botão "Copiar mensagem", para o caso de
+nenhum cliente de e-mail estar configurado no navegador.
 
 ## Mapa / localização
 
@@ -112,10 +128,11 @@ Estes itens estão marcados no próprio HTML/CSS com placeholders e devem
 ser substituídos por conteúdo real da cliente:
 
 - Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo).
-- Integração real do formulário de contato (atualmente usa `mailto:` para
-  `karinasalgado7@hotmail.com` como fallback — ver `TODO` em
-  `assets/js/main.js`) e o link real do Facebook no rodapé (sabemos que a
-  página se chama "Dra Karina Salgado" no Facebook, mas não temos a URL).
+- Access key real do Web3Forms no formulário de contato — ver seção
+  "Formulário de contato" acima (o código já está pronto, falta só a
+  cliente gerar a chave gratuita e colar em `index.html`).
+- Link real do Facebook no rodapé (sabemos que a página se chama "Dra
+  Karina Salgado" no Facebook, mas não temos a URL).
 - Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,
   `robots.txt` e `sitemap.xml`).
 - Horário de funcionamento completo (só vimos terça-feira 08h-12h /

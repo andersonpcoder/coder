@@ -185,18 +185,24 @@
     <div>
       <p class="eyebrow">Fale conosco</p>
       <h2>Agende sua consulta</h2>
-      <form class="contact-form">
+      <form class="contact-form" id="contactForm">
+        <!-- PENDENTE: trocar pela access key real gerada em https://web3forms.com (gratuito).
+             Sem a chave real, o envio automático falha e o formulario cai no fallback
+             mailto: abaixo, entao a mensagem do paciente nunca se perde. -->
+        <input type="hidden" name="access_key" value="PENDENTE_WEB3FORMS_ACCESS_KEY" />
+        <input type="hidden" name="subject" value="Novo contato pelo site - Karina Salgado" />
+        <input type="checkbox" name="botcheck" class="botcheck" style="display: none;" tabindex="-1" autocomplete="off" />
         <input type="text" id="name" name="name" placeholder="Nome" required />
         <input type="email" id="email" name="email" placeholder="E-mail" required />
         <textarea id="message" name="message" placeholder="Mensagem" required></textarea>
         <button type="submit" class="btn">Enviar</button>
       </form>
+      <p class="form-status" id="formStatus" hidden></p>
       <div class="form-confirm" id="formConfirm" hidden>
-        <p><strong>Abrimos seu aplicativo de e-mail.</strong> Se nada abrir na tela, copie a mensagem abaixo e envie manualmente para <strong>karinasalgado7@hotmail.com</strong>.</p>
+        <p><strong>Não foi possível confirmar o envio automático.</strong> Abrimos seu aplicativo de e-mail como alternativa. Se nada abrir na tela, copie a mensagem abaixo e envie manualmente para <strong>karinasalgado7@hotmail.com</strong>.</p>
         <pre class="form-confirm-text" id="formConfirmText"></pre>
         <button type="button" class="btn btn-outline" id="formCopyBtn">Copiar mensagem</button>
       </div>
-      <p class="form-note">Este formulário ainda não está conectado a um serviço de envio. Configure uma integração de e-mail/backend antes de publicar o site.</p>
 
       <div class="footer-social">
         <a href="#" aria-label="Facebook">
