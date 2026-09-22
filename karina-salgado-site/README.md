@@ -38,6 +38,33 @@ python3 -m http.server 8080
 
 Depois acesse `http://localhost:8080`.
 
+## Deploy: domínio na Hostinger + hospedagem no Netlify
+
+O `netlify.toml` já está pronto na raiz deste diretório (publica o site
+como está, sem build step). Passo a passo para publicar:
+
+1. **Criar o site no Netlify**: em app.netlify.com, "Add new site" →
+   conectar este repositório GitHub → em "Base directory" apontar para
+   `karina-salgado-site` (é onde está o `netlify.toml`). Sem build command
+   necessário. Isso já gera um link temporário tipo
+   `nome-aleatorio.netlify.app` com o site no ar.
+2. **Adicionar o domínio no Netlify**: em "Domain settings" → "Add a
+   domain" → digitar o domínio comprado na Hostinger.
+3. **Apontar o domínio pra lá**: o Netlify mostra 2 nameservers (algo como
+   `dns1.p0X.nsone.net`). No hPanel da Hostinger, em
+   **Domínios → [seu domínio] → DNS/Nameservers → Editar**, trocar os
+   nameservers atuais (hoje estão em `lunar.dns-parking.com` /
+   `solar.dns-parking.com`, que é o "estacionamento" padrão da Hostinger
+   pra domínio sem uso) pelos nameservers que o Netlify indicou.
+4. Esperar a propagação de DNS (de minutos a algumas horas) — o Netlify
+   emite o certificado HTTPS automaticamente assim que detectar o domínio
+   apontado corretamente.
+
+Depois que o domínio estiver definido, trocar os placeholders `PENDENTE`
+no código (meta tags Open Graph, `robots.txt`, `sitemap.xml`, `canonical`
+dos artigos do blog) pelo domínio real — ver seção "SEO / metadados"
+abaixo.
+
 ## Fotos
 
 As 5 fotos reais enviadas pela cliente estão em `assets/img/` e já estão
