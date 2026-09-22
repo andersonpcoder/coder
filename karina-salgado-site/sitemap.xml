@@ -1,56 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- PENDENTE: trocar https://www.karinasalgado.com.br pelo dominio real antes de publicar -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.karinasalgado.com.br/</loc>
+    <loc>https://karinasalgado.com/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/tratamentos.html</loc>
+    <loc>https://karinasalgado.com/tratamentos.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/parcerias.html</loc>
+    <loc>https://karinasalgado.com/parcerias.html</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/consultorio.html</loc>
+    <loc>https://karinasalgado.com/consultorio.html</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog.html</loc>
+    <loc>https://karinasalgado.com/blog.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/quando-usar-aparelho.html</loc>
+    <loc>https://karinasalgado.com/blog/quando-usar-aparelho.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/aparelho-fixo-vs-alinhador.html</loc>
+    <loc>https://karinasalgado.com/blog/aparelho-fixo-vs-alinhador.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/quanto-tempo-dura-tratamento.html</loc>
+    <loc>https://karinasalgado.com/blog/quanto-tempo-dura-tratamento.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/aparelho-doi.html</loc>
+    <loc>https://karinasalgado.com/blog/aparelho-doi.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/higiene-com-aparelho.html</loc>
+    <loc>https://karinasalgado.com/blog/higiene-com-aparelho.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/alimentos-para-evitar.html</loc>
+    <loc>https://karinasalgado.com/blog/alimentos-para-evitar.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/idade-ideal-para-comecar.html</loc>
+    <loc>https://karinasalgado.com/blog/idade-ideal-para-comecar.html</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.karinasalgado.com.br/blog/importancia-da-contencao.html</loc>
+    <loc>https://karinasalgado.com/blog/importancia-da-contencao.html</loc>
     <priority>0.5</priority>
   </url>
 </urlset>

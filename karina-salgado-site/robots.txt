@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.karinasalgado.com.br/sitemap.xml
+Sitemap: https://karinasalgado.com/sitemap.xml

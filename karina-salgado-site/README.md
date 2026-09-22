@@ -38,10 +38,13 @@ python3 -m http.server 8080
 
 Depois acesse `http://localhost:8080`.
 
-## Deploy: domínio na Hostinger + hospedagem no Netlify
+## Deploy: domínio karinasalgado.com (Hostinger) + hospedagem no Netlify
 
-O `netlify.toml` já está pronto na raiz deste diretório (publica o site
-como está, sem build step). Passo a passo para publicar:
+O domínio real é `karinasalgado.com`, comprado na Hostinger, e já está
+aplicado em todo o código (meta tags, `robots.txt`, `sitemap.xml`,
+`canonical` de todas as páginas e artigos do blog, dados estruturados
+Schema.org). Falta só publicar. O `netlify.toml` já está pronto na raiz
+deste diretório (publica o site como está, sem build step). Passo a passo:
 
 1. **Criar o site no Netlify**: em app.netlify.com, "Add new site" →
    conectar este repositório GitHub → em "Base directory" apontar para
@@ -49,10 +52,10 @@ como está, sem build step). Passo a passo para publicar:
    necessário. Isso já gera um link temporário tipo
    `nome-aleatorio.netlify.app` com o site no ar.
 2. **Adicionar o domínio no Netlify**: em "Domain settings" → "Add a
-   domain" → digitar o domínio comprado na Hostinger.
+   domain" → digitar `karinasalgado.com`.
 3. **Apontar o domínio pra lá**: o Netlify mostra 2 nameservers (algo como
    `dns1.p0X.nsone.net`). No hPanel da Hostinger, em
-   **Domínios → [seu domínio] → DNS/Nameservers → Editar**, trocar os
+   **Domínios → karinasalgado.com → DNS/Nameservers → Editar**, trocar os
    nameservers atuais (hoje estão em `lunar.dns-parking.com` /
    `solar.dns-parking.com`, que é o "estacionamento" padrão da Hostinger
    pra domínio sem uso) pelos nameservers que o Netlify indicou.
@@ -60,10 +63,8 @@ como está, sem build step). Passo a passo para publicar:
    emite o certificado HTTPS automaticamente assim que detectar o domínio
    apontado corretamente.
 
-Depois que o domínio estiver definido, trocar os placeholders `PENDENTE`
-no código (meta tags Open Graph, `robots.txt`, `sitemap.xml`, `canonical`
-dos artigos do blog) pelo domínio real — ver seção "SEO / metadados"
-abaixo.
+Esses 3 passos só podem ser feitos por quem tem acesso às contas da
+Hostinger e do Netlify — não são algo que se resolve pelo código.
 
 ## Fotos
 
@@ -130,15 +131,15 @@ conversão, não apenas uma lista de posts:
 
 ## SEO / metadados
 
-Já aplicados em todas as páginas, mas com placeholders que **precisam
-ser trocados quando o domínio real for definido** (marcados com
-`PENDENTE` no HTML):
+Já aplicados em todas as páginas, com o domínio real `karinasalgado.com`:
 
 - Favicon "KS" (`assets/img/favicon.svg`).
-- Meta tags Open Graph / Twitter Card (título, descrição, imagem) para
-  preview bonito ao compartilhar o link no WhatsApp/Instagram — hoje
-  apontam para `https://www.karinasalgado.com.br/...` como placeholder.
-- `robots.txt` e `sitemap.xml` — mesmo placeholder de domínio.
+- Meta tags Open Graph / Twitter Card (título, descrição, imagem absoluta)
+  para preview bonito ao compartilhar o link no WhatsApp/Instagram.
+- `<link rel="canonical">` em todas as páginas e artigos do blog.
+- `robots.txt` e `sitemap.xml` apontando para `karinasalgado.com`.
+- Dados estruturados Schema.org (`Dentist` na Início, `BreadcrumbList` e
+  `FAQPage` em cada artigo do blog) com `url`/`image` absolutos.
 - Botão flutuante de WhatsApp em todas as páginas + link do WhatsApp no
   rodapé da Início — já usam o número real (`5591920054813` / +55 91
   92005-4813).
@@ -151,8 +152,8 @@ ser substituídos por conteúdo real da cliente:
 - Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo).
 - Link real do Facebook no rodapé (sabemos que a página se chama "Dra
   Karina Salgado" no Facebook, mas não temos a URL).
-- Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,
-  `robots.txt` e `sitemap.xml`).
+- Publicar o site (ver seção "Deploy" acima — conectar o Netlify e trocar
+  os nameservers na Hostinger).
 - Horário de funcionamento completo (só vimos terça-feira 08h-12h /
   14h-18h numa captura de tela; não coloquei horário no site pra não
   sugerir que só atende às terças).
