@@ -1,6 +1,6 @@
 /* Karina Salgado - Ortodontista
    Design: luxo minimalista, fundo branco, muito espaco em branco.
-   Titulo: Cormorant Garamond | Corpo: Inter | Logo: Dancing Script */
+   Titulo: Cormorant Garamond | Corpo: Jost | Logo: Dancing Script */
 
 :root {
   --color-bg: #ffffff;
@@ -10,7 +10,7 @@
   --color-surface: #f5f5f5;
   --color-dark: #0a0a0a;
   --font-title: "Cormorant Garamond", serif;
-  --font-body: "Inter", sans-serif;
+  --font-body: "Jost", sans-serif;
   --font-logo: "Dancing Script", cursive;
   --gutter: clamp(1.5rem, 5vw, 6rem);
   --section-space: clamp(4rem, 10vw, 9rem);
@@ -278,7 +278,7 @@ h1, h2, h3, h4 {
   color: var(--color-muted);
 }
 
-.teaser-card h3 {
+.teaser-card h2 {
   font-size: 1.6rem;
   margin: 1rem 0 0.75rem;
 }
@@ -515,7 +515,7 @@ h1, h2, h3, h4 {
   aspect-ratio: 4 / 3;
 }
 
-.treatment-card h3 {
+.treatment-card h2 {
   font-size: 1.6rem;
 }
 
@@ -575,7 +575,7 @@ h1, h2, h3, h4 {
   padding: 2.5rem;
 }
 
-.beyond-card h4 {
+.beyond-card h3 {
   font-size: 1.3rem;
   margin-bottom: 0.75rem;
 }
@@ -706,7 +706,7 @@ h1, h2, h3, h4 {
   color: var(--color-muted);
 }
 
-.blog-card h3 {
+.blog-card h2 {
   font-size: 1.35rem;
   margin-top: 0.6rem;
 }
