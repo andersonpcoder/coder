@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Consultório | Karina Salgado</title>
+<meta name="description" content="Conheça o consultório de Karina Salgado e como chegar até nós." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">KS<span>Karina Salgado</span></a>
+    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="tratamentos.html">Tratamentos</a></li>
+        <li><a href="parcerias.html">Parcerias e demais serviços</a></li>
+        <li><a href="consultorio.html" aria-current="page">Consultório</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Consultório</p>
+      <h1>Um espaço pensado para o seu conforto</h1>
+      <p>Conheça o ambiente do consultório e saiba como chegar até nós.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="gallery-grid">
+        <div class="img-placeholder"><span>Foto do consultório 1</span></div>
+        <div class="img-placeholder"><span>Foto do consultório 2</span></div>
+        <div class="img-placeholder"><span>Foto do consultório 3</span></div>
+        <div class="img-placeholder"><span>Foto do consultório 4</span></div>
+      </div>
+
+      <div class="map-block">
+        <div class="section-head" style="margin-bottom: 2rem;">
+          <p class="eyebrow">Como chegar</p>
+          <h2>Localização</h2>
+        </div>
+        <div class="img-placeholder map-frame">
+          <span>Mapa do Google — inserir endereço real do consultório antes de publicar</span>
+        </div>
+      </div>
+
+      <div class="cta-band" style="padding-bottom: 0;">
+        <a href="index.html#contato" class="btn">Agende sua consulta</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" style="padding-top: 3rem;">
+  <div class="container footer-bottom">
+    <span>© <span id="year"></span> Karina Salgado Ortodontia. Todos os direitos reservados.</span>
+    <span>KS Ortodontia</span>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
