@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	var form = document.querySelector(".contact-form");
+	var confirmBox = document.getElementById("formConfirm");
+	var confirmText = document.getElementById("formConfirmText");
+	var copyBtn = document.getElementById("formCopyBtn");
+
 	if (form) {
 		form.addEventListener("submit", function (event) {
 			event.preventDefault();
@@ -30,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 			// TODO: substituir por integracao real (backend/e-mail) antes de publicar.
+			var plainMessage =
+				"Nome: " + name + "\nE-mail: " + email + "\nMensagem: " + message;
 			var subject = encodeURIComponent("Contato pelo site - " + name);
 			var body = encodeURIComponent(
 				message + "\n\nEmail para retorno: " + email,
@@ -39,6 +45,43 @@ document.addEventListener("DOMContentLoaded", function () {
 				subject +
 				"&body=" +
 				body;
+
+			// mailto: falha em silencio sem cliente de e-mail configurado (comum em
+			// navegadores embutidos como Instagram/WhatsApp), entao sempre mostramos
+			// a confirmacao na tela com um jeito manual de enviar a mensagem.
+			if (confirmBox && confirmText) {
+				confirmText.textContent = plainMessage;
+				confirmBox.hidden = false;
+				confirmBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+			}
+		});
+	}
+
+	if (copyBtn && confirmText) {
+		copyBtn.addEventListener("click", function () {
+			var text = confirmText.textContent;
+			var restoreLabel = "Copiar mensagem";
+
+			function showCopied() {
+				copyBtn.textContent = "Copiado!";
+				setTimeout(function () {
+					copyBtn.textContent = restoreLabel;
+				}, 2000);
+			}
+
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				navigator.clipboard.writeText(text).then(showCopied);
+			} else {
+				var textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.style.position = "fixed";
+				textarea.style.opacity = "0";
+				document.body.appendChild(textarea);
+				textarea.select();
+				document.execCommand("copy");
+				document.body.removeChild(textarea);
+				showCopied();
+			}
 		});
 	}
 });
