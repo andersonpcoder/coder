@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				message + "\n\nEmail para retorno: " + email,
 			);
 			window.location.href =
-				"mailto:contato@karinasalgado.com.br?subject=" +
+				"mailto:karinasalgado7@hotmail.com?subject=" +
 				subject +
 				"&body=" +
 				body;

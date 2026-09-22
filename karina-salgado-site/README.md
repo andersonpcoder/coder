@@ -10,8 +10,9 @@ ortodontista Karina Salgado, baseado no briefing em vídeo da cliente.
 - `tratamentos.html` — Tratamento Infantil, Invisalign, Tratamento
   Ortopédico, e o bloco "Ortodontia além dos dentes" (apneia obstrutiva do
   sono, respiração bucal, hábitos de sucção)
-- `parcerias.html` — Parceiros (Dra. Bianca, Dr. Rodrigo) e demais serviços
-  (limpeza, restauração, periodontal, clareamento, canal, extração, cárie)
+- `parcerias.html` — Parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo) e demais
+  serviços (limpeza, restauração, periodontal, clareamento, canal,
+  extração, cárie)
 - `consultorio.html` — Galeria de fotos do consultório e mapa de como
   chegar
 - `blog.html` — Grid de posts (capa, título, data)
@@ -43,6 +44,15 @@ aplicadas:
 - `karina-formacao.jpg` — foto ao lado da lista de formação na Início
 - `karina-consultorio-1.jpg` / `karina-consultorio-2.jpg` — 2 das 4 fotos
   da galeria em Consultório
+
+## Sobre / Formação
+
+Bio ("Quem sou eu") e a lista de formação na Início já usam dados reais
+enviados pela cliente: atua desde 2014, graduação e mestrado pela UFPA,
+especialização em Ortodontia e Ortopedia Facial pela ABO-PA, e docência de
+pós-graduação no Instituto Odontológico das Américas. E-mail de contato:
+`karinasalgado7@hotmail.com` (já aplicado no formulário e no fallback
+`mailto:`).
 
 ## Mapa / localização
 
@@ -77,20 +87,21 @@ ser substituídos por conteúdo real da cliente:
 
 - 2 fotos que faltam na galeria do Consultório (`.img-placeholder` em
   `consultorio.html`) — só havia 5 fotos disponíveis no total.
-- Fotos dos parceiros (Dra. Bianca, Dr. Rodrigo) e capas dos posts do
-  blog.
+- Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo) e capas dos
+  posts do blog.
 - Endereço completo em texto do consultório, para gerar o mapa
   incorporado (embed) em vez do botão de link (ver seção acima).
-- Integração real do formulário de contato (atualmente usa `mailto:` como
-  fallback — ver `TODO` em `assets/js/main.js`) e o link do Facebook no
-  rodapé.
+- Integração real do formulário de contato (atualmente usa `mailto:` para
+  `karinasalgado7@hotmail.com` como fallback — ver `TODO` em
+  `assets/js/main.js`) e o link do Facebook no rodapé.
 - Número de WhatsApp real (ver seção "SEO / metadados" acima).
 - Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,
   `robots.txt` e `sitemap.xml`).
-- Datas de formação (lista atualmente com `—` como placeholder de ano).
+- Anos de cada etapa da formação (a lista já tem instituições reais —
+  UFPA, ABO-PA, Instituto Odontológico das Américas — mas sem ano
+  individual; só sabemos que ela atua na odontologia desde 2014).
 - Conteúdo real dos posts do blog (atualmente com título de exemplo e
   "Em breve" como data).
-- Especialidades dos parceiros Dra. Bianca e Dr. Rodrigo.
 - Cadastro no Google Perfil da Empresa (Google Business Profile) — não é
   algo que se faz pelo código, mas é o principal fator para a clínica
   aparecer nas buscas locais do Google; recomendo fazer isso assim que o
