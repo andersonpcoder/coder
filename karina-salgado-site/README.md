@@ -60,20 +60,14 @@ pós-graduação no Instituto Odontológico das Américas. E-mail de contato:
 
 ## Formulário de contato
 
-O formulário do rodapé (`#contactForm` na Início) já está preparado para
-envio automático via [Web3Forms](https://web3forms.com) (serviço gratuito,
-sem backend próprio):
-
-1. Crie uma conta gratuita em web3forms.com com o e-mail
-   `karinasalgado7@hotmail.com` e copie a "Access Key" gerada.
-2. Em `index.html`, troque o valor `PENDENTE_WEB3FORMS_ACCESS_KEY` do campo
-   `<input type="hidden" name="access_key" ...>` pela chave real.
-
-Enquanto a chave não for trocada, ou se a chamada à API falhar por qualquer
-motivo (sem internet, serviço fora do ar), o formulário cai automaticamente
-no fallback `mailto:` já existente — abre o cliente de e-mail do visitante
-e mostra a mensagem na tela com um botão "Copiar mensagem", para o caso de
-nenhum cliente de e-mail estar configurado no navegador.
+O formulário do rodapé (`#contactForm` na Início) envia o contato direto
+pelo WhatsApp, em vez de e-mail: ao clicar em "Continuar no WhatsApp", o
+site monta uma mensagem com nome, e-mail (se preenchido) e a mensagem
+digitada, e abre uma nova aba em `wa.me/5591920054813` já com o texto
+pronto para o visitante só confirmar o envio. Se o navegador bloquear a
+abertura automática (pop-up blocker), aparece um link "Clique aqui para
+continuar no WhatsApp" no lugar. O campo de e-mail é opcional, já que a
+conversa segue pelo WhatsApp.
 
 ## Mapa / localização
 
@@ -128,9 +122,6 @@ Estes itens estão marcados no próprio HTML/CSS com placeholders e devem
 ser substituídos por conteúdo real da cliente:
 
 - Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo).
-- Access key real do Web3Forms no formulário de contato — ver seção
-  "Formulário de contato" acima (o código já está pronto, falta só a
-  cliente gerar a chave gratuita e colar em `index.html`).
 - Link real do Facebook no rodapé (sabemos que a página se chama "Dra
   Karina Salgado" no Facebook, mas não temos a URL).
 - Domínio real (troca o placeholder `karinasalgado.com.br` nas meta tags,

@@ -44,27 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	var form = document.getElementById("contactForm");
 	var statusEl = document.getElementById("formStatus");
-	var confirmBox = document.getElementById("formConfirm");
-	var confirmText = document.getElementById("formConfirmText");
-	var copyBtn = document.getElementById("formCopyBtn");
-
-	function fallbackToMailto(name, email, message) {
-		var plainMessage =
-			"Nome: " + name + "\nE-mail: " + email + "\nMensagem: " + message;
-		var subject = encodeURIComponent("Contato pelo site - " + name);
-		var body = encodeURIComponent(message + "\n\nEmail para retorno: " + email);
-		window.location.href =
-			"mailto:karinasalgado7@hotmail.com?subject=" + subject + "&body=" + body;
-
-		// mailto: falha em silencio sem cliente de e-mail configurado (comum em
-		// navegadores embutidos como Instagram/WhatsApp), entao sempre mostramos
-		// a confirmacao na tela com um jeito manual de enviar a mensagem.
-		if (confirmBox && confirmText) {
-			confirmText.textContent = plainMessage;
-			confirmBox.hidden = false;
-			confirmBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-		}
-	}
+	var whatsappNumber = "5591920054813";
 
 	if (form) {
 		form.addEventListener("submit", function (event) {
@@ -73,63 +53,35 @@ document.addEventListener("DOMContentLoaded", function () {
 			var name = form.querySelector("#name").value.trim();
 			var email = form.querySelector("#email").value.trim();
 			var message = form.querySelector("#message").value.trim();
-			var accessKey = form.querySelector('[name="access_key"]').value;
 
-			if (!name || !email || !message) {
+			if (!name || !message) {
 				return;
 			}
 
-			if (confirmBox) confirmBox.hidden = true;
+			var lines = ["Olá! Meu nome é " + name + "."];
+			if (email) lines.push("Meu e-mail: " + email);
+			lines.push(message);
 
-			var submitBtn = form.querySelector('button[type="submit"]');
-			if (submitBtn) submitBtn.disabled = true;
+			var whatsappUrl =
+				"https://wa.me/" +
+				whatsappNumber +
+				"?text=" +
+				encodeURIComponent(lines.join("\n"));
 
-			// Sem uma access key real do Web3Forms (web3forms.com), pula direto para
-			// o fallback mailto: em vez de gastar uma chamada de rede fadada a falhar.
-			if (!accessKey || accessKey === "PENDENTE_WEB3FORMS_ACCESS_KEY") {
-				if (submitBtn) submitBtn.disabled = false;
-				fallbackToMailto(name, email, message);
-				return;
+			// window.open() com "noopener" sempre retorna null por especificacao,
+			// entao nao da pra usar o retorno para saber se o popup foi bloqueado.
+			// A mensagem ja inclui um link manual como reforco para os dois casos.
+			window.open(whatsappUrl, "_blank", "noopener");
+
+			if (statusEl) {
+				statusEl.innerHTML =
+					'Abrimos o WhatsApp em uma nova aba com sua mensagem pronta. Se nada abrir, <a href="' +
+					whatsappUrl +
+					'" target="_blank" rel="noopener">clique aqui para continuar no WhatsApp</a>.';
+				statusEl.hidden = false;
 			}
 
-			fetch("https://api.web3forms.com/submit", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-				},
-				body: JSON.stringify({
-					access_key: accessKey,
-					subject: form.querySelector('[name="subject"]').value,
-					name: name,
-					email: email,
-					message: message,
-				}),
-			})
-				.then(function (response) {
-					return response.json().then(function (data) {
-						return { ok: response.ok && data.success, data: data };
-					});
-				})
-				.then(function (result) {
-					if (submitBtn) submitBtn.disabled = false;
-
-					if (result.ok) {
-						form.reset();
-						if (statusEl) {
-							statusEl.textContent =
-								"Mensagem enviada! Em breve entraremos em contato.";
-							statusEl.hidden = false;
-						}
-						return;
-					}
-
-					fallbackToMailto(name, email, message);
-				})
-				.catch(function () {
-					if (submitBtn) submitBtn.disabled = false;
-					fallbackToMailto(name, email, message);
-				});
+			form.reset();
 		});
 	}
 
@@ -163,34 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
 					blogEmpty.hidden = visibleCount !== 0;
 				}
 			});
-		});
-	}
-
-	if (copyBtn && confirmText) {
-		copyBtn.addEventListener("click", function () {
-			var text = confirmText.textContent;
-			var restoreLabel = "Copiar mensagem";
-
-			function showCopied() {
-				copyBtn.textContent = "Copiado!";
-				setTimeout(function () {
-					copyBtn.textContent = restoreLabel;
-				}, 2000);
-			}
-
-			if (navigator.clipboard && navigator.clipboard.writeText) {
-				navigator.clipboard.writeText(text).then(showCopied);
-			} else {
-				var textarea = document.createElement("textarea");
-				textarea.value = text;
-				textarea.style.position = "fixed";
-				textarea.style.opacity = "0";
-				document.body.appendChild(textarea);
-				textarea.select();
-				document.execCommand("copy");
-				document.body.removeChild(textarea);
-				showCopied();
-			}
 		});
 	}
 });
