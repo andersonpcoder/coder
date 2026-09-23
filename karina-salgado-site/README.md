@@ -21,6 +21,9 @@ ortodontista Karina Salgado, baseado no briefing em vídeo da cliente.
 - `blog/` — os 8 artigos completos, cada um como página própria (breadcrumb,
   categoria, título, subtítulo, imagem, corpo do texto, FAQ expansível,
   artigos relacionados e CTA de agendamento)
+- `lp/` — landing pages de campanha para tráfego pago (Google/Meta Ads),
+  sem menu de navegação, focadas 100% em conversão (ver seção "Landing
+  pages de campanha" abaixo)
 - `assets/css/style.css` — estilos compartilhados (luxo minimalista, fundo
   branco, Cormorant Garamond + Jost, animações de entrada/scroll-reveal)
 - `assets/js/main.js` — menu mobile, formulário de contato e scroll-reveal
@@ -129,6 +132,43 @@ conversão, não apenas uma lista de posts:
   `FAQPage`) em cada página de artigo. `sitemap.xml` já lista todas as 9
   páginas do blog.
 
+## Ícones em vez de fotos (parceiros e tratamentos)
+
+Dois pontos onde optei por ícones em vez de foto:
+
+- **Parceiros** (`parcerias.html`): os cards de Dra. Bruna Gilho e Dr.
+  Sérgio Sizo usam um monograma com as iniciais (`.partner-initials`,
+  mesmo tratamento visual do logo "KS"), porque não temos foto real
+  verificada de nenhum dos dois — usar uma foto genérica da internet como
+  se fosse a foto de uma pessoa real e nomeada não é algo que eu faço.
+- **Tratamentos** (`tratamentos.html`): os cards de Tratamento Infantil,
+  Invisalign e Tratamento Ortopédico usam ícones de linha desenhados sob
+  medida (`.icon-tile`, dente / bandeja de alinhador / bráquete), no
+  mesmo estilo minimalista do site, em vez de fotos de banco de imagens.
+
+Se a cliente enviar fotos reais depois (dos parceiros ou do consultório em
+uso), é só trocar o `.partner-initials`/`.icon-tile` pelo `.photo-frame`
+já usado no resto do site.
+
+## Landing pages de campanha
+
+Além do site institucional e do blog, `lp/` tem 3 landing pages
+standalone, pensadas para tráfego pago (Google Ads / Meta Ads), sem o
+menu de navegação do site — só o essencial para converter uma dúvida
+específica em agendamento pelo WhatsApp:
+
+- `lp/avaliacao-ortodontica.html` — avaliação geral, topo de funil.
+- `lp/invisalign.html` — foco em alinhadores transparentes.
+- `lp/ortodontia-infantil.html` — foco em pais buscando avaliação para
+  os filhos.
+
+Todas seguem a mesma estrutura: hero com CTA direto pro WhatsApp (com
+mensagem pré-preenchida identificando que veio do anúncio), barra de
+credenciais reais, lista de benefícios, FAQ e um CTA final. Estão
+marcadas com `<meta name="robots" content="noindex, follow">` — não
+competem com `tratamentos.html`/blog no Google orgânico, mas continuam
+100% acessíveis e rastreáveis por link para uso em anúncios.
+
 ## SEO / metadados
 
 Já aplicados em todas as páginas, com o domínio real `karinasalgado.com`:
@@ -149,11 +189,11 @@ Já aplicados em todas as páginas, com o domínio real `karinasalgado.com`:
 Estes itens estão marcados no próprio HTML/CSS com placeholders e devem
 ser substituídos por conteúdo real da cliente:
 
-- Fotos dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo).
+- Fotos reais dos parceiros (Dra. Bruna Gilho, Dr. Sérgio Sizo) — hoje
+  usam monograma com iniciais em vez de foto (ver seção "Ícones em vez
+  de fotos" acima).
 - Link real do Facebook no rodapé (sabemos que a página se chama "Dra
   Karina Salgado" no Facebook, mas não temos a URL).
-- Publicar o site (ver seção "Deploy" acima — conectar o Netlify e trocar
-  os nameservers na Hostinger).
 - Horário de funcionamento completo (só vimos terça-feira 08h-12h /
   14h-18h numa captura de tela; não coloquei horário no site pra não
   sugerir que só atende às terças).
