@@ -80,7 +80,22 @@ aplicadas:
 - `karina-perfil.jpg` — foto circular "quem sou eu" na Início
 - `karina-formacao.jpg` — foto ao lado da lista de formação na Início
 - `karina-consultorio-1.jpg` a `karina-consultorio-4.jpg` — as 4 fotos da
-  galeria em Consultório (completa)
+  galeria em Consultório (completa), também usadas na banda de fotos reais
+  da Início e do Blog
+
+Fotos temáticas enviadas pela cliente, também já aplicadas:
+
+- `tratamento-infantil.jpg`, `tratamento-invisalign.jpg`,
+  `tratamento-ortopedico.jpg` — as 3 fotos dos cards de `tratamentos.html`
+  (antes eram ícones de linha desenhados, substituídos por essas fotos reais
+  fornecidas pela cliente).
+- `blog-quando-usar.jpg`, `blog-fixo-ou-alinhador.jpg`,
+  `blog-quanto-tempo.jpg`, `blog-aparelho-doi.jpg`, `blog-higiene.jpg`,
+  `blog-alimentos.jpg`, `blog-idade-ideal.jpg`, `blog-contencao.jpg` — as 8
+  capas dos artigos do blog (uma por artigo, já com título embutido na
+  própria arte), enviadas pela cliente e aplicadas tanto no grid de
+  `blog.html` quanto na capa de cada página de artigo em `blog/`
+  (`.article-cover` + `og:image`).
 
 ## Sobre / Formação
 

@@ -875,6 +875,15 @@ h1, h2, h3, h4 {
   transition: transform 0.35s ease;
 }
 
+/* The thumb link is an <a> (inline by default) wrapping a block-level
+   .thumb div. Left inline, Chromium's grid auto-row sizing measures only
+   the thumb and ignores the card-meta/h2/p that follow, so the row track
+   collapses to the thumb's height and the rest of the card visually
+   overflows into the next row. */
+.blog-card > a {
+  display: block;
+}
+
 .blog-card:hover {
   transform: translateY(-6px);
 }
