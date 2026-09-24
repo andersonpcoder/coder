@@ -5,8 +5,9 @@ ortodontista Karina Salgado, baseado no briefing em vídeo da cliente.
 
 ## Estrutura
 
-- `index.html` — Início (hero, três tipos de tratamento, quem sou eu, área
-  de atuação, formação, fale conosco + mapa)
+- `index.html` — Início (banner cheio com foto + overlay escuro no estilo
+  editorial, três tipos de tratamento, quem sou eu, área de atuação,
+  formação, fale conosco + mapa)
 - `tratamentos.html` — Tratamento Infantil, Invisalign, Tratamento
   Ortopédico, e o bloco "Ortodontia além dos dentes" (apneia obstrutiva do
   sono, respiração bucal, hábitos de sucção)
@@ -131,6 +132,25 @@ conversão, não apenas uma lista de posts:
   `rel="canonical"`, e dados estruturados Schema.org (`BreadcrumbList` e
   `FAQPage`) em cada página de artigo. `sitemap.xml` já lista todas as 9
   páginas do blog.
+
+## Logo real e banner da Início
+
+A cliente enviou a arte final da logo (monograma "KS" entrelaçado +
+"Dra. Karina Salgado Ortodontia"). Ela é usada em dois tamanhos:
+
+- `assets/img/karina-monogram.png` — só o monograma, recortado da arte
+  original, usado no cabeçalho de todas as páginas (a arte completa, com
+  o texto, fica ilegível em tamanho de cabeçalho).
+- `assets/img/karina-logo.jpg` — a arte completa (monograma + nome +
+  "Ortodontia"), disponível para usos maiores (ex.: redes sociais,
+  materiais impressos).
+
+O banner da Início foi redesenhado no estilo de uma referência visual que
+a cliente enviou (clínica com banner escuro, foto de fundo, texto grande
+em overlay e botão de destaque): agora é uma seção cheia com a foto real
+da Dra. Karina, gradiente escuro por cima, título grande em serifa,
+subtítulo, CTA e indicador "role para explorar". Usa uma foto real já
+aprovada (`karina-hero.jpg`), não uma foto genérica de banco de imagens.
 
 ## Ícones em vez de fotos (parceiros e tratamentos)
 
