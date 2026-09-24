@@ -145,6 +145,17 @@ h1, h2, h3, h4 {
   color: #fff;
 }
 
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  color: #fff;
+}
+
+.btn-outline-light:hover {
+  background: #fff;
+  color: var(--color-dark);
+}
+
 /* Header */
 .site-header {
   position: sticky;
@@ -557,25 +568,6 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Icon tile: line-art icon standing in for a photo, e.g. treatment cards
-   without a real clinical photo. Matches .partner-initials in tone. */
-.icon-tile {
-  width: 100%;
-  height: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text);
-}
-
-.icon-tile svg {
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-}
-
 /* Real photo frame (replaces .img-placeholder once an image is available) */
 .photo-frame {
   width: 100%;
@@ -801,6 +793,54 @@ h1, h2, h3, h4 {
 
 @media (max-width: 760px) {
   .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Real-photo band: honest substitute for "results" photos we can't source
+   (no stock/Instagram access) — real practice photos in a bold dark band,
+   with a direct link to Instagram where real patient results actually live. */
+.gallery-band {
+  background: var(--color-dark);
+  color: #fff;
+  padding: var(--section-space) 0;
+}
+
+.gallery-band .section-head p {
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 620px;
+  margin: 1rem auto 0;
+}
+
+.gallery-band .eyebrow {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gallery-band-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+
+.gallery-band-grid .photo-frame {
+  min-width: 0;
+  aspect-ratio: 3 / 4;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.gallery-band-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .gallery-band-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }

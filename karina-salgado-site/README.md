@@ -152,23 +152,48 @@ da Dra. Karina, gradiente escuro por cima, título grande em serifa,
 subtítulo, CTA e indicador "role para explorar". Usa uma foto real já
 aprovada (`karina-hero.jpg`), não uma foto genérica de banco de imagens.
 
-## Ícones em vez de fotos (parceiros e tratamentos)
+## Ícones em vez de fotos (parceiros)
 
-Dois pontos onde optei por ícones em vez de foto:
+Um ponto onde optei por ícone em vez de foto:
 
 - **Parceiros** (`parcerias.html`): os cards de Dra. Bruna Gilho e Dr.
   Sérgio Sizo usam um monograma com as iniciais (`.partner-initials`,
   mesmo tratamento visual do logo "KS"), porque não temos foto real
   verificada de nenhum dos dois — usar uma foto genérica da internet como
   se fosse a foto de uma pessoa real e nomeada não é algo que eu faço.
-- **Tratamentos** (`tratamentos.html`): os cards de Tratamento Infantil,
-  Invisalign e Tratamento Ortopédico usam ícones de linha desenhados sob
-  medida (`.icon-tile`, dente / bandeja de alinhador / bráquete), no
-  mesmo estilo minimalista do site, em vez de fotos de banco de imagens.
 
-Se a cliente enviar fotos reais depois (dos parceiros ou do consultório em
-uso), é só trocar o `.partner-initials`/`.icon-tile` pelo `.photo-frame`
-já usado no resto do site.
+Se a cliente enviar fotos reais depois dos parceiros, é só trocar o
+`.partner-initials` pelo `.photo-frame` já usado no resto do site.
+
+Os cards de `tratamentos.html` (Tratamento Infantil, Invisalign, Tratamento
+Ortopédico) já usam fotos reais do consultório (`.photo-frame`) em vez dos
+ícones que existiam antes — ver seção "Banda de fotos reais" abaixo.
+
+## Banda de fotos reais (substitui "fotos de resultados")
+
+Não é possível, neste ambiente de desenvolvimento, baixar fotos de banco de
+imagens (Unsplash, Pexels) nem acessar o Instagram da cliente — o proxy de
+rede da sandbox bloqueia esses domínios (testado diretamente, ver histórico
+do projeto). Diante disso, em vez de uma seção de "resultados" com fotos que
+eu não teria como obter (e que, tratando-se de fotos de pacientes reais,
+exigiriam autorização confirmada de cada um), optei por uma resposta
+honesta: uma seção escura e ampla (`.gallery-band`), no estilo da
+referência visual que a cliente enviou, mostrando fotos 100% reais e já
+aprovadas do consultório, com um CTA direto para o Instagram
+(`@dra.karinasalgado`) — que é onde os resultados reais de pacientes já
+estão publicados, com autorização de cada um.
+
+Essa seção aparece em dois lugares:
+
+- **Início** (`index.html`), entre "Área de atuação" e "Formação": título
+  "Conheça o espaço onde cada tratamento acontece", com CTA duplo (Instagram
+  + Consultório completo).
+- **Blog** (`blog.html`), depois da grade de artigos: título "Quer ver
+  resultados reais de pacientes?", direcionando quem já leu os artigos para
+  o Instagram.
+
+O link do Instagram também foi corrigido no rodapé da Início (antes apontava
+para `#`).
 
 ## Landing pages de campanha
 
