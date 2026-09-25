@@ -334,6 +334,16 @@ create table integrations (
   unique (company_id, provider)
 );
 
+-- Os webhooks encontram a empresa por estes identificadores. Sem unicidade,
+-- outra empresa poderia cadastrar o mesmo número ou conta e receber as
+-- mensagens de quem é dono dele.
+create unique index integrations_phone_number_id on integrations (provider, (settings ->> 'phone_number_id'))
+  where coalesce(settings ->> 'phone_number_id', '') <> '';
+create unique index integrations_account_id on integrations (provider, (settings ->> 'account_id'))
+  where coalesce(settings ->> 'account_id', '') <> '';
+create unique index integrations_verify_token on integrations (provider, (settings ->> 'verify_token'))
+  where coalesce(settings ->> 'verify_token', '') <> '';
+
 -- updated_at automático
 create function touch_updated_at() returns trigger language plpgsql as $$
 begin

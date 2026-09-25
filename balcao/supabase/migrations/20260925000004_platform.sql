@@ -47,8 +47,16 @@ create table invites (
   created_at timestamptz not null default now()
 );
 alter table invites enable row level security;
+-- O profissional vinculado ao convite tem de ser da mesma empresa: aceitar o
+-- convite liga a conta a ele.
 create policy "admin gerencia convites" on invites for all
-  using (is_admin(company_id)) with check (is_admin(company_id));
+  using (is_admin(company_id))
+  with check (
+    is_admin(company_id)
+    and (professional_id is null or exists (
+      select 1 from professionals p where p.id = professional_id and p.company_id = invites.company_id
+    ))
+  );
 
 create function public.public_invite(p_token text) returns jsonb
 language sql stable security definer set search_path = '' as $$
@@ -73,7 +81,12 @@ begin
   values (v_invite.company_id, auth.uid(), v_invite.role)
   on conflict (company_id, user_id) do update set role = excluded.role;
   if v_invite.professional_id is not null then
-    update public.professionals set user_id = auth.uid() where id = v_invite.professional_id;
+    update public.professionals set user_id = auth.uid()
+    where id = v_invite.professional_id and company_id = v_invite.company_id
+      and (user_id is null or user_id = auth.uid());
+    if not found then
+      raise exception 'Este convite não é mais válido. Peça um novo ao administrador.';
+    end if;
   end if;
   update public.invites set accepted_by = auth.uid(), accepted_at = now() where id = v_invite.id;
   return v_invite.company_id;

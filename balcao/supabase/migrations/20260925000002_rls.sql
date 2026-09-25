@@ -30,7 +30,8 @@ $$;
 create function public.my_professional_id(target_company uuid) returns uuid
 language sql stable security definer set search_path = '' as $$
   select p.id from public.professionals p
-  where p.company_id = target_company and p.user_id = auth.uid();
+  where p.company_id = target_company and p.user_id = auth.uid()
+    and public.is_member(target_company);
 $$;
 
 do $$

@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { safeNext } from "@/lib/redirect";
 
 // Rotas do painel: exigem login quando o Supabase está configurado.
 const PROTECTED = [
@@ -36,9 +37,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(target);
   }
   if (data.user && AUTH_PAGES.includes(path) && !request.nextUrl.searchParams.get("convite")) {
-    const next = request.nextUrl.searchParams.get("proximo");
-    const safe = next && next.startsWith("/") && !next.startsWith("//") ? next : "/painel";
-    return NextResponse.redirect(new URL(safe, request.url));
+    const next = safeNext(request.nextUrl.searchParams.get("proximo"));
+    return NextResponse.redirect(new URL(next, request.url));
   }
   return response;
 }

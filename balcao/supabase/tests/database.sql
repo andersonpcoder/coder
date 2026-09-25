@@ -169,6 +169,32 @@ select pg_temp.check((select count(*) from companies) = 2, 'convite aceito dá a
 select pg_temp.fails($$ select accept_invite('convite-teste') $$, 'convite não pode ser usado duas vezes');
 reset role;
 
+-- Convite não pode ligar a conta a profissional de outra empresa
+set role authenticated;
+select pg_temp.as_user('22222222-2222-2222-2222-222222222222');
+select pg_temp.fails($$
+  insert into invites (company_id, role, professional_id)
+  select c.id, 'admin', (select id from professionals where name = 'Marina Costa')
+  from companies c where c.slug = 'barbearia-do-ze' $$, 'convite com profissional de outra empresa');
+reset role;
+insert into invites (company_id, role, professional_id, token)
+select c.id, 'admin', (select id from professionals where name = 'Marina Costa'), 'convite-cruzado'
+from companies c where c.slug = 'barbearia-do-ze';
+set role authenticated;
+select pg_temp.as_user('22222222-2222-2222-2222-222222222222');
+select pg_temp.fails($$ select accept_invite('convite-cruzado') $$, 'aceitar convite não toma profissional de outra empresa');
+reset role;
+select pg_temp.check((select user_id from professionals where name = 'Marina Costa') = '33333333-3333-3333-3333-333333333333',
+  'profissional continua ligado à própria conta');
+
+-- Integrações: o mesmo número não pode ser de duas empresas
+insert into integrations (company_id, provider, settings) values
+  ('00000000-0000-0000-0000-00000000c001', 'whatsapp_cloud', '{"phone_number_id": "555"}');
+select pg_temp.fails($$
+  insert into integrations (company_id, provider, settings)
+  select id, 'whatsapp_cloud', '{"phone_number_id": "555"}' from companies where slug = 'barbearia-do-ze' $$,
+  'número do WhatsApp já usado por outra empresa');
+
 -- Aniversário sem duplicar
 update customers set birth_date = (now() at time zone 'America/Sao_Paulo')::date - interval '30 years' where name = 'Beatriz Santos';
 select pg_temp.check(enqueue_marketing_messages() >= 1, 'mensagem de aniversário gerada');

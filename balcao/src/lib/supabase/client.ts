@@ -32,6 +32,9 @@ export function errorMessage(error: unknown): string {
     if (msg.includes("appointments_no_overlap")) return "Conflito de horário com outro agendamento.";
     if (msg.includes("customers_company_phone_key")) return "Já existe um cliente com este telefone.";
     if (msg.includes("companies_slug_key")) return "Este endereço já está em uso. Escolha outro.";
+    if (msg.includes("integrations_phone_number_id") || msg.includes("integrations_account_id")) {
+      return "Este número ou conta já está ligado a outra empresa no Balcão. Fale com o suporte.";
+    }
     if (msg.includes("row-level security")) return "Você não tem permissão para esta ação.";
     return msg;
   }

@@ -7,6 +7,7 @@ import { Suspense, useState } from "react";
 import { AuthShell, FormError, GoogleIcon } from "@/components/auth/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
+import { safeNext } from "@/lib/redirect";
 import { createClient, errorMessage, isSupabaseConfigured, setDemoCookie } from "@/lib/supabase/client";
 
 export default function EntrarPage() {
@@ -20,7 +21,7 @@ export default function EntrarPage() {
 function Entrar() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("proximo") ?? "/painel";
+  const next = safeNext(params.get("proximo"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(params.get("erro") ?? "");
