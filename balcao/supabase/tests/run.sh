@@ -9,5 +9,5 @@ createdb "$DB"
 trap 'dropdb --if-exists "$DB"' EXIT
 $PSQL -f tests/stubs.sql
 for f in migrations/*.sql; do $PSQL -f "$f"; done
-$PSQL -f seed.sql > /dev/null
+$PSQL -f seed.sql >/dev/null
 $PSQL -f tests/database.sql 2>&1 | grep -v "^$" | sed "s/^psql:[^ ]* NOTICE:  /  /"

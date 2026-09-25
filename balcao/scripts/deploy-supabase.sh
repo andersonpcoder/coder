@@ -13,7 +13,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 ENV_FILE="supabase/.env.production"
-[[ -f "$ENV_FILE" ]] || { echo "Crie $ENV_FILE a partir de supabase/.env.production.example."; exit 1; }
+[[ -f "$ENV_FILE" ]] || {
+	echo "Crie $ENV_FILE a partir de supabase/.env.production.example."
+	exit 1
+}
 set -a
 # shellcheck disable=SC1090
 source "$ENV_FILE"
@@ -21,21 +24,36 @@ set +a
 
 missing=()
 for v in SUPABASE_PROJECT_REF SUPABASE_DB_URL PUBLIC_APP_URL CRON_SECRET; do
-  [[ -n "${!v:-}" ]] || missing+=("$v")
+	[[ -n "${!v:-}" ]] || missing+=("$v")
 done
 if ((${#missing[@]})); then
-  echo "Preencha em $ENV_FILE: ${missing[*]}"
-  exit 1
+	echo "Preencha em $ENV_FILE: ${missing[*]}"
+	exit 1
 fi
-command -v supabase >/dev/null || { echo "Instale a Supabase CLI: npm i -g supabase"; exit 1; }
-command -v psql >/dev/null || { echo "Instale o cliente do Postgres (psql)."; exit 1; }
-[[ "$CRON_SECRET" =~ ^[A-Za-z0-9_-]{24,}$ ]] || { echo "CRON_SECRET: use 24+ letras, números, _ ou -."; exit 1; }
-[[ "$PUBLIC_APP_URL" =~ ^https?://[^/]+$ ]] || { echo "PUBLIC_APP_URL: use só o endereço, sem barra no fim (ex.: https://balcao.app)."; exit 1; }
-psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -qAtc "select 1" >/dev/null || { echo "Não consegui conectar em SUPABASE_DB_URL."; exit 1; }
+command -v supabase >/dev/null || {
+	echo "Instale a Supabase CLI: npm i -g supabase"
+	exit 1
+}
+command -v psql >/dev/null || {
+	echo "Instale o cliente do Postgres (psql)."
+	exit 1
+}
+[[ "$CRON_SECRET" =~ ^[A-Za-z0-9_-]{24,}$ ]] || {
+	echo "CRON_SECRET: use 24+ letras, números, _ ou -."
+	exit 1
+}
+[[ "$PUBLIC_APP_URL" =~ ^https?://[^/]+$ ]] || {
+	echo "PUBLIC_APP_URL: use só o endereço, sem barra no fim (ex.: https://balcao.app)."
+	exit 1
+}
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -qAtc "select 1" >/dev/null || {
+	echo "Não consegui conectar em SUPABASE_DB_URL."
+	exit 1
+}
 
 if [[ "${1:-}" == "--verificar" ]]; then
-  echo "Tudo certo: arquivo preenchido, ferramentas instaladas e banco acessível."
-  exit 0
+	echo "Tudo certo: arquivo preenchido, ferramentas instaladas e banco acessível."
+	exit 0
 fi
 
 step() { printf '\n\033[1;32m==> %s\033[0m\n' "$1"; }
@@ -44,33 +62,33 @@ step "Aplicando as migrações do banco"
 supabase db push --db-url "$SUPABASE_DB_URL"
 
 if [[ "${1:-}" == "--com-exemplo" ]]; then
-  step "Carregando a empresa de exemplo (Estúdio Aurora)"
-  psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
+	step "Carregando a empresa de exemplo (Estúdio Aurora)"
+	psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
 fi
 
 step "Publicando as Edge Functions"
 # Chamadas por terceiros (webhooks, agendador, API): validam a origem pelo próprio segredo.
 for fn in meta-webhook whatsapp-webhook billing-webhook send-reminders api; do
-  supabase functions deploy "$fn" --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
+	supabase functions deploy "$fn" --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
 done
 # Chamadas pelo app com o usuário logado.
 for fn in send-message send-invite billing-checkout billing-cancel; do
-  supabase functions deploy "$fn" --project-ref "$SUPABASE_PROJECT_REF"
+	supabase functions deploy "$fn" --project-ref "$SUPABASE_PROJECT_REF"
 done
 
 step "Gravando os segredos das funções"
 secrets=()
 for v in PUBLIC_APP_URL CRON_SECRET RESEND_API_KEY EMAIL_FROM META_APP_SECRET BILLING_PROVIDER \
-  STRIPE_SECRET_KEY STRIPE_WEBHOOK_SECRET STRIPE_PRICE_BASICO STRIPE_PRICE_PROFISSIONAL STRIPE_PRICE_EMPRESA \
-  STRIPE_PRICE_BASICO_ANUAL STRIPE_PRICE_PROFISSIONAL_ANUAL STRIPE_PRICE_EMPRESA_ANUAL \
-  ASAAS_API_KEY ASAAS_BASE_URL ASAAS_WEBHOOK_TOKEN MP_ACCESS_TOKEN MP_WEBHOOK_SECRET; do
-  [[ -n "${!v:-}" ]] && secrets+=("$v=${!v}")
+	STRIPE_SECRET_KEY STRIPE_WEBHOOK_SECRET STRIPE_PRICE_BASICO STRIPE_PRICE_PROFISSIONAL STRIPE_PRICE_EMPRESA \
+	STRIPE_PRICE_BASICO_ANUAL STRIPE_PRICE_PROFISSIONAL_ANUAL STRIPE_PRICE_EMPRESA_ANUAL \
+	ASAAS_API_KEY ASAAS_BASE_URL ASAAS_WEBHOOK_TOKEN MP_ACCESS_TOKEN MP_WEBHOOK_SECRET; do
+	[[ -n "${!v:-}" ]] && secrets+=("$v=${!v}")
 done
 supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "${secrets[@]}"
 
 step "Agendando o envio de mensagens (pg_cron)"
 sed -e "s/SEU_PROJECT_REF/$SUPABASE_PROJECT_REF/g" -e "s/CRON_SECRET/$CRON_SECRET/g" supabase/cron.sql |
-  psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -q
+	psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -q
 
 BASE="https://$SUPABASE_PROJECT_REF.supabase.co/functions/v1"
 cat <<INFO
