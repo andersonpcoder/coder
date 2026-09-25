@@ -47,7 +47,10 @@ As regras valem no banco (RLS), não só na tela.
 | Profissional | R$ 39,90 | Até 5 profissionais, fila, WhatsApp, relatórios |
 | Empresa | R$ 79,90 | Ilimitado, várias unidades, caixa de entrada unificada, API |
 
-Teste grátis de 14 dias com tudo do plano Empresa. Os preços ficam em
+Plano anual com 2 meses grátis. Os valores aparecem como preço de lançamento,
+com o preço cheio riscado. Teste grátis de 14 dias com tudo do plano Empresa;
+depois dele, sem assinatura, a conta fica bloqueada até escolher um plano
+(pagamento atrasado tem 7 dias de tolerância). Os preços ficam em
 `src/lib/plans.ts` e `supabase/functions/_shared/billing.ts` (mantenha iguais).
 Os limites de profissionais e unidades também são validados no banco.
 

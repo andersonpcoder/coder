@@ -103,17 +103,44 @@ create policy "admin gerencia chaves" on api_keys for all
 -- Básico: 1 profissional. Profissional: até 5. Empresa: ilimitado e várias unidades.
 -- Durante o teste grátis vale tudo do plano Empresa.
 
+-- Conta ativa: teste em andamento, assinatura paga, pagamento atrasado há até
+-- 7 dias ou cancelada dentro do período já pago. Sem isso a agenda fica bloqueada.
+create function public.has_active_plan(p_company uuid) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select coalesce((
+    select case
+      when s.status = 'teste' then s.trial_ends_at > now()
+      when s.status = 'ativa' then true
+      when s.status = 'inadimplente' then coalesce(s.current_period_end, now()) + interval '7 days' > now()
+      when s.status = 'cancelada' then coalesce(s.current_period_end > now(), false)
+    end
+    from public.subscriptions s where s.company_id = p_company
+  ), false);
+$$;
+
 create function public.effective_plan(p_company uuid) returns plan_tier
 language sql stable security definer set search_path = '' as $$
   select case
     when s.status = 'teste' and s.trial_ends_at > now() then 'empresa'::public.plan_tier
-    when s.status in ('ativa', 'inadimplente') then s.plan
-    -- Cancelada: o acesso segue até o fim do período já pago.
-    when s.status = 'cancelada' and s.current_period_end > now() then s.plan
+    when public.has_active_plan(p_company) then s.plan
     else 'basico'::public.plan_tier
   end
   from public.subscriptions s where s.company_id = p_company;
 $$;
+
+create function public.enforce_active_plan() returns trigger
+language plpgsql security definer set search_path = '' as $$
+begin
+  if not public.has_active_plan(new.company_id) then
+    raise exception 'Assinatura do Balcão inativa. Escolha um plano em Configurações > Plano e cobrança.';
+  end if;
+  return new;
+end;
+$$;
+create trigger appointments_active_plan before insert on appointments
+  for each row execute function public.enforce_active_plan();
+create trigger queue_entries_active_plan before insert on queue_entries
+  for each row execute function public.enforce_active_plan();
 
 create function public.enforce_professional_limit() returns trigger
 language plpgsql security definer set search_path = '' as $$
@@ -365,6 +392,13 @@ language sql stable security definer set search_path = '' as $$
     and not exists (select 1 from public.companies where slug = p_slug);
 $$;
 grant execute on function public.slug_available to anon, authenticated;
+
+-- A página pública mostra aviso em vez do agendamento quando a conta está inativa.
+create or replace function public.public_booking_open(p_slug text) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select public.has_active_plan(id) from public.companies where slug = p_slug;
+$$;
+grant execute on function public.public_booking_open to anon, authenticated;
 
 -- Modelo aprovado na Meta para a API oficial do WhatsApp: fora da janela de 24h
 -- só mensagens de modelo são entregues. provider_params lista, na ordem dos

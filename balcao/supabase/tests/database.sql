@@ -99,6 +99,25 @@ select pg_temp.fails($$ insert into units (company_id, name) values ('00000000-0
   'várias unidades só no plano Empresa');
 update subscriptions set plan = 'empresa' where company_id = '00000000-0000-0000-0000-00000000c001';
 
+-- Assinatura inativa bloqueia a agenda ------------------------------------------------
+update subscriptions set status = 'teste', trial_ends_at = now() - interval '1 day'
+where company_id = (select id from companies where slug = 'barbearia-do-ze');
+select pg_temp.check(not has_active_plan((select id from companies where slug = 'barbearia-do-ze')), 'teste vencido deixa a conta inativa');
+select pg_temp.check(not public_booking_open('barbearia-do-ze'), 'página pública fechada sem assinatura');
+select pg_temp.fails($$ insert into appointments (company_id, professional_id, service_id, customer_id, starts_at, ends_at)
+  select (select id from companies where slug = 'barbearia-do-ze'), professional_id, service_id, customer_id,
+    now() + interval '400 days', now() + interval '400 days 30 minutes' from appointments limit 1 $$,
+  'agenda bloqueada sem assinatura');
+update subscriptions set status = 'inadimplente', current_period_end = now() - interval '3 days'
+where company_id = (select id from companies where slug = 'barbearia-do-ze');
+select pg_temp.check(has_active_plan((select id from companies where slug = 'barbearia-do-ze')), 'atraso dentro dos 7 dias de tolerância');
+update subscriptions set current_period_end = now() - interval '8 days'
+where company_id = (select id from companies where slug = 'barbearia-do-ze');
+select pg_temp.check(not has_active_plan((select id from companies where slug = 'barbearia-do-ze')), 'atraso acima de 7 dias bloqueia');
+update subscriptions set status = 'cancelada', current_period_end = now() + interval '5 days'
+where company_id = (select id from companies where slug = 'barbearia-do-ze');
+select pg_temp.check(has_active_plan((select id from companies where slug = 'barbearia-do-ze')), 'cancelada usa até o fim do período pago');
+
 -- Página pública (anônimo) -----------------------------------------------------------
 set role anon;
 select pg_temp.as_user(null);

@@ -6,6 +6,20 @@ export type Provider = "stripe" | "asaas" | "mercadopago";
 export const PRICES: Record<Plan, number> = { basico: 1990, profissional: 3990, empresa: 7990 };
 export const PLAN_NAMES: Record<Plan, string> = { basico: "Básico", profissional: "Profissional", empresa: "Empresa" };
 
+/** Plano anual: paga 10 meses e usa 12. Mantenha igual a src/lib/plans.ts. */
+export const ANNUAL_MONTHS_CHARGED = 10;
+export type Cycle = "mensal" | "anual";
+export const isCycle = (v: unknown): v is Cycle => v === "mensal" || v === "anual";
+
+/** Valor cobrado por ciclo, em centavos. */
+export const priceFor = (plan: Plan, cycle: Cycle) => (cycle === "anual" ? PRICES[plan] * ANNUAL_MONTHS_CHARGED : PRICES[plan]);
+
+/** Referência gravada no provedor: empresa:plano:ciclo. */
+export function splitReference(ref?: string | null): { companyId?: string; plan?: string; cycle?: Cycle } {
+  const [companyId, plan, cycle] = (ref ?? "").split(":");
+  return { companyId: companyId || undefined, plan, cycle: isCycle(cycle) ? cycle : undefined };
+}
+
 export const provider = (Deno.env.get("BILLING_PROVIDER") ?? "stripe") as Provider;
 
 export const isPlan = (v: unknown): v is Plan => v === "basico" || v === "profissional" || v === "empresa";

@@ -64,6 +64,8 @@ export interface ChatMessage {
 
 export interface PublicApi {
   company(slug: string): Promise<PublicCompany | null>;
+  /** Falso quando a assinatura da empresa está inativa. */
+  isOpen(slug: string): Promise<boolean>;
   slots(slug: string, serviceId: string, professionalId: string, day: Date, ignoreToken?: string): Promise<Date[]>;
   book(input: { slug: string; serviceId: string; professionalId: string; start: Date; name: string; phone: string; consent: boolean }): Promise<string>;
   appointment(token: string): Promise<PublicAppointment | null>;
@@ -85,6 +87,7 @@ async function rpc<T>(fn: string, args: Record<string, unknown>): Promise<T> {
 }
 
 const supabaseApi: PublicApi = {
+  isOpen: async (slug) => Boolean(await rpc<boolean>("public_booking_open", { p_slug: slug })),
   async company(slug) {
     const r = await rpc<any>("public_company", { p_slug: slug });
     if (!r) return null;
@@ -181,6 +184,7 @@ function demoFor(slug: string) {
 }
 
 const demoApi: PublicApi = {
+  isOpen: async () => true,
   async company(slug) {
     const s = readDemo();
     if (!s || s.company.slug !== slug) return null;

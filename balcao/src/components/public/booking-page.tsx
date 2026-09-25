@@ -31,12 +31,14 @@ export function BookingPage({ slug }: { slug: string }) {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [token, setToken] = useState("");
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     publicApi()
       .company(slug)
-      .then((c) => {
+      .then(async (c) => {
         setDisplayTimeZone(c?.timezone);
+        if (c) setOpen(await publicApi().isOpen(slug).catch(() => true));
         setCompany(c);
       })
       .catch(() => setCompany(null));
@@ -119,7 +121,18 @@ export function BookingPage({ slug }: { slug: string }) {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-6 pb-28 sm:px-6">
-        {step < 4 && (
+        {!open && (
+          <div className="rounded-2xl bg-surface-2 p-6 text-center" role="status">
+            <p className="font-semibold">O agendamento online está indisponível no momento.</p>
+            <p className="mt-1 text-sm text-muted">Fale direto com o estabelecimento{whatsapp ? " pelo WhatsApp" : ""}.</p>
+            {whatsapp && (
+              <a href={whatsapp} target="_blank" rel="noreferrer" className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-fg">
+                <MessageCircle className="size-4" aria-hidden /> Chamar no WhatsApp
+              </a>
+            )}
+          </div>
+        )}
+        {open && step < 4 && (
           <ol className="mb-5 flex gap-2 text-xs font-semibold text-muted" aria-label="Etapas">
             {["Serviço", "Profissional", "Horário", "Seus dados"].map((l, i) => (
               <li key={l} className={cn("flex-1 border-t-4 pt-2", i <= step ? "border-primary text-text" : "border-border")} aria-current={i === step ? "step" : undefined}>{l}</li>
@@ -131,7 +144,7 @@ export function BookingPage({ slug }: { slug: string }) {
           <Button variant="ghost" className="-ml-3 mb-2" onClick={() => setStep(step - 1)}><ArrowLeft /> Voltar</Button>
         )}
 
-        {step === 0 && (
+        {open && step === 0 && (
           <section aria-labelledby="t-servico">
             <h2 id="t-servico" className="mb-4 text-xl font-semibold">Qual serviço você quer agendar?</h2>
             {company.services.length === 0 && <p className="text-muted">Nenhum serviço disponível para agendamento online.</p>}

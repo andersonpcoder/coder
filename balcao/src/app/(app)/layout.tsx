@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/shell/sidebar";
+import { SubscriptionGate } from "@/components/shell/subscription-gate";
 import { Topbar } from "@/components/shell/topbar";
 import { Toaster } from "@/components/ui/toaster";
 import { StoreProvider } from "@/lib/store";
@@ -14,7 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex min-w-0 flex-1 flex-col">
           <Topbar />
           <main id="conteudo" className="flex-1 px-4 py-5 sm:px-6 lg:px-8">
-            {children}
+            <SubscriptionGate>{children}</SubscriptionGate>
           </main>
         </div>
       </div>

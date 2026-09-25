@@ -59,7 +59,8 @@ confirmação de cadastro nem a recuperação de senha.
 ### Stripe (cartão)
 
 1. Em **Product catalog**, crie os produtos Básico, Profissional e Empresa, cada
-   um com um preço **mensal recorrente** em BRL. Anote os três `price_...`.
+   um com dois preços recorrentes em BRL: **mensal** (19,90, 39,90 e 79,90) e
+   **anual** (199,00, 399,00 e 799,00). Anote os seis `price_...`.
 2. **Developers > API keys:** anote a Secret key.
 3. O segredo do webhook (`whsec_...`) aparece ao criar o webhook no passo 7.
 
@@ -68,9 +69,20 @@ confirmação de cadastro nem a recuperação de senha.
 1. Em **Suas integrações**, crie uma aplicação e anote o **Access Token** de produção.
 2. O segredo do webhook aparece ao configurar as notificações no passo 7.
 
-Os preços padrão são R$ 19,90, R$ 39,90 e R$ 79,90. Para mudar, edite
+Os preços padrão são R$ 19,90, R$ 39,90 e R$ 79,90 por mês, ou 10 mensalidades
+no plano anual (2 meses grátis). Aparecem como **preço de lançamento**, com o
+preço cheio (R$ 29,90, R$ 59,90 e R$ 119,90) riscado. Para mudar, edite
 `src/lib/plans.ts` e `supabase/functions/_shared/billing.ts` (os testes avisam
-se ficarem diferentes). No Stripe, os preços valem os cadastrados lá.
+se ficarem diferentes). Para encerrar o lançamento, mude `LAUNCH_PRICING` para
+`false` e suba os preços. No Stripe, os valores cobrados são os cadastrados lá.
+
+### Regras de acesso
+
+- **Teste grátis:** 14 dias com tudo liberado, sem cartão.
+- **Teste acabou sem assinar:** o painel e o agendamento online ficam
+  bloqueados até escolher um plano. Os dados continuam guardados.
+- **Pagamento atrasado:** 7 dias de tolerância; depois, bloqueia.
+- **Cancelou:** usa até o fim do período já pago.
 
 ## 4. Publicar o banco e as funções
 

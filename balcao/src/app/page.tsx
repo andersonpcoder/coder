@@ -1,10 +1,10 @@
-import { CalendarDays, Check, ListOrdered, MessagesSquare, Smartphone, UsersRound, Wallet } from "lucide-react";
+import { CalendarDays, ListOrdered, MessagesSquare, Smartphone, UsersRound, Wallet } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/shell/logo";
+import { PricingSection } from "@/components/shared/pricing";
 import { Button } from "@/components/ui/button";
-import { money } from "@/lib/format";
-import { PLANS, TRIAL_DAYS } from "@/lib/plans";
+import { TRIAL_DAYS } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Balcão: agenda, fila e atendimento em um só lugar",
@@ -64,23 +64,7 @@ export default function Home() {
 
         <section aria-labelledby="planos" className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
           <h2 id="planos" className="text-3xl font-semibold">Planos</h2>
-          <p className="mt-1 text-muted">Todos com {TRIAL_DAYS} dias grátis. Pague com Pix ou cartão. Cancele quando quiser.</p>
-          <div className="mt-6 grid gap-4 lg:grid-cols-3">
-            {Object.values(PLANS).map((p) => (
-              <div key={p.tier} className={`flex flex-col rounded-[var(--radius-card)] border bg-surface p-6 ${p.tier === "profissional" ? "border-primary ring-1 ring-primary" : "border-border"}`}>
-                <h3 className="text-xl font-semibold">{p.name}</h3>
-                <p className="mt-2"><span className="font-display text-3xl font-bold">{money(p.priceCents)}</span><span className="text-muted">/mês</span></p>
-                <ul className="mt-4 flex flex-1 flex-col gap-2 text-sm">
-                  {p.highlights.map((h) => (
-                    <li key={h} className="flex gap-2"><Check className="size-4 shrink-0 text-primary" aria-hidden /> {h}</li>
-                  ))}
-                </ul>
-                <Button className="mt-6" variant={p.tier === "profissional" ? "primary" : "outline"} asChild>
-                  <Link href="/cadastrar">Começar grátis</Link>
-                </Button>
-              </div>
-            ))}
-          </div>
+          <PricingSection />
         </section>
       </main>
 

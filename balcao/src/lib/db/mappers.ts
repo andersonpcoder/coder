@@ -263,6 +263,7 @@ export const fromRow = {
     status: r.status,
     trialEndsAt: r.trial_ends_at,
     currentPeriodEnd: undef(r.current_period_end),
+    billingCycle: r.billing_cycle ?? "mensal",
     provider: undef(r.provider),
   }),
 };

@@ -1,17 +1,17 @@
 // Notificações dos provedores de cobrança. URL: /functions/v1/billing-webhook?provider=stripe|asaas|mercadopago
 import { admin, hmacHex, safeEqual } from "../_shared/http.ts";
-import { addMonths, asaas, isPlan, mercadopago } from "../_shared/billing.ts";
+import { addMonths, asaas, isCycle, isPlan, mercadopago, splitReference } from "../_shared/billing.ts";
 
 type Status = "ativa" | "inadimplente" | "cancelada";
 
-async function update(companyId: string, patch: { plan?: string; status?: Status; current_period_end?: string; provider_subscription_id?: string; provider?: string }) {
+async function update(
+  companyId: string,
+  patch: { plan?: string; status?: Status; current_period_end?: string; provider_subscription_id?: string; provider?: string; billing_cycle?: string },
+) {
   if (patch.plan && !isPlan(patch.plan)) delete patch.plan;
+  if (patch.billing_cycle && !isCycle(patch.billing_cycle)) delete patch.billing_cycle;
+  for (const k of Object.keys(patch) as (keyof typeof patch)[]) if (patch[k] === undefined) delete patch[k];
   await admin.from("subscriptions").update(patch).eq("company_id", companyId);
-}
-
-function splitReference(ref?: string | null): { companyId?: string; plan?: string } {
-  const [companyId, plan] = (ref ?? "").split(":");
-  return { companyId: companyId || undefined, plan };
 }
 
 Deno.serve(async (req) => {
@@ -39,8 +39,8 @@ async function stripeEvent(req: Request, raw: string) {
   const obj = event.data.object;
   switch (event.type) {
     case "checkout.session.completed": {
-      const { companyId, plan } = splitReference(obj.client_reference_id);
-      if (companyId) await update(companyId, { plan, status: "ativa", provider: "stripe", provider_subscription_id: obj.subscription });
+      const { companyId, plan, cycle } = splitReference(obj.client_reference_id);
+      if (companyId) await update(companyId, { plan, billing_cycle: cycle, status: "ativa", provider: "stripe", provider_subscription_id: obj.subscription });
       break;
     }
     case "customer.subscription.created":
@@ -56,6 +56,7 @@ async function stripeEvent(req: Request, raw: string) {
       const periodEnd = obj.current_period_end ?? obj.items?.data?.[0]?.current_period_end;
       await update(companyId, {
         plan: obj.metadata?.plan,
+        billing_cycle: obj.metadata?.cycle,
         status,
         provider_subscription_id: obj.id,
         current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : undefined,
@@ -78,14 +79,19 @@ async function asaasEvent(req: Request, raw: string) {
   const payment = event.payment;
   const subscriptionId = payment?.subscription ?? event.subscription?.id;
   if (!subscriptionId) return new Response("ok");
-  let { companyId, plan } = splitReference(payment?.externalReference ?? event.subscription?.externalReference);
+  let { companyId, plan, cycle } = splitReference(payment?.externalReference ?? event.subscription?.externalReference);
   if (!companyId) {
     const sub = await asaas(`subscriptions/${subscriptionId}`);
-    ({ companyId, plan } = splitReference(sub.externalReference));
+    ({ companyId, plan, cycle } = splitReference(sub.externalReference));
   }
   if (!companyId) return new Response("ok");
   if (event.event === "PAYMENT_CONFIRMED" || event.event === "PAYMENT_RECEIVED") {
-    await update(companyId, { plan, status: "ativa", current_period_end: addMonths(new Date(payment.dueDate), 1).toISOString() });
+    await update(companyId, {
+      plan,
+      billing_cycle: cycle,
+      status: "ativa",
+      current_period_end: addMonths(new Date(payment.dueDate), cycle === "anual" ? 12 : 1).toISOString(),
+    });
   } else if (event.event === "PAYMENT_OVERDUE") {
     await update(companyId, { status: "inadimplente" });
   } else if (event.event === "SUBSCRIPTION_DELETED" || event.event === "SUBSCRIPTION_INACTIVATED") {
@@ -107,17 +113,17 @@ async function mercadopagoEvent(req: Request, raw: string) {
   if (!id) return new Response("ok");
   if (body.type === "subscription_preapproval") {
     const pre = await mercadopago(`preapproval/${id}`);
-    const { companyId, plan } = splitReference(pre.external_reference);
+    const { companyId, plan, cycle } = splitReference(pre.external_reference);
     if (companyId) {
       const status: Status = pre.status === "authorized" ? "ativa" : pre.status === "cancelled" || pre.status === "paused" ? "cancelada" : "inadimplente";
-      await update(companyId, { plan, status, provider: "mercadopago", provider_subscription_id: pre.id, current_period_end: pre.next_payment_date ?? undefined });
+      await update(companyId, { plan, billing_cycle: cycle, status, provider: "mercadopago", provider_subscription_id: pre.id, current_period_end: pre.next_payment_date ?? undefined });
     }
   } else if (body.type === "subscription_authorized_payment") {
     const pay = await mercadopago(`authorized_payments/${id}`);
     const pre = await mercadopago(`preapproval/${pay.preapproval_id}`);
-    const { companyId, plan } = splitReference(pre.external_reference);
+    const { companyId, plan, cycle } = splitReference(pre.external_reference);
     if (companyId) {
-      await update(companyId, { plan, status: pay.status === "approved" || pay.payment?.status === "approved" ? "ativa" : "inadimplente", current_period_end: pre.next_payment_date ?? undefined });
+      await update(companyId, { plan, billing_cycle: cycle, status: pay.status === "approved" || pay.payment?.status === "approved" ? "ativa" : "inadimplente", current_period_end: pre.next_payment_date ?? undefined });
     }
   }
   return new Response("ok");

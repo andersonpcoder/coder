@@ -315,6 +315,7 @@ create table subscriptions (
   status subscription_status not null default 'teste',
   trial_ends_at timestamptz not null default now() + interval '14 days',
   current_period_end timestamptz,
+  billing_cycle text not null default 'mensal' check (billing_cycle in ('mensal', 'anual')),
   provider text check (provider in ('stripe', 'asaas', 'mercadopago')),
   provider_customer_id text,
   provider_subscription_id text

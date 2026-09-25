@@ -92,8 +92,15 @@ export async function loadCompany(sb: SupabaseClient, companyId: string): Promis
   // A tabela de assinatura é só do admin; os demais recebem apenas o plano em vigor.
   let subscription = subscriptionRes.data ? fromRow.subscription(subscriptionRes.data) : null;
   if (!subscription) {
-    const { data: plan } = await sb.rpc("effective_plan", { p_company: companyId });
-    subscription = { plan: (plan as Subscription["plan"]) ?? "basico", status: "ativa", trialEndsAt: new Date().toISOString() };
+    const [{ data: plan }, { data: active }] = await Promise.all([
+      sb.rpc("effective_plan", { p_company: companyId }),
+      sb.rpc("has_active_plan", { p_company: companyId }),
+    ]);
+    subscription = {
+      plan: (plan as Subscription["plan"]) ?? "basico",
+      status: active ? "ativa" : "cancelada",
+      trialEndsAt: new Date().toISOString(),
+    };
   }
 
   const userIds = memberships.map((m) => m.user_id);

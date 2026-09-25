@@ -54,6 +54,7 @@ export interface Subscription {
   status: SubscriptionStatus;
   trialEndsAt: string;
   currentPeriodEnd?: string;
+  billingCycle?: "mensal" | "anual";
   provider?: string;
 }
 

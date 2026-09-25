@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, CreditCard, QrCode } from "lucide-react";
+import { CreditCard, QrCode } from "lucide-react";
+import { CycleToggle, PlanHighlights, PriceTag } from "@/components/shared/pricing";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Field, Input } from "@/components/ui/field";
 import { addDays } from "@/lib/dates";
-import { formatDate, money } from "@/lib/format";
-import { effectivePlan, PLANS, trialDaysLeft } from "@/lib/plans";
+import { formatDate } from "@/lib/format";
+import { effectivePlan, GRACE_DAYS, isActive, PLANS, trialDaysLeft, type BillingCycle } from "@/lib/plans";
 import { useStore } from "@/lib/store";
 import { errorMessage } from "@/lib/supabase/client";
 import type { PlanTier } from "@/lib/types";
@@ -22,6 +23,7 @@ export function PlanoTab() {
   const sub = state.subscription;
   const [method, setMethod] = useState<"pix" | "cartao">("pix");
   const [document, setDocument] = useState("");
+  const [cycle, setCycle] = useState<BillingCycle>(sub.billingCycle ?? "mensal");
   const [busy, setBusy] = useState<PlanTier | "cancelar" | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const current = effectivePlan(sub);
@@ -34,13 +36,16 @@ export function PlanoTab() {
     }
     setBusy(plan);
     if (!supabase) {
-      dispatch({ type: "setSubscription", subscription: { ...sub, plan, status: "ativa", currentPeriodEnd: addDays(new Date(), 30).toISOString(), provider: "demonstracao" } });
+      dispatch({
+        type: "setSubscription",
+        subscription: { ...sub, plan, status: "ativa", billingCycle: cycle, currentPeriodEnd: addDays(new Date(), cycle === "anual" ? 365 : 30).toISOString(), provider: "demonstracao" },
+      });
       toast(`Plano ${PLANS[plan].name} ativado (demonstração, sem cobrança).`, "sucesso");
       setBusy(null);
       return;
     }
     const { data, error } = await supabase.functions.invoke("billing-checkout", {
-      body: { company_id: state.company.id, plan, method, document: document.replace(/\D/g, "") || undefined, return_url: `${window.location.origin}/configuracoes?aba=plano` },
+      body: { company_id: state.company.id, plan, cycle, method, document: document.replace(/\D/g, "") || undefined, return_url: `${window.location.origin}/configuracoes?aba=plano` },
     });
     setBusy(null);
     if (error || !data?.url) return toast(`Não foi possível abrir o pagamento: ${errorMessage(error ?? data?.error)}`, "erro");
@@ -69,7 +74,7 @@ export function PlanoTab() {
       <Card>
         <CardHeader><CardTitle>Sua assinatura</CardTitle><Badge tone={sub.status === "ativa" ? "success" : sub.status === "teste" ? "accent" : "danger"}>{statusLabel[sub.status]}</Badge></CardHeader>
         <CardContent className="grid gap-3 text-sm sm:grid-cols-3">
-          <div><p className="text-muted">Plano em uso</p><p className="font-display text-xl font-semibold">{PLANS[current].name}</p></div>
+          <div><p className="text-muted">Plano em uso</p><p className="font-display text-xl font-semibold">{PLANS[current].name}{sub.status === "ativa" && sub.billingCycle === "anual" ? " (anual)" : ""}</p></div>
           <div>
             <p className="text-muted">{sub.status === "teste" ? "Teste termina em" : "Próxima cobrança"}</p>
             <p className="font-display text-xl font-semibold">
@@ -78,10 +83,16 @@ export function PlanoTab() {
           </div>
           <div><p className="text-muted">Profissionais ativos</p><p className="font-display text-xl font-semibold">{activePros}{PLANS[current].maxProfessionals !== null && ` de ${PLANS[current].maxProfessionals}`}</p></div>
           {sub.status === "teste" && <p className="text-muted sm:col-span-3">No teste grátis todos os recursos do plano Empresa estão liberados. Escolha um plano para continuar depois do teste.</p>}
-          {sub.status === "inadimplente" && <p className="text-danger sm:col-span-3">Não conseguimos cobrar a última mensalidade. Atualize o pagamento para não perder o acesso.</p>}
+          {sub.status === "inadimplente" && (
+            <p className="text-danger sm:col-span-3">
+              Não conseguimos cobrar a última mensalidade. A agenda continua liberada por {GRACE_DAYS} dias; depois fica bloqueada até o pagamento.
+            </p>
+          )}
+          {!isActive(sub) && <p className="font-semibold text-danger sm:col-span-3">A conta está bloqueada. Escolha um plano abaixo para reabrir a agenda.</p>}
         </CardContent>
       </Card>
 
+      <CycleToggle value={cycle} onChange={setCycle} />
       <fieldset className="flex flex-wrap items-center gap-2">
         <legend className="mb-2 text-sm font-semibold">Forma de pagamento</legend>
         {([["pix", "Pix", QrCode], ["cartao", "Cartão de crédito", CreditCard]] as const).map(([v, l, Icon]) => (
@@ -97,14 +108,12 @@ export function PlanoTab() {
 
       <div className="grid gap-4 lg:grid-cols-3">
         {Object.values(PLANS).map((p) => {
-          const isCurrent = sub.status === "ativa" && sub.plan === p.tier;
+          const isCurrent = sub.status === "ativa" && sub.plan === p.tier && (sub.billingCycle ?? "mensal") === cycle;
           return (
             <Card key={p.tier} className={cn("flex flex-col p-6", isCurrent && "border-primary ring-1 ring-primary")}>
               <h3 className="text-xl font-semibold">{p.name}</h3>
-              <p className="mt-2"><span className="font-display text-3xl font-bold">{money(p.priceCents)}</span><span className="text-muted">/mês</span></p>
-              <ul className="mt-4 flex flex-1 flex-col gap-2 text-sm">
-                {p.highlights.map((h) => <li key={h} className="flex gap-2"><Check className="size-4 shrink-0 text-primary" aria-hidden /> {h}</li>)}
-              </ul>
+              <PriceTag plan={p} cycle={cycle} />
+              <PlanHighlights plan={p} />
               <Button className="mt-6" variant={isCurrent ? "outline" : "primary"} disabled={isCurrent || busy !== null} onClick={() => subscribe(p.tier)}>
                 {isCurrent ? "Plano atual" : busy === p.tier ? "Abrindo pagamento…" : sub.status === "ativa" ? "Mudar para este plano" : "Assinar"}
               </Button>
