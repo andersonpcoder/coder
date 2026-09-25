@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #efede7;
+  --border: #e4e1d9;
+  --text: #1c2321;
+  --muted: #5e6763;
+  --primary: #0f6e63;
+  --primary-hover: #0b5a51;
+  --primary-soft: #dcefeb;
+  --primary-fg: #ffffff;
+  --accent: #c8742b;
+  --accent-soft: #f7e6d5;
+  --danger: #b4372f;
+  --danger-soft: #f8e1df;
+  --warning: #9a6200;
+  --warning-soft: #fbeccc;
+  --success: #1f7a3f;
+  --success-soft: #dcf1e2;
+  --ring: #0f6e63;
+  --hatch: #d9d5cb;
+
+  /* Paleta suave dos serviços na agenda: fundo, texto e barra lateral. */
+  --svc-lavanda-bg: #ece7fb; --svc-lavanda-fg: #3d2f7a; --svc-lavanda-bar: #7c6ae0;
+  --svc-ceu-bg: #e0eefb; --svc-ceu-fg: #1d4670; --svc-ceu-bar: #4a90d9;
+  --svc-menta-bg: #dcf3ea; --svc-menta-fg: #145a44; --svc-menta-bar: #34a27d;
+  --svc-pessego-bg: #fdebd9; --svc-pessego-fg: #7a3d0c; --svc-pessego-bar: #e08a3c;
+  --svc-rosa-bg: #fbe3ea; --svc-rosa-fg: #7c1f3d; --svc-rosa-bar: #d9577f;
+  --svc-areia-bg: #f1ecdf; --svc-areia-fg: #5b4a1e; --svc-areia-bar: #b39449;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #121615;
+  --surface: #1a201e;
+  --surface-2: #232a28;
+  --border: #2f3835;
+  --text: #ecefed;
+  --muted: #a3ada9;
+  --primary: #3fb3a3;
+  --primary-hover: #5cc6b7;
+  --primary-soft: #16332f;
+  --primary-fg: #0b1a18;
+  --accent: #e5985a;
+  --accent-soft: #3a2818;
+  --danger: #f08a80;
+  --danger-soft: #3d1f1c;
+  --warning: #f0c060;
+  --warning-soft: #3a2e14;
+  --success: #6fd192;
+  --success-soft: #173323;
+  --ring: #5cc6b7;
+  --hatch: #2c3431;
+
+  --svc-lavanda-bg: #2a2548; --svc-lavanda-fg: #d9d1ff; --svc-lavanda-bar: #9d8ff0;
+  --svc-ceu-bg: #1b2d42; --svc-ceu-fg: #cde3fa; --svc-ceu-bar: #6aaae8;
+  --svc-menta-bg: #173529; --svc-menta-fg: #c8f0de; --svc-menta-bar: #4fc298;
+  --svc-pessego-bg: #3b2a1a; --svc-pessego-fg: #fbdcc0; --svc-pessego-bar: #eba062;
+  --svc-rosa-bg: #3d1f2a; --svc-rosa-fg: #fbd0dd; --svc-rosa-bar: #e87c9d;
+  --svc-areia-bg: #332d1d; --svc-areia-fg: #eee2c0; --svc-areia-bar: #cbb068;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-ring: var(--ring);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 16px;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.svc {
+  background: var(--svc-bg);
+  color: var(--svc-fg);
+  border-left: 3px solid var(--svc-bar);
+}
+.svc-lavanda { --svc-bg: var(--svc-lavanda-bg); --svc-fg: var(--svc-lavanda-fg); --svc-bar: var(--svc-lavanda-bar); }
+.svc-ceu { --svc-bg: var(--svc-ceu-bg); --svc-fg: var(--svc-ceu-fg); --svc-bar: var(--svc-ceu-bar); }
+.svc-menta { --svc-bg: var(--svc-menta-bg); --svc-fg: var(--svc-menta-fg); --svc-bar: var(--svc-menta-bar); }
+.svc-pessego { --svc-bg: var(--svc-pessego-bg); --svc-fg: var(--svc-pessego-fg); --svc-bar: var(--svc-pessego-bar); }
+.svc-rosa { --svc-bg: var(--svc-rosa-bg); --svc-fg: var(--svc-rosa-fg); --svc-bar: var(--svc-rosa-bar); }
+.svc-areia { --svc-bg: var(--svc-areia-bg); --svc-fg: var(--svc-areia-fg); --svc-bar: var(--svc-areia-bar); }
+
+.hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--hatch) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
