@@ -10,7 +10,7 @@ import { useActions, type AppointmentDraft } from "@/lib/actions";
 import { atMinutes, fromDateInput, parseTimeInput, toDateInput, toTimeInput } from "@/lib/dates";
 import { channelLabel, formatDuration, formatPhone, money, statusLabel } from "@/lib/format";
 import { availableSlots } from "@/lib/scheduling";
-import { useStore } from "@/lib/store";
+import { useActiveProfessionals, useLookups, useStore } from "@/lib/store";
 import type { Appointment, AppointmentStatus, BookingChannel, Recurrence } from "@/lib/types";
 
 export interface AppointmentDialogSeed {
@@ -39,7 +39,11 @@ export function AppointmentDialog({
   onConclude?: (appointment: Appointment) => void;
 }) {
   const { state } = useStore();
-  const { saveAppointment } = useActions();
+  const { saveAppointment, setStatus: saveStatus } = useActions();
+  const { currentUser } = useLookups();
+  // O profissional só altera o status dos próprios atendimentos (regra do RLS).
+  const statusOnly = currentUser.role === "profissional";
+  const activePros = useActiveProfessionals();
   const editing = seed?.appointment;
 
   const [customerId, setCustomerId] = useState("");
@@ -62,14 +66,14 @@ export function AppointmentDialog({
     const a = seed.appointment;
     const start = a ? new Date(a.start) : (seed.start ?? new Date());
     const pro = a?.professionalId ?? seed.professionalId ?? "";
-    const firstService = state.professionals.find((p) => p.id === pro)?.serviceIds[0] ?? state.services[0].id;
+    const firstService = activePros.find((p) => p.id === pro)?.serviceIds[0] ?? state.services.find((s) => s.active)?.id ?? "";
     const svc = a?.serviceId ?? firstService;
     setCustomerId(a?.customerId ?? seed.customerId ?? "");
     setCreatingCustomer(false);
     setNewCustomer({ name: "", phone: "" });
     setCustomerQuery("");
     setServiceId(svc);
-    setProfessionalId(pro || (state.professionals.find((p) => p.serviceIds.includes(svc))?.id ?? ""));
+    setProfessionalId(pro || (activePros.find((p) => p.serviceIds.includes(svc))?.id ?? ""));
     setDate(toDateInput(start));
     setTime(toTimeInput(start));
     setDuration(a ? (new Date(a.end).getTime() - start.getTime()) / 60_000 : (state.services.find((s) => s.id === svc)?.durationMin ?? 30));
@@ -78,10 +82,15 @@ export function AppointmentDialog({
     setNotes(a?.notes ?? "");
     setRecurrence("nenhuma");
     setOccurrences(4);
-  }, [seed, state.professionals, state.services]);
+    // Recarrega o formulário só quando abre com outra semente.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed]);
 
   const service = state.services.find((s) => s.id === serviceId);
-  const eligiblePros = state.professionals.filter((p) => p.serviceIds.includes(serviceId));
+  const eligiblePros = state.professionals.filter(
+    (p) => p.serviceIds.includes(serviceId) && (p.active || p.id === editing?.professionalId),
+  );
+  const serviceOptions = state.services.filter((s) => s.active || s.id === editing?.serviceId);
   const pro = state.professionals.find((p) => p.id === professionalId);
 
   const suggestions = useMemo(() => {
@@ -103,8 +112,9 @@ export function AppointmentDialog({
       .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
   }, [customerQuery, state.customers]);
 
-  const submit = () => {
-    if (!date || !time) return;
+  const [saving, setSaving] = useState(false);
+  const submit = async () => {
+    if (!date || !time || saving) return;
     const draft: AppointmentDraft = {
       id: editing?.id,
       customerId: creatingCustomer ? undefined : customerId,
@@ -119,7 +129,16 @@ export function AppointmentDialog({
       recurrence,
       occurrences,
     };
-    if (saveAppointment(draft)) onClose();
+    setSaving(true);
+    if (statusOnly && editing) {
+      await saveStatus(editing.id, status);
+      setSaving(false);
+      onClose();
+      return;
+    }
+    const ok = await saveAppointment(draft);
+    setSaving(false);
+    if (ok) onClose();
   };
 
   const customer = state.customers.find((c) => c.id === customerId);
@@ -141,7 +160,7 @@ export function AppointmentDialog({
           <Button variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button onClick={submit} disabled={!professionalId || !serviceId || (creatingCustomer ? !newCustomer.name.trim() : !customerId)}>
+          <Button onClick={submit} disabled={saving || !professionalId || !serviceId || (creatingCustomer ? !newCustomer.name.trim() : !customerId)}>
             {editing ? "Salvar alterações" : "Agendar"}
           </Button>
         </>
@@ -154,6 +173,7 @@ export function AppointmentDialog({
           submit();
         }}
       >
+        <fieldset disabled={statusOnly} className="contents">
         <div className="sm:col-span-2">
           {creatingCustomer ? (
             <div className="grid gap-3 rounded-2xl bg-surface-2 p-3 sm:grid-cols-2">
@@ -206,12 +226,12 @@ export function AppointmentDialog({
                 const svc = state.services.find((s) => s.id === e.target.value);
                 setServiceId(e.target.value);
                 if (svc) setDuration(svc.durationMin);
-                if (svc && !state.professionals.find((p) => p.id === professionalId)?.serviceIds.includes(svc.id)) {
-                  setProfessionalId(state.professionals.find((p) => p.serviceIds.includes(svc.id))?.id ?? "");
+                if (svc && !activePros.find((p) => p.id === professionalId)?.serviceIds.includes(svc.id)) {
+                  setProfessionalId(activePros.find((p) => p.serviceIds.includes(svc.id))?.id ?? "");
                 }
               }}
             >
-              {state.services.map((s) => (
+              {serviceOptions.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name} · {formatDuration(s.durationMin)} · {money(s.priceCents)}
                 </option>
@@ -274,6 +294,7 @@ export function AppointmentDialog({
           </div>
         )}
 
+        </fieldset>
         <Field label="Status">
           {(id) => (
             <Select id={id} value={status} onChange={(e) => setStatus(e.target.value as AppointmentStatus)}>
@@ -285,6 +306,7 @@ export function AppointmentDialog({
             </Select>
           )}
         </Field>
+        <fieldset disabled={statusOnly} className="contents">
         <Field label="Canal">
           {(id) => (
             <Select id={id} value={channel} onChange={(e) => setChannel(e.target.value as BookingChannel)}>
@@ -333,6 +355,7 @@ export function AppointmentDialog({
             Faz parte de uma série recorrente. Alterações valem só para esta data. <StatusBadge status={editing.status} />
           </p>
         )}
+        </fieldset>
         <button type="submit" hidden />
       </form>
     </Dialog>

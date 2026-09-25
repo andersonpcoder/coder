@@ -1,37 +1,20 @@
-// Edge Function: envia os lembretes pendentes (WhatsApp e e-mail).
-// Agendada pelo pg_cron a cada 5 minutos (ver README). Usa a service role,
-// então roda fora do RLS e deve ser chamada só pelo agendador.
-import { createClient } from "npm:@supabase/supabase-js@2";
+// Envia as mensagens automáticas pendentes: lembretes 24h/2h, aniversário e retorno.
+// Agendada pelo pg_cron a cada 5 minutos (ver README).
+import { admin, json, safeEqual } from "../_shared/http.ts";
+import { sendWhatsApp, whatsappIntegration } from "../_shared/messaging.ts";
 
-const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-
-const WHATSAPP_TOKEN = Deno.env.get("WHATSAPP_TOKEN");
-const WHATSAPP_PHONE_ID = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID");
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const EMAIL_FROM = Deno.env.get("EMAIL_FROM") ?? "Balcão <lembretes@balcao.app>";
 const PUBLIC_URL = Deno.env.get("PUBLIC_APP_URL") ?? "https://balcao.app";
 const CRON_SECRET = Deno.env.get("CRON_SECRET");
 
-const fmt = (iso: string, opts: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", ...opts }).format(new Date(iso));
+const fmt = (iso: string, tz: string, opts: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat("pt-BR", { timeZone: tz, ...opts }).format(new Date(iso));
 
-function render(template: string, vars: Record<string, string>) {
-  return template.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
-}
-
-async function sendWhatsApp(phone: string, body: string) {
-  if (!WHATSAPP_TOKEN || !WHATSAPP_PHONE_ID) throw new Error("WhatsApp não configurado");
-  const res = await fetch(`https://graph.facebook.com/v21.0/${WHATSAPP_PHONE_ID}/messages`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}`, "Content-Type": "application/json" },
-    // Fora da janela de 24h a Meta exige modelo aprovado; troque por type "template" em produção.
-    body: JSON.stringify({ messaging_product: "whatsapp", to: `55${phone}`, type: "text", text: { body } }),
-  });
-  if (!res.ok) throw new Error(`WhatsApp ${res.status}: ${await res.text()}`);
-}
+const render = (template: string, vars: Record<string, string>) => template.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
 
 async function sendEmail(to: string, subject: string, text: string) {
-  if (!RESEND_API_KEY) throw new Error("E-mail não configurado");
+  if (!RESEND_API_KEY) throw new Error("E-mail não configurado (RESEND_API_KEY)");
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
@@ -40,33 +23,52 @@ async function sendEmail(to: string, subject: string, text: string) {
   if (!res.ok) throw new Error(`E-mail ${res.status}: ${await res.text()}`);
 }
 
+const subjects: Record<string, string> = {
+  lembrete_24h: "Lembrete: seu horário é amanhã",
+  lembrete_2h: "Seu horário é daqui a pouco",
+  aniversario: "Feliz aniversário!",
+  retorno: "Que tal agendar seu retorno?",
+};
+
 Deno.serve(async (req) => {
-  if (CRON_SECRET && req.headers.get("authorization") !== `Bearer ${CRON_SECRET}`) {
+  if (CRON_SECRET && !safeEqual(req.headers.get("authorization") ?? "", `Bearer ${CRON_SECRET}`)) {
     return new Response("Não autorizado", { status: 401 });
   }
 
-  const { data: jobs, error } = await supabase
+  const { data: jobs, error } = await admin
     .from("notification_jobs")
     .select(`id, kind, channel, attempts, company_id,
-      appointment:appointments(starts_at, status, manage_token,
-        service:services(name), professional:professionals(name)),
+      company:companies(name, timezone),
+      appointment:appointments(starts_at, status, manage_token, service:services(name), professional:professionals(name)),
       customer:customers(name, phone, email)`)
     .eq("status", "pendente")
     .lte("scheduled_for", new Date().toISOString())
     .lt("attempts", 3)
-    .limit(100);
-  if (error) return new Response(error.message, { status: 500 });
+    .order("scheduled_for")
+    .limit(200);
+  if (error) return json({ error: error.message }, 500);
 
   let sent = 0;
+  const plans = new Map<string, string>();
   for (const job of jobs ?? []) {
     // deno-lint-ignore no-explicit-any
     const j = job as any;
+    const mark = (patch: Record<string, unknown>) => admin.from("notification_jobs").update(patch).eq("id", j.id);
     try {
-      if (!j.appointment || ["cancelado", "faltou"].includes(j.appointment.status)) {
-        await supabase.from("notification_jobs").update({ status: "cancelado" }).eq("id", j.id);
+      const isReminder = j.kind === "lembrete_24h" || j.kind === "lembrete_2h";
+      if (isReminder && (!j.appointment || ["cancelado", "faltou", "concluido"].includes(j.appointment.status))) {
+        await mark({ status: "cancelado" });
         continue;
       }
-      const { data: template } = await supabase
+      if (!plans.has(j.company_id)) {
+        const { data } = await admin.rpc("effective_plan", { p_company: j.company_id });
+        plans.set(j.company_id, data as string);
+      }
+      if (j.channel === "whatsapp" && plans.get(j.company_id) === "basico") {
+        await mark({ status: "cancelado", last_error: "WhatsApp não incluído no plano Básico" });
+        continue;
+      }
+      const { data: template } = await admin
         .from("message_templates")
         .select("body")
         .eq("company_id", j.company_id)
@@ -75,31 +77,38 @@ Deno.serve(async (req) => {
         .eq("active", true)
         .maybeSingle();
       if (!template) {
-        await supabase.from("notification_jobs").update({ status: "cancelado", last_error: "Sem modelo ativo" }).eq("id", j.id);
+        await mark({ status: "cancelado", last_error: "Sem modelo ativo" });
         continue;
       }
-      const confirmLink = `${PUBLIC_URL}/confirmar/${j.appointment.manage_token}`;
-      const text = render(template.body, {
-        nome: j.customer.name.split(" ")[0],
-        hora: fmt(j.appointment.starts_at, { hour: "2-digit", minute: "2-digit" }),
-        data: fmt(j.appointment.starts_at, { day: "2-digit", month: "2-digit", year: "numeric" }),
-        servico: j.appointment.service.name,
-        profissional: j.appointment.professional.name,
-      }) + `\n\nConfirmar ou remarcar: ${confirmLink}`;
+      const tz = j.company?.timezone ?? "America/Sao_Paulo";
+      let text = render(template.body, {
+        nome: String(j.customer?.name ?? "").split(" ")[0],
+        empresa: j.company?.name ?? "",
+        hora: j.appointment ? fmt(j.appointment.starts_at, tz, { hour: "2-digit", minute: "2-digit" }) : "",
+        data: j.appointment ? fmt(j.appointment.starts_at, tz, { day: "2-digit", month: "2-digit" }) : "",
+        servico: j.appointment?.service?.name ?? "",
+        profissional: j.appointment?.professional?.name ?? "",
+      });
+      if (isReminder) text += `\n\nConfirmar, remarcar ou cancelar: ${PUBLIC_URL}/agendamento/${j.appointment.manage_token}`;
 
-      if (j.channel === "whatsapp") await sendWhatsApp(j.customer.phone, text);
-      else if (j.customer.email) await sendEmail(j.customer.email, "Lembrete do seu horário", text);
-      else throw new Error("Cliente sem e-mail");
-
-      await supabase.from("notification_jobs").update({ status: "enviado", sent_at: new Date().toISOString() }).eq("id", j.id);
+      if (j.channel === "whatsapp") {
+        const integration = await whatsappIntegration(j.company_id);
+        if (!integration) throw new Error("Nenhuma integração de WhatsApp ativa");
+        if (!j.customer?.phone) throw new Error("Cliente sem telefone");
+        await sendWhatsApp(integration, j.customer.phone, text);
+      } else {
+        if (!j.customer?.email) {
+          await mark({ status: "cancelado", last_error: "Cliente sem e-mail" });
+          continue;
+        }
+        await sendEmail(j.customer.email, `${subjects[j.kind] ?? "Aviso"} · ${j.company?.name ?? ""}`, text);
+      }
+      await mark({ status: "enviado", sent_at: new Date().toISOString(), attempts: j.attempts + 1 });
       sent++;
     } catch (e) {
       const attempts = j.attempts + 1;
-      await supabase
-        .from("notification_jobs")
-        .update({ attempts, last_error: String(e), status: attempts >= 3 ? "falhou" : "pendente" })
-        .eq("id", j.id);
+      await mark({ attempts, last_error: String((e as Error).message).slice(0, 500), status: attempts >= 3 ? "falhou" : "pendente" });
     }
   }
-  return Response.json({ processados: jobs?.length ?? 0, enviados: sent });
+  return json({ processados: jobs?.length ?? 0, enviados: sent });
 });

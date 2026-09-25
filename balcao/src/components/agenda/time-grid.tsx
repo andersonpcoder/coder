@@ -288,7 +288,7 @@ export function TimeGrid({
               isSameDay(new Date(b.start), col.day) &&
               (!b.professionalId || !col.professional || b.professionalId === col.professional.id),
           );
-          const windows = col.professional?.workHours[col.day.getDay()] ?? null;
+          const windows = col.professional ? (col.professional.workHours[col.day.getDay()] ?? []) : null;
           const today = isSameDay(col.day, now);
           return (
             <div

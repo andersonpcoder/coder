@@ -17,7 +17,7 @@ import { Segmented } from "@/components/ui/segmented";
 import { useActions } from "@/lib/actions";
 import { addDays, addMonths, isSameDay, startOfDay, startOfWeek } from "@/lib/dates";
 import { formatDate, formatDayLong, formatMonth, formatWeekday, statusLabel } from "@/lib/format";
-import { useLookups, useStore } from "@/lib/store";
+import { useActiveProfessionals, useLookups, useStore } from "@/lib/store";
 import type { Appointment, AppointmentStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ type View = "dia" | "semana" | "mes" | "equipe";
 const ALL_STATUSES = Object.keys(statusLabel) as AppointmentStatus[];
 
 export default function AgendaPage() {
-  const { state, dispatch } = useStore();
+  const { state, db } = useStore();
   const { currentUser, customers, services } = useLookups();
   const { moveAppointment } = useActions();
   const isPro = currentUser.role === "profissional";
@@ -42,8 +42,10 @@ export default function AgendaPage() {
   // Profissional vê só a própria agenda (mesma regra das políticas RLS).
   const chosenPro = isPro ? (currentUser.professionalId ?? "") : proFilter;
   // Na semana, vários profissionais sobrepostos ficam ilegíveis; mostra um por vez.
-  const effectivePro = view === "semana" && !chosenPro ? state.professionals[0].id : chosenPro;
-  const professionals = state.professionals.filter((p) => !effectivePro || p.id === effectivePro);
+  const activePros = useActiveProfessionals();
+  const activeServices = state.services.filter((s) => s.active);
+  const effectivePro = view === "semana" && !chosenPro ? (activePros[0]?.id ?? "") : chosenPro;
+  const professionals = activePros.filter((p) => !effectivePro || p.id === effectivePro);
 
   const filtered = useMemo(
     () =>
@@ -60,14 +62,15 @@ export default function AgendaPage() {
   const [startMin, endMin] = useMemo(() => {
     let s = 24 * 60;
     let e = 0;
-    for (const p of state.professionals)
+    for (const p of activePros)
       for (const ws of Object.values(p.workHours))
         for (const w of ws) {
           s = Math.min(s, w.start);
           e = Math.max(e, w.end);
         }
+    if (e === 0) return [8 * 60, 19 * 60];
     return [Math.max(6 * 60, Math.floor(s / 60) * 60 - 60), Math.min(23 * 60, Math.ceil(e / 60) * 60 + 60)];
-  }, [state.professionals]);
+  }, [activePros]);
 
   const columns: GridColumn[] = useMemo(() => {
     if (view === "dia") {
@@ -104,7 +107,7 @@ export default function AgendaPage() {
   };
 
   const conclude = (a: Appointment) => {
-    dispatch({ type: "updateAppointment", id: a.id, patch: { status: "concluido" } });
+    void db.patch("appointments", a.id, { status: "concluido" });
     setDialog(null);
     // Profissional marca como concluído; o recebimento fica com a recepção.
     if (isPro) return;
@@ -129,9 +132,11 @@ export default function AgendaPage() {
             <Button variant="outline" onClick={() => setBlockOpen(true)}>
               <Ban /> Bloquear horário
             </Button>
-            <Button onClick={() => setDialog({ start: nextQuarter(), professionalId: effectivePro || undefined })}>
-              <Plus /> Novo agendamento
-            </Button>
+            {!isPro && (
+              <Button onClick={() => setDialog({ start: nextQuarter(), professionalId: effectivePro || undefined })}>
+                <Plus /> Novo agendamento
+              </Button>
+            )}
           </>
         }
       />
@@ -168,14 +173,14 @@ export default function AgendaPage() {
           {!isPro && (
             <Select aria-label="Filtrar por profissional" value={effectivePro} onChange={(e) => setProFilter(e.target.value)} className="w-auto">
               {view !== "semana" && <option value="">Todos os profissionais</option>}
-              {state.professionals.map((p) => (
+              {activePros.map((p) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </Select>
           )}
           <Select aria-label="Filtrar por serviço" value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="w-auto">
             <option value="">Todos os serviços</option>
-            {state.services.map((s) => (
+            {activeServices.map((s) => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </Select>
@@ -183,7 +188,13 @@ export default function AgendaPage() {
         </div>
       </div>
 
-      {view === "mes" ? (
+      {activePros.length === 0 ? (
+        <div className="rounded-[var(--radius-card)] border border-dashed border-border p-10 text-center">
+          <p className="font-display text-lg font-semibold">Cadastre a equipe para começar a agendar</p>
+          <p className="mt-1 text-sm text-muted">A agenda mostra os horários de cada profissional.</p>
+          <Button asChild className="mt-4"><a href="/equipe">Ir para Equipe</a></Button>
+        </div>
+      ) : view === "mes" ? (
         <MonthView cursor={cursor} appointments={filtered} blocks={state.blocks} onPickDay={openDay} onOpen={(a) => setDialog({ appointment: a })} />
       ) : view === "equipe" ? (
         <TeamView
@@ -201,7 +212,7 @@ export default function AgendaPage() {
           blocks={effectivePro ? state.blocks.filter((b) => !b.professionalId || b.professionalId === effectivePro) : state.blocks}
           startMin={startMin}
           endMin={endMin}
-          canEdit
+          canEdit={!isPro}
           onCreate={(start, professionalId) => setDialog({ start, professionalId: professionalId ?? (effectivePro || undefined) })}
           onOpen={(a) => setDialog({ appointment: a })}
           onMove={moveAppointment}
@@ -211,7 +222,7 @@ export default function AgendaPage() {
       <ServiceLegend />
 
       <AppointmentDialog seed={dialog} onClose={() => setDialog(null)} onConclude={conclude} />
-      <BlockDialog open={blockOpen} day={cursor} onClose={() => setBlockOpen(false)} />
+      <BlockDialog open={blockOpen} day={cursor} onClose={() => setBlockOpen(false)} professionalId={isPro ? currentUser.professionalId : undefined} />
       <PaymentDialog target={payment} onClose={() => setPayment(null)} />
     </div>
   );
@@ -261,7 +272,7 @@ function ServiceLegend() {
   const { state } = useStore();
   return (
     <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted" aria-label="Legenda de serviços">
-      {state.services.map((s) => (
+      {state.services.filter((s) => s.active).map((s) => (
         <li key={s.id} className="flex items-center gap-1.5">
           <span className={cn("svc size-3 rounded-sm", `svc-${s.color}`)} aria-hidden />
           {s.name}

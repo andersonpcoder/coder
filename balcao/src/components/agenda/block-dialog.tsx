@@ -10,8 +10,9 @@ import { newId, useStore } from "@/lib/store";
 import type { TimeBlockKind } from "@/lib/types";
 
 /** Bloqueio de horário: almoço, folga, feriado ou outro motivo. */
-export function BlockDialog({ open, day, onClose }: { open: boolean; day: Date; onClose: () => void }) {
-  const { state, dispatch, toast } = useStore();
+/** Com professionalId fixo (profissional logado), bloqueia só a própria agenda. */
+export function BlockDialog({ open, day, onClose, professionalId: fixedPro }: { open: boolean; day: Date; onClose: () => void; professionalId?: string }) {
+  const { state, db, toast } = useStore();
   const [kind, setKind] = useState<TimeBlockKind>("almoco");
   const [professionalId, setProfessionalId] = useState("");
   const [date, setDate] = useState("");
@@ -23,13 +24,14 @@ export function BlockDialog({ open, day, onClose }: { open: boolean; day: Date; 
   useEffect(() => {
     if (open) {
       setDate(toDateInput(day));
+      setProfessionalId(fixedPro ?? "");
       setKind("almoco");
       setAllDay(false);
       setReason("");
     }
   }, [open, day]);
 
-  const submit = () => {
+  const submit = async () => {
     const d = fromDateInput(date);
     const s = allDay ? 0 : parseTimeInput(start);
     const e = allDay ? 24 * 60 - 1 : parseTimeInput(end);
@@ -37,17 +39,17 @@ export function BlockDialog({ open, day, onClose }: { open: boolean; day: Date; 
       toast("O fim precisa ser depois do início.", "erro");
       return;
     }
-    dispatch({
-      type: "addBlock",
-      block: {
-        id: newId("b"),
+    const ok = await db.upsert("blocks", [
+      {
+        id: newId(),
         kind,
         professionalId: professionalId || undefined,
         reason: reason.trim() || blockKindLabel[kind],
         start: atMinutes(d, s).toISOString(),
         end: atMinutes(d, e).toISOString(),
       },
-    });
+    ]);
+    if (!ok) return;
     toast("Horário bloqueado.", "sucesso");
     onClose();
   };
@@ -85,9 +87,9 @@ export function BlockDialog({ open, day, onClose }: { open: boolean; day: Date; 
         </Field>
         <Field label="Para quem">
           {(id) => (
-            <Select id={id} value={professionalId} onChange={(e) => setProfessionalId(e.target.value)}>
-              <option value="">Toda a equipe</option>
-              {state.professionals.map((p) => (
+            <Select id={id} value={professionalId} disabled={!!fixedPro} onChange={(e) => setProfessionalId(e.target.value)}>
+              {!fixedPro && <option value="">Toda a equipe</option>}
+              {state.professionals.filter((p) => p.active).map((p) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </Select>

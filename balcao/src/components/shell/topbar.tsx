@@ -7,7 +7,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/lib/format";
-import { useStore } from "@/lib/store";
+import { trialDaysLeft } from "@/lib/plans";
+import { useLookups, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Logo, SidebarNav, UserMenu } from "./sidebar";
 
@@ -32,10 +33,10 @@ function ThemeToggle() {
 }
 
 function Notifications() {
-  const { state, dispatch } = useStore();
+  const { state, db } = useStore();
   const unread = state.notifications.filter((n) => !n.read).length;
   return (
-    <Dropdown.Root onOpenChange={(open) => !open && unread && dispatch({ type: "readNotifications" })}>
+    <Dropdown.Root onOpenChange={(open) => !open && unread > 0 && void db.readNotifications()}>
       <Dropdown.Trigger asChild>
         <Button variant="ghost" size="icon" aria-label={`Notificações${unread ? `, ${unread} novas` : ""}`} className="relative">
           <Bell />
@@ -45,7 +46,8 @@ function Notifications() {
       <Dropdown.Portal>
         <Dropdown.Content align="end" sideOffset={6} className="z-50 w-[min(22rem,calc(100vw-2rem))] rounded-2xl border border-border bg-surface p-1.5 shadow-xl">
           <Dropdown.Label className="px-3 py-2 text-sm font-semibold">Notificações</Dropdown.Label>
-          {state.notifications.map((n) => (
+          {state.notifications.length === 0 && <p className="px-3 pb-3 text-sm text-muted">Nada por aqui ainda.</p>}
+          {state.notifications.slice(0, 15).map((n) => (
             <Dropdown.Item key={n.id} asChild>
               <Link
                 href={n.link ?? "#"}
@@ -66,9 +68,52 @@ function Notifications() {
   );
 }
 
+function UnitSwitcher() {
+  const { state, dispatch } = useStore();
+  if (state.units.length < 2) return <span className="hidden text-sm text-muted lg:inline">{state.company.name}</span>;
+  return (
+    <select
+      aria-label="Unidade"
+      value={state.currentUnitId ?? ""}
+      onChange={(e) => dispatch({ type: "setUnit", unitId: e.target.value || undefined })}
+      className="hidden min-h-11 rounded-xl border border-border bg-surface px-3 text-sm sm:block"
+    >
+      <option value="">Todas as unidades</option>
+      {state.units.map((u) => (
+        <option key={u.id} value={u.id}>{u.name}</option>
+      ))}
+    </select>
+  );
+}
+
+function TrialBanner() {
+  const { state, mode } = useStore();
+  const { currentUser } = useLookups();
+  const sub = state.subscription;
+  if (mode === "supabase" && currentUser.role !== "admin") return null;
+  if (mode === "demo") {
+    return <span className="hidden rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent md:inline">Modo demonstração</span>;
+  }
+  if (sub.status === "teste") {
+    const days = trialDaysLeft(sub);
+    return (
+      <Link href="/configuracoes?aba=plano" className="hidden rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent md:inline">
+        {days > 0 ? `Teste grátis: ${days} dia${days === 1 ? "" : "s"}` : "Teste encerrado: escolha um plano"}
+      </Link>
+    );
+  }
+  if (sub.status === "inadimplente" || sub.status === "cancelada") {
+    return (
+      <Link href="/configuracoes?aba=plano" className="rounded-full bg-danger-soft px-3 py-1 text-xs font-semibold text-danger">
+        {sub.status === "inadimplente" ? "Pagamento pendente" : "Assinatura cancelada"}
+      </Link>
+    );
+  }
+  return null;
+}
+
 export function Topbar() {
   const [open, setOpen] = useState(false);
-  const { state } = useStore();
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-border bg-bg/85 px-4 backdrop-blur sm:px-6">
       <D.Root open={open} onOpenChange={setOpen}>
@@ -96,8 +141,9 @@ export function Topbar() {
         </D.Portal>
       </D.Root>
       <span className="lg:hidden"><Logo /></span>
-      <span className="hidden text-sm text-muted lg:inline">{state.company.name}</span>
-      <div className="ml-auto flex items-center gap-1">
+      <UnitSwitcher />
+      <div className="ml-auto flex items-center gap-2">
+        <TrialBanner />
         <Notifications />
         <ThemeToggle />
       </div>

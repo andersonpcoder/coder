@@ -14,15 +14,15 @@ insert into units (id, company_id, name, phone, address_line, city, state, busin
 insert into subscriptions (company_id, plan, status) values
   ('00000000-0000-0000-0000-00000000c001', 'profissional', 'teste');
 
-insert into services (id, company_id, name, duration_min, price_cents, color) values
-  ('00000000-0000-0000-0000-0000000005a1', '00000000-0000-0000-0000-00000000c001', 'Corte feminino', 60, 12000, 'lavanda'),
-  ('00000000-0000-0000-0000-0000000005a2', '00000000-0000-0000-0000-00000000c001', 'Corte masculino', 30, 5500, 'ceu'),
-  ('00000000-0000-0000-0000-0000000005a3', '00000000-0000-0000-0000-00000000c001', 'Barba', 30, 4000, 'areia'),
-  ('00000000-0000-0000-0000-0000000005a4', '00000000-0000-0000-0000-00000000c001', 'Coloração', 120, 28000, 'rosa'),
-  ('00000000-0000-0000-0000-0000000005a5', '00000000-0000-0000-0000-00000000c001', 'Escova', 45, 7000, 'pessego'),
-  ('00000000-0000-0000-0000-0000000005a6', '00000000-0000-0000-0000-00000000c001', 'Manicure', 45, 4500, 'menta'),
-  ('00000000-0000-0000-0000-0000000005a7', '00000000-0000-0000-0000-00000000c001', 'Pedicure', 60, 5500, 'menta'),
-  ('00000000-0000-0000-0000-0000000005a8', '00000000-0000-0000-0000-00000000c001', 'Design de sobrancelha', 30, 5000, 'pessego');
+insert into services (id, company_id, name, category, duration_min, price_cents, color) values
+  ('00000000-0000-0000-0000-0000000005a1', '00000000-0000-0000-0000-00000000c001', 'Corte feminino', 'Cabelo', 60, 12000, 'lavanda'),
+  ('00000000-0000-0000-0000-0000000005a2', '00000000-0000-0000-0000-00000000c001', 'Corte masculino', 'Barbearia', 30, 5500, 'ceu'),
+  ('00000000-0000-0000-0000-0000000005a3', '00000000-0000-0000-0000-00000000c001', 'Barba', 'Barbearia', 30, 4000, 'areia'),
+  ('00000000-0000-0000-0000-0000000005a4', '00000000-0000-0000-0000-00000000c001', 'Coloração', 'Cabelo', 120, 28000, 'rosa'),
+  ('00000000-0000-0000-0000-0000000005a5', '00000000-0000-0000-0000-00000000c001', 'Escova', 'Cabelo', 45, 7000, 'pessego'),
+  ('00000000-0000-0000-0000-0000000005a6', '00000000-0000-0000-0000-00000000c001', 'Manicure', 'Unhas', 45, 4500, 'menta'),
+  ('00000000-0000-0000-0000-0000000005a7', '00000000-0000-0000-0000-00000000c001', 'Pedicure', 'Unhas', 60, 5500, 'menta'),
+  ('00000000-0000-0000-0000-0000000005a8', '00000000-0000-0000-0000-00000000c001', 'Design de sobrancelha', 'Estética', 30, 5000, 'pessego');
 
 insert into professionals (id, company_id, unit_id, name, role_title, commission_pct) values
   ('00000000-0000-0000-0000-0000000000b1', '00000000-0000-0000-0000-00000000c001', '00000000-0000-0000-0000-00000000d001', 'Marina Costa', 'Cabeleireira', 40),
@@ -159,6 +159,13 @@ insert into quick_replies (company_id, title, body) values
   ('00000000-0000-0000-0000-00000000c001', 'Endereço', 'Estamos na Rua das Palmeiras, 240, Pinheiros, São Paulo. Qualquer dúvida é só chamar!'),
   ('00000000-0000-0000-0000-00000000c001', 'Confirmar agendamento', 'Seu horário está confirmado para {data} às {hora}.'),
   ('00000000-0000-0000-0000-00000000c001', 'Enviar horários disponíveis', 'Tenho estes horários livres: {horarios}. Qual prefere?');
+
+insert into message_templates (company_id, kind, channel, body) values
+  ('00000000-0000-0000-0000-00000000c001', 'lembrete_24h', 'whatsapp', 'Olá, {nome}! Lembrete: amanhã às {hora} você tem {servico} com {profissional}. Responda 1 para confirmar.'),
+  ('00000000-0000-0000-0000-00000000c001', 'lembrete_2h', 'whatsapp', 'Oi, {nome}! Te esperamos hoje às {hora}. Até já!'),
+  ('00000000-0000-0000-0000-00000000c001', 'lembrete_24h', 'email', 'Olá, {nome}. Seu horário de {servico} é amanhã às {hora}.'),
+  ('00000000-0000-0000-0000-00000000c001', 'aniversario', 'whatsapp', 'Feliz aniversário, {nome}! Temos um presente para você na próxima visita.'),
+  ('00000000-0000-0000-0000-00000000c001', 'retorno', 'whatsapp', 'Oi, {nome}! Faz 30 dias da sua última visita. Que tal agendar?');
 
 -- Conversas de exemplo.
 with c as (

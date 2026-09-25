@@ -18,6 +18,11 @@ export type Recurrence = "nenhuma" | "semanal" | "quinzenal" | "mensal";
 export type TimeBlockKind = "almoco" | "folga" | "feriado" | "outro";
 export type QueueStatus = "aguardando" | "chamado" | "em_atendimento" | "concluido" | "desistiu";
 export type PaymentMethod = "pix" | "dinheiro" | "cartao_credito" | "cartao_debito";
+export type PlanTier = "basico" | "profissional" | "empresa";
+export type SubscriptionStatus = "teste" | "ativa" | "inadimplente" | "cancelada";
+export type NotificationKind = "lembrete_24h" | "lembrete_2h" | "confirmacao" | "aniversario" | "retorno" | "cancelamento";
+export type NotificationChannel = "whatsapp" | "email";
+export type IntegrationProvider = "whatsapp_cloud" | "zapi" | "evolution" | "instagram";
 
 export interface Company {
   id: string;
@@ -25,8 +30,73 @@ export interface Company {
   slug: string;
   primaryColor: string;
   timezone: string;
+  segment?: string;
+  logoUrl?: string;
+  /** Endereço e telefone vêm da unidade principal. */
   address: string;
   phone: string;
+}
+
+export interface Unit {
+  id: string;
+  name: string;
+  phone?: string;
+  addressLine?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  /** Horário de funcionamento em minutos, indexado pelo dia da semana. */
+  businessHours: WorkHours;
+}
+
+export interface Subscription {
+  plan: PlanTier;
+  status: SubscriptionStatus;
+  trialEndsAt: string;
+  currentPeriodEnd?: string;
+  provider?: string;
+}
+
+export interface MessageTemplate {
+  id: string;
+  kind: NotificationKind;
+  channel: NotificationChannel;
+  body: string;
+  active: boolean;
+}
+
+export interface QuickReply {
+  id: string;
+  title: string;
+  body: string;
+}
+
+export interface Integration {
+  id: string;
+  provider: IntegrationProvider;
+  settings: Record<string, string>;
+  active: boolean;
+}
+
+export interface Invite {
+  id: string;
+  email?: string;
+  role: Role;
+  professionalId?: string;
+  token: string;
+  acceptedAt?: string;
+  createdAt: string;
+}
+
+export interface ApiKey {
+  id: string;
+  name: string;
+  prefix: string;
+  /** Só enviado na criação; o banco guarda apenas o hash. */
+  keyHash?: string;
+  lastUsedAt?: string;
+  revokedAt?: string;
+  createdAt: string;
 }
 
 export interface User {
@@ -44,11 +114,13 @@ export interface Professional {
   id: string;
   name: string;
   title: string;
-  initials: string;
   avatarHue: number;
   commissionPct: number;
   serviceIds: string[];
   workHours: WorkHours;
+  active: boolean;
+  unitId?: string;
+  userId?: string;
 }
 
 export interface Service {
@@ -58,6 +130,7 @@ export interface Service {
   durationMin: number;
   priceCents: number;
   color: ServiceColor;
+  active: boolean;
 }
 
 export interface Customer {
@@ -69,6 +142,7 @@ export interface Customer {
   notes?: string;
   tags: string[];
   createdAt: string;
+  lgpdConsentAt?: string;
 }
 
 export interface Appointment {
@@ -84,6 +158,8 @@ export interface Appointment {
   priceCents: number;
   notes?: string;
   recurrenceId?: string;
+  unitId?: string;
+  manageToken?: string;
 }
 
 export interface TimeBlock {
@@ -107,6 +183,7 @@ export interface QueueEntry {
   isWalkIn: boolean;
   status: QueueStatus;
   checkedInAt: string;
+  unitId?: string;
   calledAt?: string;
   startedAt?: string;
   finishedAt?: string;
@@ -129,6 +206,7 @@ export interface Conversation {
   tags: string[];
   unread: number;
   messages: Message[];
+  lastMessageAt: string;
 }
 
 export interface Payment {
@@ -138,6 +216,7 @@ export interface Payment {
   professionalId?: string;
   method: PaymentMethod;
   amountCents: number;
+  commissionCents?: number;
   paidAt: string;
 }
 

@@ -39,8 +39,8 @@ declare
 begin
   foreach t in array array[
     'companies', 'units', 'profiles', 'memberships', 'professionals', 'work_hours',
-    'service_categories', 'services', 'professional_services', 'customers', 'consent_logs',
-    'recurrences', 'appointments', 'time_blocks', 'queue_entries', 'conversations',
+    'services', 'professional_services', 'customers', 'consent_logs',
+    'appointments', 'time_blocks', 'queue_entries', 'conversations',
     'messages', 'quick_replies', 'payments', 'message_templates', 'notification_jobs',
     'internal_notifications', 'subscriptions', 'integrations'
   ] loop
@@ -77,7 +77,7 @@ declare
   t text;
 begin
   foreach t in array array[
-    'professionals', 'work_hours', 'service_categories', 'services',
+    'professionals', 'work_hours', 'services',
     'professional_services', 'quick_replies', 'message_templates'
   ] loop
     execute format(
@@ -110,9 +110,6 @@ create policy "profissional lê a própria agenda" on appointments for select
 create policy "profissional atualiza a própria agenda" on appointments for update
   using (professional_id = my_professional_id(company_id))
   with check (professional_id = my_professional_id(company_id));
-
-create policy "equipe gerencia recorrências" on recurrences for all
-  using (is_staff(company_id)) with check (is_staff(company_id));
 
 create policy "membros leem bloqueios" on time_blocks for select using (is_member(company_id));
 create policy "equipe gerencia bloqueios" on time_blocks for all

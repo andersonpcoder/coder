@@ -13,7 +13,6 @@ create type appointment_status as enum (
   'agendado', 'confirmado', 'aguardando', 'em_atendimento', 'concluido', 'faltou', 'cancelado'
 );
 create type booking_channel as enum ('whatsapp', 'instagram', 'site', 'presencial', 'telefone');
-create type recurrence_frequency as enum ('semanal', 'quinzenal', 'mensal');
 create type time_block_kind as enum ('almoco', 'folga', 'feriado', 'outro');
 create type queue_status as enum ('aguardando', 'chamado', 'em_atendimento', 'concluido', 'desistiu');
 create type conversation_channel as enum ('whatsapp', 'instagram', 'site');
@@ -97,17 +96,11 @@ create table work_hours (
 );
 create index on work_hours (professional_id, weekday);
 
-create table service_categories (
-  id uuid primary key default gen_random_uuid(),
-  company_id uuid not null references companies (id) on delete cascade,
-  name text not null
-);
-
 create table services (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null references companies (id) on delete cascade,
-  category_id uuid references service_categories (id) on delete set null,
   name text not null,
+  category text not null default 'Geral',
   duration_min integer not null check (duration_min between 5 and 720),
   price_cents integer not null default 0 check (price_cents >= 0),
   -- Chave da paleta suave usada na agenda (lavanda, ceu, menta, pessego, rosa, areia).
@@ -152,14 +145,6 @@ create table consent_logs (
 
 -- Agenda -------------------------------------------------------------------------
 
-create table recurrences (
-  id uuid primary key default gen_random_uuid(),
-  company_id uuid not null references companies (id) on delete cascade,
-  frequency recurrence_frequency not null,
-  occurrences integer not null check (occurrences between 2 and 52),
-  created_at timestamptz not null default now()
-);
-
 create table appointments (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null references companies (id) on delete cascade,
@@ -167,7 +152,8 @@ create table appointments (
   professional_id uuid not null references professionals (id) on delete restrict,
   service_id uuid not null references services (id) on delete restrict,
   customer_id uuid not null references customers (id) on delete cascade,
-  recurrence_id uuid references recurrences (id) on delete set null,
+  -- Agrupa as ocorrências de uma série recorrente (semanal, quinzenal, mensal).
+  recurrence_id uuid,
   starts_at timestamptz not null,
   ends_at timestamptz not null,
   status appointment_status not null default 'agendado',
@@ -301,6 +287,8 @@ create table notification_jobs (
   attempts integer not null default 0,
   last_error text,
   sent_at timestamptz,
+  -- Evita duplicar mensagens sem agendamento (aniversário, retorno).
+  dedupe_key text unique,
   unique (appointment_id, kind, channel)
 );
 create index on notification_jobs (status, scheduled_for);
@@ -335,10 +323,12 @@ create table subscriptions (
 create table integrations (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null references companies (id) on delete cascade,
-  provider text not null check (provider in ('whatsapp_cloud', 'zapi', 'evolution', 'instagram', 'google_calendar')),
-  -- Credenciais ficam no Supabase Vault; aqui só a referência ao segredo.
-  vault_secret_id uuid,
+  provider text not null check (provider in ('whatsapp_cloud', 'zapi', 'evolution', 'instagram')),
+  -- Configuração visível para o admin (ids de telefone, instância, URL).
   settings jsonb not null default '{}'::jsonb,
+  -- Token de acesso. Os clientes não conseguem ler esta coluna (ver RLS);
+  -- só as Edge Functions, com a service role.
+  secret text,
   active boolean not null default false,
   unique (company_id, provider)
 );

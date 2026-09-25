@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FeatureGate } from "@/components/shell/upgrade-notice";
 import { AppointmentDialog, type AppointmentDialogSeed } from "@/components/agenda/appointment-dialog";
 import { ChannelIcon, StatusBadge } from "@/components/shared/status";
 import { Avatar } from "@/components/ui/avatar";
@@ -23,6 +24,7 @@ import { Input, Textarea } from "@/components/ui/field";
 import { Segmented } from "@/components/ui/segmented";
 import { isSameDay } from "@/lib/dates";
 import { channelLabel, firstName, formatDate, formatDayShort, formatPhone, formatTime, money } from "@/lib/format";
+import { fromRow } from "@/lib/db/mappers";
 import { nextAvailableSlots } from "@/lib/scheduling";
 import { newId, useLookups, useStore } from "@/lib/store";
 import type { Conversation, ConversationChannel } from "@/lib/types";
@@ -31,7 +33,15 @@ import { cn } from "@/lib/utils";
 type Tab = "abertos" | "meus" | "resolvidos";
 
 export default function AtendimentosPage() {
-  const { state, dispatch } = useStore();
+  return (
+    <FeatureGate feature="atendimentos">
+      <AtendimentosPageContent />
+    </FeatureGate>
+  );
+}
+
+function AtendimentosPageContent() {
+  const { state, db } = useStore();
   const { customers, currentUser } = useLookups();
   const [tab, setTab] = useState<Tab>("abertos");
   const [query, setQuery] = useState("");
@@ -39,7 +49,7 @@ export default function AtendimentosPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
 
-  const lastAt = (c: Conversation) => c.messages[c.messages.length - 1]?.at ?? "";
+  const lastAt = (c: Conversation) => c.lastMessageAt;
   const list = useMemo(() => {
     const q = query.trim().toLowerCase();
     return state.conversations
@@ -60,7 +70,7 @@ export default function AtendimentosPage() {
 
   const open = (c: Conversation) => {
     setSelectedId(c.id);
-    if (c.unread) dispatch({ type: "updateConversation", id: c.id, patch: { unread: 0 } });
+    if (c.unread) void db.patch("conversations", c.id, { unread: 0 });
   };
 
   return (
@@ -197,7 +207,7 @@ function ChatPane({
   onBack: () => void;
   onToggleInfo: () => void;
 }) {
-  const { state, dispatch, toast } = useStore();
+  const { state, db, toast, supabase, dispatch } = useStore();
   const { customers, users, currentUser, professionals, services } = useLookups();
   const [text, setText] = useState("");
   const [schedule, setSchedule] = useState<AppointmentDialogSeed | null>(null);
@@ -209,6 +219,21 @@ function ChatPane({
     endRef.current?.scrollIntoView({ block: "end" });
   }, [c.messages.length]);
 
+  // Conversas antigas não vêm na carga inicial; busca o histórico ao abrir.
+  useEffect(() => {
+    if (!supabase || c.messages.length) return;
+    supabase
+      .from("messages")
+      .select("*")
+      .eq("conversation_id", c.id)
+      .order("created_at")
+      .then(({ data }) => {
+        if (data?.length) {
+          dispatch({ type: "upsert", collection: "conversations", items: [{ id: c.id, messages: data.map(fromRow.message) }] });
+        }
+      });
+  }, [supabase, c.id, c.messages.length, dispatch]);
+
   const customerAppointments = state.appointments
     .filter((a) => a.customerId === c.customerId)
     .sort((a, b) => a.start.localeCompare(b.start));
@@ -218,12 +243,8 @@ function ChatPane({
   const send = (body: string) => {
     const trimmed = body.trim();
     if (!trimmed) return;
-    dispatch({
-      type: "addMessage",
-      conversationId: c.id,
-      message: { id: newId("m"), direction: "saida", body: trimmed, at: new Date().toISOString(), authorId: currentUser.id },
-    });
-    if (!c.assignedTo) dispatch({ type: "updateConversation", id: c.id, patch: { assignedTo: currentUser.id } });
+    void db.addMessage(c.id, { id: newId(), direction: "saida", body: trimmed, at: new Date().toISOString(), authorId: currentUser.id });
+    if (!c.assignedTo) void db.patch("conversations", c.id, { assignedTo: currentUser.id });
     setText("");
   };
 
@@ -232,44 +253,43 @@ function ChatPane({
     inputRef.current?.focus();
   };
 
-  const quickReplies = [
-    {
-      label: "Enviar horários disponíveis",
-      run: () => {
-        const ref = next ?? last;
-        const pro = state.professionals.find((p) => p.id === ref?.professionalId) ?? state.professionals[0];
-        const svc = services.get(ref?.serviceId ?? pro.serviceIds[0])!;
-        const slots = nextAvailableSlots(pro, svc.durationMin, state.appointments, state.blocks, 4);
-        if (!slots.length) {
-          toast("Sem horários livres nos próximos 14 dias.", "erro");
-          return;
-        }
-        insert(
-          `Oi, ${firstName(customer?.name ?? "")}! Tenho estes horários livres para ${svc.name} com ${firstName(pro.name)}:\n` +
-            slots.map((s) => `• ${formatDayShort(s)} às ${formatTime(s)}`).join("\n") +
-            "\nQual prefere?",
-        );
-      },
-    },
-    {
-      label: "Confirmar agendamento",
-      run: () => {
-        if (!next) {
-          toast("Este cliente não tem agendamento futuro.", "erro");
-          return;
-        }
-        dispatch({ type: "updateAppointment", id: next.id, patch: { status: "confirmado" } });
-        insert(
-          `Prontinho, ${firstName(customer?.name ?? "")}! Seu horário de ${services.get(next.serviceId)?.name} com ${firstName(professionals.get(next.professionalId)?.name ?? "")} está confirmado para ${formatDayShort(next.start)} às ${formatTime(next.start)}.`,
-        );
+  // Respostas rápidas com variáveis: {nome}, {servico}, {profissional},
+  // {horarios}, {data}, {hora}, {endereco} e {empresa}.
+  const runQuickReply = (title: string, body: string) => {
+    const ref = next ?? last;
+    const pro = state.professionals.find((p) => p.id === ref?.professionalId && p.active) ?? state.professionals.find((p) => p.active);
+    const svc = services.get(ref?.serviceId ?? pro?.serviceIds[0] ?? "");
+    const vars: Record<string, string> = {
+      nome: firstName(customer?.name ?? ""),
+      servico: svc?.name ?? "",
+      profissional: firstName(pro?.name ?? ""),
+      endereco: state.company.address,
+      empresa: state.company.name,
+    };
+    if (body.includes("{horarios}")) {
+      const slots = pro && svc ? nextAvailableSlots(pro, svc.durationMin, state.appointments, state.blocks, 4) : [];
+      if (!slots.length) {
+        toast("Sem horários livres nos próximos 14 dias.", "erro");
+        return;
+      }
+      vars.horarios = slots.map((s) => `• ${formatDayShort(s)} às ${formatTime(s)}`).join("\n");
+    }
+    if (body.includes("{data}") || body.includes("{hora}")) {
+      if (!next) {
+        toast("Este cliente não tem agendamento futuro.", "erro");
+        return;
+      }
+      vars.data = formatDayShort(next.start);
+      vars.hora = formatTime(next.start);
+      vars.servico = services.get(next.serviceId)?.name ?? vars.servico;
+      vars.profissional = firstName(professionals.get(next.professionalId)?.name ?? "");
+      if (/confirm/i.test(title) && next.status === "agendado") {
+        void db.patch("appointments", next.id, { status: "confirmado" });
         toast("Agendamento marcado como confirmado.", "sucesso");
-      },
-    },
-    {
-      label: "Endereço",
-      run: () => insert(`Estamos na ${state.company.address}. Qualquer dúvida é só chamar!`),
-    },
-  ];
+      }
+    }
+    insert(body.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? `{${k}}`));
+  };
 
   const assignee = c.assignedTo ? users.get(c.assignedTo) : undefined;
 
@@ -305,12 +325,8 @@ function ChatPane({
                     key={u.id}
                     disabled={u.id === c.assignedTo}
                     onSelect={() => {
-                      dispatch({ type: "updateConversation", id: c.id, patch: { assignedTo: u.id } });
-                      dispatch({
-                        type: "addMessage",
-                        conversationId: c.id,
-                        message: { id: newId("m"), direction: "sistema", body: `Conversa transferida para ${u.name}`, at: new Date().toISOString() },
-                      });
+                      void db.patch("conversations", c.id, { assignedTo: u.id });
+                void db.addMessage(c.id, { id: newId(), direction: "sistema", body: `Conversa transferida para ${u.name}`, at: new Date().toISOString() });
                       toast(`Conversa transferida para ${u.name}.`, "sucesso");
                     }}
                     className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-surface-2"
@@ -326,14 +342,14 @@ function ChatPane({
               variant="outline"
               size="sm"
               onClick={() => {
-                dispatch({ type: "updateConversation", id: c.id, patch: { status: "resolvida", unread: 0 } });
+                void db.patch("conversations", c.id, { status: "resolvida", unread: 0 });
                 toast("Conversa resolvida.", "sucesso");
               }}
             >
               <CheckCheck /> <span className="hidden sm:inline">Resolver</span>
             </Button>
           ) : (
-            <Button variant="outline" size="sm" onClick={() => dispatch({ type: "updateConversation", id: c.id, patch: { status: "aberta" } })}>
+            <Button variant="outline" size="sm" onClick={() => void db.patch("conversations", c.id, { status: "aberta" })}>
               <RotateCcw /> <span className="hidden sm:inline">Reabrir</span>
             </Button>
           )}
@@ -382,14 +398,14 @@ function ChatPane({
 
       <footer className="border-t border-border bg-surface p-3">
         <div className="mb-2 flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Respostas rápidas">
-          {quickReplies.map((r) => (
+          {state.quickReplies.map((r) => (
             <button
-              key={r.label}
+              key={r.id}
               type="button"
-              onClick={r.run}
+              onClick={() => runQuickReply(r.title, r.body)}
               className="min-h-10 shrink-0 rounded-full border border-border px-3 text-[13px] font-medium hover:border-primary hover:text-primary"
             >
-              {r.label}
+              {r.title}
             </button>
           ))}
         </div>
@@ -434,7 +450,7 @@ function nextQuarterHour(): Date {
 }
 
 function CustomerPanel({ conversation: c, onClose }: { conversation: Conversation; onClose: () => void }) {
-  const { state, dispatch } = useStore();
+  const { state, db } = useStore();
   const { customers, services, professionals } = useLookups();
   const [newTag, setNewTag] = useState("");
   const customer = customers.get(c.customerId);
@@ -451,7 +467,7 @@ function CustomerPanel({ conversation: c, onClose }: { conversation: Conversatio
   const spent = state.payments.filter((p) => p.customerId === customer.id).reduce((s, p) => s + p.amountCents, 0);
 
   const tags = c.tags;
-  const setTags = (next: string[]) => dispatch({ type: "updateConversation", id: c.id, patch: { tags: next } });
+  const setTags = (next: string[]) => void db.patch("conversations", c.id, { tags: next });
 
   return (
     <div className="flex flex-col gap-5 p-5">

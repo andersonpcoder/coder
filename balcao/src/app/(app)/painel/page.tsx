@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { addDays, isSameDay, startOfDay, startOfWeek } from "@/lib/dates";
 import { channelLabel, firstName, formatDayLong, formatDuration, formatTime, formatWeekday, money } from "@/lib/format";
-import { useLookups, useNow, useStore } from "@/lib/store";
+import { useActiveProfessionals, useLookups, useNow, useStore } from "@/lib/store";
 import type { BookingChannel } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +20,7 @@ export default function PainelPage() {
   const now = useNow(30_000);
   const isPro = currentUser.role === "profissional";
   const isAdmin = currentUser.role === "admin";
+  const activePros = useActiveProfessionals();
 
   const scoped = useMemo(
     () => (isPro ? state.appointments.filter((a) => a.professionalId === currentUser.professionalId) : state.appointments),
@@ -63,7 +64,7 @@ export default function PainelPage() {
     .sort((a, b) => a.start.localeCompare(b.start))
     .slice(0, 6);
 
-  const team = state.professionals
+  const team = activePros
     .filter((p) => !isPro || p.id === currentUser.professionalId)
     .map((p) => {
       const current = state.appointments.find(

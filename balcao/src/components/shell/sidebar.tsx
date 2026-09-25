@@ -1,26 +1,18 @@
 "use client";
 
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
-import { ChevronsUpDown, RotateCcw } from "lucide-react";
+import { Building2, ChevronsUpDown, Lock, LogOut, RotateCcw } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
+import { hasFeature } from "@/lib/plans";
 import { useLookups, useStore } from "@/lib/store";
+import { isSupabaseConfigured, setDemoCookie } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { Logo } from "./logo";
 import { navItems, roleLabel } from "./nav";
 
-export function Logo({ className }: { className?: string }) {
-  return (
-    <span className={cn("flex items-center gap-2.5", className)}>
-      <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-fg" aria-hidden>
-        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-          <path d="M4 10h16M6 10v9M18 10v9M3 19h18M8 6h8" />
-        </svg>
-      </span>
-      <span className="font-display text-xl font-bold tracking-tight">Balcão</span>
-    </span>
-  );
-}
+export { Logo };
 
 export function useNavCounters() {
   const { state } = useStore();
@@ -33,6 +25,7 @@ export function useNavCounters() {
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { currentUser } = useLookups();
+  const { state } = useStore();
   const counters = useNavCounters();
   return (
     <nav aria-label="Menu principal" className="flex flex-col gap-0.5">
@@ -40,7 +33,8 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         .filter((item) => item.roles.includes(currentUser.role))
         .map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-          const count = item.counter ? counters[item.counter] : 0;
+          const locked = item.feature ? !hasFeature(state.subscription, item.feature) : false;
+          const count = item.counter && !locked ? counters[item.counter] : 0;
           return (
             <Link
               key={item.href}
@@ -54,6 +48,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             >
               <item.icon className={cn("size-[18px]", active && "text-primary")} aria-hidden />
               <span className="flex-1">{item.label}</span>
+              {locked && <Lock className="size-3.5 text-muted" aria-label="Disponível em outro plano" />}
               {count > 0 && (
                 <span
                   className="min-w-6 rounded-full bg-accent px-1.5 text-center text-xs font-semibold leading-6 text-white"
@@ -69,9 +64,20 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
+const itemClass =
+  "flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 outline-none data-[highlighted]:bg-surface-2";
+
 export function UserMenu() {
-  const { state, dispatch, reset, toast } = useStore();
+  const { state, dispatch, reset, toast, mode, supabase, memberships, switchCompany } = useStore();
   const { currentUser } = useLookups();
+  const router = useRouter();
+
+  const signOut = async () => {
+    if (supabase) await supabase.auth.signOut();
+    setDemoCookie(false);
+    router.replace("/entrar");
+  };
+
   return (
     <Dropdown.Root>
       <Dropdown.Trigger className="flex min-h-14 w-full items-center gap-3 rounded-xl px-2 text-left hover:bg-surface/70">
@@ -87,38 +93,68 @@ export function UserMenu() {
           side="top"
           align="start"
           sideOffset={8}
-          className="z-50 w-64 rounded-2xl border border-border bg-surface p-1.5 text-sm shadow-xl"
+          className="z-50 w-72 rounded-2xl border border-border bg-surface p-1.5 text-sm shadow-xl"
         >
-          <Dropdown.Label className="px-3 py-2 text-xs font-semibold text-muted">
-            Ver como (demonstração de permissões)
-          </Dropdown.Label>
-          {state.users.map((u) => (
-            <Dropdown.Item
-              key={u.id}
-              onSelect={() => {
-                dispatch({ type: "setUser", userId: u.id });
-                toast(`Agora você vê o Balcão como ${roleLabel[u.role]}.`);
-              }}
-              className={cn(
-                "flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 outline-none data-[highlighted]:bg-surface-2",
-                u.id === currentUser.id && "font-semibold",
+          {mode === "demo" ? (
+            <>
+              <Dropdown.Label className="px-3 py-2 text-xs font-semibold text-muted">
+                Ver como (demonstração de permissões)
+              </Dropdown.Label>
+              {state.users.map((u) => (
+                <Dropdown.Item
+                  key={u.id}
+                  onSelect={() => {
+                    dispatch({ type: "setUser", userId: u.id });
+                    toast(`Agora você vê o Balcão como ${roleLabel[u.role]}.`);
+                  }}
+                  className={cn(itemClass, u.id === currentUser.id && "font-semibold")}
+                >
+                  <Avatar name={u.name} size="sm" />
+                  <span className="flex-1">{u.name}</span>
+                  <span className="text-xs text-muted">{roleLabel[u.role]}</span>
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Separator className="my-1 h-px bg-border" />
+              <Dropdown.Item
+                onSelect={() => {
+                  reset();
+                  toast("Dados de exemplo restaurados.", "sucesso");
+                }}
+                className={cn(itemClass, "text-muted")}
+              >
+                <RotateCcw className="size-4" /> Restaurar dados de exemplo
+              </Dropdown.Item>
+              {isSupabaseConfigured() && (
+                <Dropdown.Item onSelect={signOut} className={cn(itemClass, "text-muted")}>
+                  <LogOut className="size-4" /> Sair da demonstração
+                </Dropdown.Item>
               )}
-            >
-              <Avatar name={u.name} size="sm" />
-              <span className="flex-1">{u.name}</span>
-              <span className="text-xs text-muted">{roleLabel[u.role]}</span>
-            </Dropdown.Item>
-          ))}
-          <Dropdown.Separator className="my-1 h-px bg-border" />
-          <Dropdown.Item
-            onSelect={() => {
-              reset();
-              toast("Dados de exemplo restaurados.", "sucesso");
-            }}
-            className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-muted outline-none data-[highlighted]:bg-surface-2"
-          >
-            <RotateCcw className="size-4" /> Restaurar dados de exemplo
-          </Dropdown.Item>
+            </>
+          ) : (
+            <>
+              {memberships.length > 1 && (
+                <>
+                  <Dropdown.Label className="px-3 py-2 text-xs font-semibold text-muted">Empresas</Dropdown.Label>
+                  {memberships.map((m) => (
+                    <Dropdown.Item
+                      key={m.companyId}
+                      onSelect={() => m.companyId !== state.company.id && switchCompany(m.companyId)}
+                      className={cn(itemClass, m.companyId === state.company.id && "font-semibold")}
+                    >
+                      <Building2 className="size-4" /> <span className="flex-1 truncate">{m.companyName}</span>
+                    </Dropdown.Item>
+                  ))}
+                  <Dropdown.Separator className="my-1 h-px bg-border" />
+                </>
+              )}
+              <Dropdown.Item onSelect={() => router.push("/onboarding?nova=1")} className={cn(itemClass, "text-muted")}>
+                <Building2 className="size-4" /> Cadastrar outra empresa
+              </Dropdown.Item>
+              <Dropdown.Item onSelect={signOut} className={cn(itemClass, "text-muted")}>
+                <LogOut className="size-4" /> Sair
+              </Dropdown.Item>
+            </>
+          )}
         </Dropdown.Content>
       </Dropdown.Portal>
     </Dropdown.Root>

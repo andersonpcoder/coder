@@ -1,18 +1,25 @@
 import { addDays, addMinutes, atMinutes, minutesOfDay, startOfDay } from "./dates";
 import type {
+  ApiKey,
   Appointment,
   AppointmentStatus,
   BookingChannel,
   Company,
   Conversation,
   Customer,
+  Integration,
+  Invite,
+  MessageTemplate,
   Notification,
   Payment,
   PaymentMethod,
   Professional,
   QueueEntry,
+  QuickReply,
   Service,
+  Subscription,
   TimeBlock,
+  Unit,
   User,
   WorkHours,
 } from "./types";
@@ -46,15 +53,42 @@ export const company: Company = {
   phone: "11987654321",
 };
 
+export const units: Unit[] = [
+  {
+    id: "un-pinheiros",
+    name: "Pinheiros",
+    phone: "11987654321",
+    addressLine: "Rua das Palmeiras, 240",
+    city: "São Paulo",
+    state: "SP",
+    postalCode: "05422-000",
+    businessHours: weekdays([1, 2, 3, 4, 5, 6], h(8), h(20)),
+  },
+];
+
+export const templates: MessageTemplate[] = [
+  { id: "t-1", kind: "lembrete_24h", channel: "whatsapp", active: true, body: "Olá, {nome}! Lembrete: amanhã às {hora} você tem {servico} com {profissional}. Responda 1 para confirmar." },
+  { id: "t-2", kind: "lembrete_2h", channel: "whatsapp", active: true, body: "Oi, {nome}! Te esperamos hoje às {hora}. Até já!" },
+  { id: "t-3", kind: "lembrete_24h", channel: "email", active: true, body: "Olá, {nome}. Seu horário de {servico} é amanhã às {hora}." },
+  { id: "t-4", kind: "aniversario", channel: "whatsapp", active: true, body: "Feliz aniversário, {nome}! Temos um presente para você na próxima visita." },
+  { id: "t-5", kind: "retorno", channel: "whatsapp", active: true, body: "Oi, {nome}! Faz 30 dias da sua última visita. Que tal agendar?" },
+];
+
+export const quickReplies: QuickReply[] = [
+  { id: "qr-1", title: "Enviar horários disponíveis", body: "Oi, {nome}! Tenho estes horários livres para {servico} com {profissional}:\n{horarios}\nQual prefere?" },
+  { id: "qr-2", title: "Confirmar agendamento", body: "Prontinho, {nome}! Seu horário de {servico} com {profissional} está confirmado para {data} às {hora}." },
+  { id: "qr-3", title: "Endereço", body: "Estamos na {endereco}. Qualquer dúvida é só chamar!" },
+];
+
 export const services: Service[] = [
-  { id: "s-corte-f", name: "Corte feminino", category: "Cabelo", durationMin: 60, priceCents: 12000, color: "lavanda" },
-  { id: "s-corte-m", name: "Corte masculino", category: "Barbearia", durationMin: 30, priceCents: 5500, color: "ceu" },
-  { id: "s-barba", name: "Barba", category: "Barbearia", durationMin: 30, priceCents: 4000, color: "areia" },
-  { id: "s-coloracao", name: "Coloração", category: "Cabelo", durationMin: 120, priceCents: 28000, color: "rosa" },
-  { id: "s-escova", name: "Escova", category: "Cabelo", durationMin: 45, priceCents: 7000, color: "pessego" },
-  { id: "s-manicure", name: "Manicure", category: "Unhas", durationMin: 45, priceCents: 4500, color: "menta" },
-  { id: "s-pedicure", name: "Pedicure", category: "Unhas", durationMin: 60, priceCents: 5500, color: "menta" },
-  { id: "s-sobrancelha", name: "Design de sobrancelha", category: "Estética", durationMin: 30, priceCents: 5000, color: "pessego" },
+  { id: "s-corte-f", name: "Corte feminino", category: "Cabelo", durationMin: 60, priceCents: 12000, color: "lavanda", active: true },
+  { id: "s-corte-m", name: "Corte masculino", category: "Barbearia", durationMin: 30, priceCents: 5500, color: "ceu", active: true },
+  { id: "s-barba", name: "Barba", category: "Barbearia", durationMin: 30, priceCents: 4000, color: "areia", active: true },
+  { id: "s-coloracao", name: "Coloração", category: "Cabelo", durationMin: 120, priceCents: 28000, color: "rosa", active: true },
+  { id: "s-escova", name: "Escova", category: "Cabelo", durationMin: 45, priceCents: 7000, color: "pessego", active: true },
+  { id: "s-manicure", name: "Manicure", category: "Unhas", durationMin: 45, priceCents: 4500, color: "menta", active: true },
+  { id: "s-pedicure", name: "Pedicure", category: "Unhas", durationMin: 60, priceCents: 5500, color: "menta", active: true },
+  { id: "s-sobrancelha", name: "Design de sobrancelha", category: "Estética", durationMin: 30, priceCents: 5000, color: "pessego", active: true },
 ];
 
 const tueToSat = [2, 3, 4, 5, 6];
@@ -63,29 +97,29 @@ const monToSat = [1, 2, 3, 4, 5, 6];
 
 export const professionals: Professional[] = [
   {
-    id: "p-marina", name: "Marina Costa", title: "Cabeleireira", initials: "MC", avatarHue: 170,
+    id: "p-marina", name: "Marina Costa", title: "Cabeleireira", avatarHue: 170,
     commissionPct: 40, serviceIds: ["s-corte-f", "s-escova", "s-coloracao"],
-    workHours: weekdays(tueToSat, h(9), h(19)),
+    active: true, workHours: weekdays(tueToSat, h(9), h(19)),
   },
   {
-    id: "p-rafael", name: "Rafael Lima", title: "Barbeiro", initials: "RL", avatarHue: 210,
+    id: "p-rafael", name: "Rafael Lima", title: "Barbeiro", avatarHue: 210,
     commissionPct: 45, serviceIds: ["s-corte-m", "s-barba"],
-    workHours: weekdays(monToSat, h(9), h(18)),
+    active: true, workHours: weekdays(monToSat, h(9), h(18)),
   },
   {
-    id: "p-juliana", name: "Juliana Alves", title: "Manicure", initials: "JA", avatarHue: 330,
+    id: "p-juliana", name: "Juliana Alves", title: "Manicure", avatarHue: 330,
     commissionPct: 50, serviceIds: ["s-manicure", "s-pedicure", "s-sobrancelha"],
-    workHours: weekdays(monToFri, h(8), h(17)),
+    active: true, workHours: weekdays(monToFri, h(8), h(17)),
   },
   {
-    id: "p-bruno", name: "Bruno Tavares", title: "Barbeiro", initials: "BT", avatarHue: 30,
+    id: "p-bruno", name: "Bruno Tavares", title: "Barbeiro", avatarHue: 30,
     commissionPct: 45, serviceIds: ["s-corte-m", "s-barba", "s-sobrancelha"],
-    workHours: weekdays(tueToSat, h(10), h(20)),
+    active: true, workHours: weekdays(tueToSat, h(10), h(20)),
   },
   {
-    id: "p-camila", name: "Camila Rocha", title: "Colorista", initials: "CR", avatarHue: 270,
+    id: "p-camila", name: "Camila Rocha", title: "Colorista", avatarHue: 270,
     commissionPct: 40, serviceIds: ["s-coloracao", "s-escova", "s-corte-f"],
-    workHours: weekdays(monToSat, h(9), h(18)),
+    active: true, workHours: weekdays(monToSat, h(9), h(18)),
   },
 ];
 
@@ -131,6 +165,13 @@ function buildCustomers(today: Date): Customer[] {
 
 export interface Dataset {
   company: Company;
+  units: Unit[];
+  subscription: Subscription;
+  templates: MessageTemplate[];
+  quickReplies: QuickReply[];
+  integrations: Integration[];
+  invites: Invite[];
+  apiKeys: ApiKey[];
   users: User[];
   professionals: Professional[];
   services: Service[];
@@ -247,6 +288,13 @@ export function buildDataset(now = new Date()): Dataset {
   const queue = buildQueue(now, cleanAppointments, customers);
   return {
     company,
+    units,
+    subscription: { plan: "profissional", status: "teste", trialEndsAt: addDays(today, 9).toISOString() },
+    templates,
+    quickReplies,
+    integrations: [],
+    invites: [],
+    apiKeys: [],
     users,
     professionals,
     services,
@@ -328,7 +376,7 @@ function msg(id: string, direction: "entrada" | "saida" | "sistema", body: strin
 
 function buildConversations(now: Date): Conversation[] {
   const m = (min: number) => addMinutes(now, -min);
-  return [
+  const list: Omit<Conversation, "lastMessageAt">[] = [
     {
       id: "cv-1", customerId: "cl-1", channel: "whatsapp", status: "aberta", assignedTo: "u-leticia",
       tags: ["Remarcação"], unread: 2,
@@ -393,4 +441,5 @@ function buildConversations(now: Date): Conversation[] {
       ],
     },
   ];
+  return list.map((c) => ({ ...c, lastMessageAt: c.messages[c.messages.length - 1].at }));
 }

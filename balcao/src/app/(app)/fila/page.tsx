@@ -4,6 +4,7 @@ import { ArrowRight, BellRing, CheckCircle2, Clock, LogIn, Megaphone, MonitorPla
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/shell/page-header";
+import { FeatureGate } from "@/components/shell/upgrade-notice";
 import { PaymentDialog, type PaymentTarget } from "@/components/shared/payment-dialog";
 import { StatusBadge } from "@/components/shared/status";
 import { Avatar } from "@/components/ui/avatar";
@@ -15,14 +16,23 @@ import { Field, Input, Select } from "@/components/ui/field";
 import { useActions } from "@/lib/actions";
 import { isSameDay } from "@/lib/dates";
 import { formatDuration, formatElapsed, formatTime } from "@/lib/format";
-import { useLookups, useNow, useStore } from "@/lib/store";
+import { useActiveProfessionals, useLookups, useNow, useStore } from "@/lib/store";
 import type { QueueEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export default function FilaPage() {
+  return (
+    <FeatureGate feature="fila">
+      <FilaPageContent />
+    </FeatureGate>
+  );
+}
+
+function FilaPageContent() {
   const { state } = useStore();
   const { services, professionals } = useLookups();
   const { checkIn, updateQueue } = useActions();
+  const activePros = useActiveProfessionals();
   const now = useNow(1000);
   const [walkInOpen, setWalkInOpen] = useState(false);
   const [callPro, setCallPro] = useState("");
@@ -109,7 +119,7 @@ export default function FilaPage() {
                 {(id) => (
                   <Select id={id} value={callPro} onChange={(e) => setCallPro(e.target.value)}>
                     <option value="">Qualquer profissional</option>
-                    {state.professionals.map((p) => (
+                    {activePros.map((p) => (
                       <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                   </Select>
@@ -299,6 +309,7 @@ function Empty({ text }: { text: string }) {
 function WalkInDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { state } = useStore();
   const { addWalkIn } = useActions();
+  const activePros = useActiveProfessionals();
   const [name, setName] = useState("");
   const [serviceId, setServiceId] = useState("");
   const [professionalId, setProfessionalId] = useState("");
@@ -331,7 +342,7 @@ function WalkInDialog({ open, onClose }: { open: boolean; onClose: () => void })
           {(id) => (
             <Select id={id} value={serviceId} onChange={(e) => setServiceId(e.target.value)}>
               <option value="">A definir</option>
-              {state.services.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+              {state.services.filter((s) => s.active).map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
             </Select>
           )}
         </Field>
@@ -339,7 +350,7 @@ function WalkInDialog({ open, onClose }: { open: boolean; onClose: () => void })
           {(id) => (
             <Select id={id} value={professionalId} onChange={(e) => setProfessionalId(e.target.value)}>
               <option value="">Qualquer um disponível</option>
-              {state.professionals
+              {activePros
                 .filter((p) => !serviceId || p.serviceIds.includes(serviceId))
                 .map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </Select>

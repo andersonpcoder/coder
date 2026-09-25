@@ -144,3 +144,21 @@ h3,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Impressão (Relatórios > PDF): só o conteúdo, sem menu nem topo. */
+@media print {
+  :root, .dark {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --text: #111111;
+  }
+  aside, header, .print\:hidden, [aria-live="polite"] {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  @page {
+    margin: 14mm;
+  }
+}

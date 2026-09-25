@@ -15,6 +15,14 @@ begin
   if auth.uid() is null then
     raise exception 'É preciso estar autenticado';
   end if;
+  -- O link público é balcao.app/<slug>; não pode colidir com as rotas do app.
+  if p_slug = any (array[
+    'painel', 'agenda', 'fila', 'atendimentos', 'clientes', 'equipe', 'servicos', 'financeiro',
+    'relatorios', 'configuracoes', 'entrar', 'cadastrar', 'recuperar-senha', 'nova-senha',
+    'onboarding', 'auth', 'tv', 'agendamento', 'convite', 'api', 'planos', 'demo', 'termos'
+  ]) then
+    raise exception 'Este endereço é reservado. Escolha outro.';
+  end if;
 
   insert into public.companies (name, slug, segment, timezone)
   values (p_name, p_slug, p_segment, p_timezone)
@@ -67,15 +75,18 @@ $$;
 create function public.public_company(p_slug text) returns jsonb
 language sql stable security definer set search_path = '' as $$
   select jsonb_build_object(
-    'id', c.id, 'name', c.name, 'logo_url', c.logo_url, 'primary_color', c.primary_color,
+    'id', c.id, 'name', c.name, 'slug', c.slug, 'logo_url', c.logo_url, 'primary_color', c.primary_color,
     'timezone', c.timezone,
+    'address', (select concat_ws(', ', u.address_line, u.city, u.state) from public.units u where u.company_id = c.id order by u.created_at limit 1),
+    'phone', (select u.phone from public.units u where u.company_id = c.id order by u.created_at limit 1),
     'services', coalesce((
-      select jsonb_agg(jsonb_build_object('id', s.id, 'name', s.name, 'duration_min', s.duration_min, 'price_cents', s.price_cents) order by s.name)
+      select jsonb_agg(jsonb_build_object('id', s.id, 'name', s.name, 'category', s.category, 'duration_min', s.duration_min, 'price_cents', s.price_cents) order by s.category, s.name)
       from public.services s where s.company_id = c.id and s.active), '[]'::jsonb),
     'professionals', coalesce((
       select jsonb_agg(jsonb_build_object(
         'id', p.id, 'name', p.name, 'avatar_url', p.avatar_url,
-        'service_ids', (select jsonb_agg(ps.service_id) from public.professional_services ps where ps.professional_id = p.id)
+        'role_title', p.role_title,
+        'service_ids', coalesce((select jsonb_agg(ps.service_id) from public.professional_services ps where ps.professional_id = p.id), '[]'::jsonb)
       ) order by p.name)
       from public.professionals p where p.company_id = c.id and p.active), '[]'::jsonb)
   )
@@ -84,7 +95,7 @@ $$;
 
 -- Horários livres de um profissional num dia, em intervalos de 15 minutos.
 create function public.public_available_slots(
-  p_slug text, p_service uuid, p_professional uuid, p_day date
+  p_slug text, p_service uuid, p_professional uuid, p_day date, p_ignore_token text default null
 ) returns setof timestamptz
 language plpgsql stable security definer set search_path = '' as $$
 declare
@@ -94,7 +105,11 @@ begin
   select * into v_company from public.companies where slug = p_slug;
   select duration_min into v_duration from public.services
   where id = p_service and company_id = v_company.id and active;
-  if v_duration is null then
+  if v_duration is null or not exists (
+    select 1 from public.professional_services ps
+    join public.professionals p on p.id = ps.professional_id
+    where ps.professional_id = p_professional and ps.service_id = p_service and p.active
+  ) then
     return;
   end if;
 
@@ -114,6 +129,7 @@ begin
       select 1 from public.appointments a
       where a.professional_id = p_professional
         and a.status not in ('cancelado', 'faltou')
+        and a.manage_token is distinct from p_ignore_token
         and tstzrange(a.starts_at, a.ends_at) && tstzrange(slot, slot + make_interval(mins => v_duration))
     )
     and not exists (

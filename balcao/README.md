@@ -1,33 +1,55 @@
 # Balcão
 
-Gestão de atendimento e agendamento para pequenos negócios que atendem por
-horário: clínicas, consultórios odontológicos, barbearias, salões, estúdios e
-prestadores de serviço. Tudo em português do Brasil.
+SaaS de gestão de atendimento e agendamento para pequenos negócios que atendem
+por horário: clínicas, consultórios odontológicos, barbearias, salões, estúdios
+e prestadores de serviço. Tudo em português do Brasil.
 
 Stack: Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS 4 +
-componentes no padrão shadcn/ui (Radix) + Supabase (Postgres, Auth, Storage,
-Realtime, Edge Functions).
+componentes no padrão shadcn/ui (Radix) + Supabase (Postgres com RLS, Auth,
+Storage, Realtime e Edge Functions em Deno).
 
-## Situação desta entrega (fase 1)
+## Módulos
 
-| Item                                                    | Situação                                                            |
-|---------------------------------------------------------|---------------------------------------------------------------------|
-| Estrutura do banco, RLS e funções                       | Pronto e testado num Postgres 16 local                              |
-| Agenda (dia, semana, mês, equipe)                       | Pronta, com dados de exemplo                                        |
-| Fila de atendimento e painel de TV                      | Pronta, com dados de exemplo                                        |
-| Atendimentos (caixa de entrada unificada)               | Pronta, com dados de exemplo                                        |
-| Painel (dashboard)                                      | Pronto, com dados de exemplo                                        |
-| Clientes, Equipe, Serviços, Financeiro                  | Telas de consulta; cadastro e edição na próxima fase                |
-| Relatórios, Configurações                               | Próxima fase                                                        |
-| Lembretes automáticos                                   | Banco (fila de envios e gatilhos) e Edge Function prontos           |
-| Autenticação, onboarding em 3 passos, página pública    | Funções no banco prontas (`create_company`, `public_*`); telas na próxima fase |
-| Planos e cobrança recorrente                            | Tabela `subscriptions` pronta; integração na próxima fase           |
+| Módulo | O que tem |
+|---|---|
+| Página inicial (`/`) | Apresentação, recursos, planos e teste grátis |
+| Login e cadastro | E-mail e senha, Google, recuperação de senha, termos LGPD |
+| Onboarding (3 passos) | Empresa (link público, endereço, cor, logo, fuso), horário e serviços sugeridos por segmento, equipe |
+| Painel | Atendimentos do dia, espera, tempo médio, comparecimento, faturamento, gráficos, equipe agora, próximos horários |
+| Agenda | Dia, semana, mês e visão por profissional; arrastar, redimensionar, bloqueios, recorrência, filtros, sem conflitos |
+| Fila | Check-in, encaixes, espera ao vivo, chamar próximo, painel de TV (`/tv`) |
+| Atendimentos | WhatsApp, Instagram e chat do site numa caixa só; respostas rápidas com variáveis, transferir, resolver, agendar pela conversa |
+| Clientes | Cadastro, ficha com histórico, busca, etiquetas, importar e exportar CSV, exportar e excluir dados (LGPD) |
+| Equipe | Profissionais, serviços, horários, comissão, unidade, convite de acesso |
+| Serviços | Nome, duração, preço, cor, categoria, profissionais habilitados |
+| Financeiro | Recebimentos por período e forma (Pix, dinheiro, cartão), pendentes, recebimento avulso, comissões, CSV |
+| Relatórios | Por período, profissional e serviço; faltas, horários de pico, canais, novos x recorrentes; CSV e PDF |
+| Página pública (`/nome-da-empresa`) | Serviço, profissional (ou sem preferência), dia, horário, dados e confirmação; chat "Fale conosco" |
+| Gestão do agendamento (`/agendamento/<token>`) | Cliente confirma, remarca ou cancela pelo link dos lembretes |
+| Configurações | Empresa, unidades, usuários e convites, mensagens automáticas, respostas rápidas, integrações, API, plano e cobrança |
+| Notificações | Lembretes 24h e 2h (WhatsApp e e-mail), aniversário, retorno após 30 dias, notificações internas |
 
-**Importante:** nesta fase as telas funcionam com dados de exemplo guardados no
-navegador (`src/lib/store.tsx`), para dar para usar e avaliar sem configurar
-nada. As ações (`src/lib/actions.ts`) aplicam as mesmas regras do banco
-(conflito de horário, bloqueios, recorrência, status). A troca para o Supabase
-substitui o `dispatch` de cada ação por uma chamada ao banco.
+### Permissões
+
+| Papel | Acesso |
+|---|---|
+| Administrador | Tudo, inclusive financeiro completo, relatórios, plano e configurações |
+| Recepção | Agenda, fila, atendimentos, clientes, equipe e serviços (leitura) e o caixa do dia |
+| Profissional | Só a própria agenda e os próprios clientes; marca atendimentos como concluídos e bloqueia a própria agenda |
+
+As regras valem no banco (RLS), não só na tela.
+
+### Planos
+
+| Plano | Preço padrão | Inclui |
+|---|---|---|
+| Básico | R$ 49,90 | 1 profissional, agenda, página pública, lembretes por e-mail |
+| Profissional | R$ 99,90 | Até 5 profissionais, fila, WhatsApp, relatórios |
+| Empresa | R$ 199,90 | Ilimitado, várias unidades, caixa de entrada unificada, API |
+
+Teste grátis de 14 dias com tudo do plano Empresa. Os preços ficam em
+`src/lib/plans.ts` e `supabase/functions/_shared/billing.ts` (mantenha iguais).
+Os limites de profissionais e unidades também são validados no banco.
 
 ## Rodar localmente
 
@@ -37,176 +59,153 @@ npm install
 npm run dev
 ```
 
-Abra http://localhost:3000. No rodapé do menu, o seletor de usuário mostra o
-Balcão como **Administrador**, **Recepção** ou **Profissional**, para testar
-as permissões. "Restaurar dados de exemplo" volta ao estado inicial.
+Sem variáveis de ambiente o Balcão abre em **modo demonstração**: dados de
+exemplo guardados no navegador, sem login. No menu do usuário dá para ver o
+sistema como Administrador, Recepção ou Profissional. A página pública da
+demonstração é `http://localhost:3000/estudio-aurora`.
 
-Para testar o painel de TV, abra a Fila e clique em **Painel de TV**: a janela
-nova acompanha as chamadas em tempo real.
-
-## O que cada tela faz
-
-### Agenda
-- Visões **Dia** (colunas por profissional), **Semana** (um profissional por
-  vez), **Mês** e **Equipe** (linhas = profissionais, colunas = dias).
-- Blocos coloridos por serviço, ponto de status e linha da hora atual.
-- Clique num horário vazio para agendar; clique num bloco para editar.
-- Arraste para mover (inclusive para outro profissional na visão Dia) e puxe a
-  borda de baixo para mudar a duração. No celular, a edição é pelo formulário
-  para não atrapalhar a rolagem.
-- Conflitos com outro agendamento ou bloqueio são recusados com aviso.
-- Recorrência semanal, quinzenal ou mensal; datas com conflito são puladas e
-  informadas.
-- Bloqueios de almoço, folga, feriado ou outro motivo, por profissional ou para
-  toda a equipe.
-- Filtros por profissional, serviço e status. "Concluir e receber" abre o
-  registro de pagamento.
-
-### Fila
-- Check-in das chegadas previstas do dia (senha `A001`) e encaixes sem horário
-  (senha `E001`).
-- Tempo de espera ao vivo, com alerta de cor depois de 10 e 20 minutos.
-- "Chamar próximo" (geral ou por profissional), iniciar, concluir com
-  pagamento, desistência.
-- Painel de TV (`/tv`) com senha, nome, profissional e últimas chamadas, com
-  aviso sonoro.
-
-### Atendimentos
-- Abas Abertos, Meus e Resolvidos; busca e filtro por canal (WhatsApp,
-  Instagram, site).
-- Respostas rápidas: **Enviar horários disponíveis** (calcula os próximos
-  horários livres do profissional), **Confirmar agendamento** (confirma o
-  próximo horário do cliente) e **Endereço**.
-- Transferir para outro atendente, resolver e reabrir.
-- Painel do cliente: visitas, faltas, total gasto, observações, próximo
-  agendamento, histórico e etiquetas.
-- Botão **Agendar** abre a agenda já com o cliente e o canal da conversa.
+Com o Supabase (local ou na nuvem), crie `balcao/.env.local` a partir de
+`.env.example`. Mesmo com o Supabase configurado, o botão "Ver demonstração"
+na tela de login continua disponível.
 
 ## Estrutura
 
 ```
 balcao/
-├── src/app/(app)/        telas com menu lateral (painel, agenda, fila, ...)
-├── src/app/tv/           painel de TV da fila, sem menu
-├── src/components/       ui (primitivos), shell (menu), agenda, shared
-├── src/lib/              tipos, formatação pt-BR, regras de agenda, estado
-├── src/lib/supabase/     clientes do Supabase (navegador e servidor)
+├── src/app/(app)/          telas com menu lateral (painel, agenda, fila, ...)
+├── src/app/[slug]/         página pública de agendamento
+├── src/app/agendamento/    gestão do agendamento pelo cliente
+├── src/app/entrar, cadastrar, recuperar-senha, nova-senha, convite, onboarding
+├── src/app/tv/             painel de TV da fila
+├── src/middleware.ts       sessão do Supabase e proteção das rotas
+├── src/components/         ui (primitivos), shell, agenda, clientes, equipe, config, public
+├── src/lib/store.tsx       estado: demonstração ou Supabase (otimista + Realtime)
+├── src/lib/db/             carga, gravação, mapeamento e Realtime do Supabase
+├── src/lib/public-api.ts   página pública (funções public_* do banco)
 └── supabase/
-    ├── migrations/       schema, RLS e funções
-    ├── functions/        Edge Function send-reminders
-    └── seed.sql          dados de exemplo
+    ├── migrations/         schema, RLS, funções, planos, convites, API, chat
+    ├── functions/          Edge Functions (Deno)
+    ├── seed.sql            empresa de exemplo com 4 semanas de agenda
+    ├── cron.sql            agendamentos do pg_cron
+    └── config.toml         configuração do Supabase CLI
 ```
 
-## Banco de dados
+### Edge Functions
 
-Todas as tabelas de negócio têm `company_id` e RLS habilitado.
+| Função | Para quê |
+|---|---|
+| `send-reminders` | Envia lembretes, aniversário e retorno pendentes (pg_cron a cada 5 min) |
+| `send-message` | Entrega no WhatsApp ou Instagram a resposta escrita em Atendimentos |
+| `meta-webhook` | Recebe mensagens do WhatsApp Cloud API e do Instagram |
+| `whatsapp-webhook` | Recebe mensagens da Z-API ou da Evolution API |
+| `billing-checkout` | Abre o pagamento da assinatura (Stripe, Asaas ou Mercado Pago) |
+| `billing-webhook` | Atualiza a assinatura com as notificações do provedor |
+| `billing-cancel` | Cancela a assinatura no provedor |
+| `api` | API pública do plano Empresa (agendamentos, clientes, horários) |
 
-| Grupo           | Tabelas                                                                         |
-|-----------------|---------------------------------------------------------------------------------|
-| Empresa         | `companies`, `units`, `memberships`, `profiles`, `subscriptions`, `integrations` |
-| Equipe          | `professionals`, `work_hours`, `professional_services`                          |
-| Serviços        | `service_categories`, `services`                                                |
-| Clientes        | `customers`, `consent_logs`                                                     |
-| Agenda          | `appointments`, `recurrences`, `time_blocks`                                    |
-| Fila            | `queue_entries`                                                                 |
-| Conversas       | `conversations`, `messages`, `quick_replies`                                    |
-| Financeiro      | `payments`                                                                      |
-| Notificações    | `message_templates`, `notification_jobs`, `internal_notifications`              |
-
-Regras garantidas pelo banco:
-
-- **Sem conflito de horário:** a restrição `appointments_no_overlap`
-  (exclusão com `btree_gist`) impede dois agendamentos ativos do mesmo
-  profissional no mesmo intervalo. Cancelados e faltas liberam o horário.
-- **Permissões por papel** (`memberships.role`):
-  - `admin`: tudo, inclusive financeiro completo, plano e integrações.
-  - `recepcao`: agenda, fila, conversas e clientes; no financeiro, registra
-    pagamentos e vê só o caixa do dia.
-  - `profissional`: lê e atualiza só a própria agenda, vê só os próprios
-    clientes e pagamentos.
-- **Página pública sem login:** `public_company`, `public_available_slots`,
-  `public_book` (exige consentimento LGPD e revalida o horário),
-  `public_confirm` e `public_cancel` (pelo token do agendamento).
-- **Onboarding:** `create_company` cria empresa, unidade principal, assinatura
-  de teste de 14 dias, o usuário como admin, respostas rápidas e modelos de
-  mensagem.
-- **Lembretes:** cada agendamento gera envios 24h (WhatsApp e e-mail) e 2h
-  (WhatsApp) antes; remarcar reagenda e cancelar suspende.
-- **Notificações internas** para novo agendamento e cancelamento.
-- **LGPD:** `export_customer_data` e `delete_customer_data` (apenas admin).
-- **Tempo real:** `queue_entries`, `conversations`, `messages` e
-  `appointments` publicadas no Supabase Realtime.
+Resposta "1", "sim" ou "confirmo" no WhatsApp confirma o agendamento das
+próximas 48 horas.
 
 ## Publicar (Supabase + Vercel)
 
 ### 1. Supabase
 
 1. Crie um projeto em https://supabase.com (região São Paulo, `sa-east-1`).
-2. Instale a CLI e vincule o projeto:
+2. Aplique o banco com a CLI:
    ```bash
    npm install -g supabase
    supabase login
    cd balcao
    supabase link --project-ref SEU_PROJECT_REF
-   ```
-3. Aplique as migrações (e, se quiser, os dados de exemplo):
-   ```bash
    supabase db push
-   psql "$(supabase db url)" -f supabase/seed.sql   # opcional
+   psql "$(supabase db url)" -f supabase/seed.sql   # opcional: empresa de exemplo
    ```
-4. Em **Authentication > Providers**, habilite e-mail/senha e Google
-   (credenciais OAuth do Google Cloud). Em **URL Configuration**, cadastre a URL
-   da Vercel como Site URL e `https://SEU-DOMINIO/**` em Redirect URLs, para a
-   recuperação de senha funcionar.
-5. Para ver os dados de exemplo com seu usuário, depois do primeiro login:
-   ```sql
-   insert into memberships (company_id, user_id, role)
-   select '00000000-0000-0000-0000-00000000c001', id, 'admin'
-   from auth.users where email = 'seu@email.com';
-   ```
+   As migrações também criam o bucket público `logos` no Storage.
+3. **Authentication > URL Configuration:** Site URL `https://seudominio.com` e
+   Redirect URLs `https://seudominio.com/**`.
+4. **Authentication > Providers:** e-mail já vem ativo. Para o Google, crie as
+   credenciais OAuth no Google Cloud (URI de redirecionamento
+   `https://SEU_PROJECT_REF.supabase.co/auth/v1/callback`) e cole client ID e
+   secret.
+5. **Authentication > SMTP:** configure um SMTP próprio (Resend, SES,
+   Brevo) para confirmação de e-mail e recuperação de senha em produção.
 
-### 2. Lembretes automáticos
+### 2. Edge Functions e segredos
 
-1. Publique a função e configure os segredos:
-   ```bash
-   supabase functions deploy send-reminders --no-verify-jwt
-   supabase secrets set CRON_SECRET=um-segredo-longo \
-     WHATSAPP_TOKEN=... WHATSAPP_PHONE_NUMBER_ID=... \
-     RESEND_API_KEY=... EMAIL_FROM="Balcão <lembretes@seudominio.com>" \
-     PUBLIC_APP_URL=https://seudominio.com
-   ```
-   O WhatsApp usa a Cloud API oficial da Meta. Fora da janela de 24h a Meta
-   exige modelo de mensagem aprovado; cadastre o lembrete como modelo e troque
-   o envio para `type: "template"`. Z-API e Evolution API podem substituir a
-   função `sendWhatsApp`.
-2. Agende a execução a cada 5 minutos (habilite `pg_cron` e `pg_net` em
-   **Database > Extensions**):
-   ```sql
-   select cron.schedule('balcao-lembretes', '*/5 * * * *', $$
-     select net.http_post(
-       url := 'https://SEU_PROJECT_REF.supabase.co/functions/v1/send-reminders',
-       headers := '{"Authorization": "Bearer um-segredo-longo"}'::jsonb
-     );
-   $$);
-   ```
+```bash
+supabase functions deploy send-reminders send-message meta-webhook whatsapp-webhook \
+  billing-checkout billing-webhook billing-cancel api
 
-### 3. Vercel
+supabase secrets set \
+  PUBLIC_APP_URL=https://seudominio.com \
+  CRON_SECRET=um-segredo-longo \
+  RESEND_API_KEY=... EMAIL_FROM="Balcão <lembretes@seudominio.com>" \
+  META_APP_SECRET=... \
+  BILLING_PROVIDER=stripe
+```
+
+O `config.toml` já libera sem JWT as funções chamadas por terceiros
+(webhooks, cron e API); elas validam a origem pelo próprio segredo.
+
+Cobrança, conforme o provedor escolhido em `BILLING_PROVIDER`:
+
+| Provedor | Segredos | Webhook |
+|---|---|---|
+| Stripe | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_BASICO`, `STRIPE_PRICE_PROFISSIONAL`, `STRIPE_PRICE_EMPRESA` | `.../functions/v1/billing-webhook?provider=stripe` (eventos `checkout.session.completed`, `customer.subscription.*`, `invoice.payment_failed`) |
+| Asaas | `ASAAS_API_KEY`, `ASAAS_WEBHOOK_TOKEN`, `ASAAS_BASE_URL` (sandbox: `https://api-sandbox.asaas.com/v3`) | `.../functions/v1/billing-webhook?provider=asaas` |
+| Mercado Pago | `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET` | `.../functions/v1/billing-webhook?provider=mercadopago` (tópicos de assinatura) |
+
+Pix recorrente: o Asaas gera a cobrança Pix todo mês. Stripe e Mercado Pago
+fazem assinatura só com cartão.
+
+### 3. Agendamentos (pg_cron)
+
+Habilite `pg_cron` e `pg_net` em **Database > Extensions**, troque
+`SEU_PROJECT_REF` e `CRON_SECRET` em `supabase/cron.sql` e rode no SQL Editor.
+Ele agenda o envio de mensagens a cada 5 minutos e a geração diária de
+aniversários e retornos.
+
+### 4. WhatsApp e Instagram
+
+Cada empresa configura em **Configurações > Integrações**, que mostra a URL do
+webhook e o token de verificação:
+
+- **WhatsApp Cloud API (oficial):** app na Meta com o produto WhatsApp, número
+  verificado e token permanente. Fora da janela de 24 horas a Meta só entrega
+  mensagens com **modelo aprovado**: cadastre os lembretes como modelos e troque o
+  envio em `_shared/messaging.ts` para `type: "template"`.
+- **Z-API ou Evolution API:** conecte o número pelo QR Code e cole no provedor a
+  URL de webhook mostrada no Balcão.
+- **Instagram:** conta profissional ligada a uma página, com permissão
+  `instagram_manage_messages`, e o mesmo webhook da Meta.
+
+### 5. Vercel
 
 1. Importe o repositório em https://vercel.com/new e defina **Root Directory**
    como `balcao`.
-2. Variáveis de ambiente (veja `.env.example`):
-   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-   `NEXT_PUBLIC_APP_URL`.
-3. Faça o deploy. Para o link público por empresa (`balcao.app/nome-da-empresa`),
-   aponte o domínio para o projeto na aba **Domains**.
+2. Variáveis de ambiente (veja `.env.example`): `NEXT_PUBLIC_SUPABASE_URL`,
+   `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`.
+3. Faça o deploy e aponte o domínio em **Domains**. Os links públicos ficam em
+   `https://seudominio.com/nome-da-empresa`.
 
-## Próximas fases
+## Como foi testado
 
-1. Login (e-mail/senha e Google, recuperação de senha) e onboarding em 3
-   passos, ligando as telas ao Supabase e ao Realtime.
-2. Página pública de agendamento `/[empresa]` com confirmação, cancelamento e
-   remarcação pelo token.
-3. Cadastro e edição de clientes (importar CSV, LGPD), equipe e serviços.
-4. Financeiro por período, relatórios com exportação em PDF e CSV.
-5. Configurações, integrações (WhatsApp, Instagram) e cobrança recorrente
-   (Stripe, Asaas ou Mercado Pago) com limites por plano.
+- Migrações, seed e funções SQL num Postgres 16 com o GoTrue (Auth) e o
+  PostgREST do Supabase rodando localmente.
+- Testes de ponta a ponta no navegador (Playwright) contra esse ambiente:
+  cadastro, onboarding, agenda com arrastar e soltar gravando no banco,
+  clientes, importação CSV, exportar e excluir dados, página pública,
+  confirmar, remarcar e cancelar pelo link, chat do site com resposta pela
+  caixa de entrada, recuperação de senha com o e-mail real do GoTrue, convites
+  de recepção e de profissional com as permissões de cada papel, limites de
+  plano e o modo demonstração.
+- Edge Functions rodando no Deno contra o mesmo ambiente: API pública,
+  webhooks da Meta e da Z-API (cliente novo, mensagem duplicada, confirmação por
+  "Sim"), `send-message`, `send-reminders`, geração de aniversários e o webhook de
+  cobrança com eventos assinados do Stripe e do Asaas.
+
+Não testado aqui, por depender de contas externas: envio real pelo WhatsApp,
+Instagram e e-mail, checkout real no Stripe, Asaas e Mercado Pago, login com
+Google, upload no Storage e o Realtime do Supabase (sem ele, os dados de outros
+dispositivos aparecem ao recarregar a página). Faça esses testes no ambiente de homologação com as
+contas sandbox de cada provedor antes de abrir para clientes.
