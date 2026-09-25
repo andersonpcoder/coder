@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escola Coração de Jesus</title>
+<meta name="description" content="Escola particular no Barreiro, Belém/PA. Educação Infantil (Maternal, Jardim I e II) e Ensino Fundamental do 1º ao 5º ano, turnos manhã e tarde, salas climatizadas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&family=Lexend:wght@400;500;700&family=Caveat:wght@600;700&display=swap">
+<style>
+:root{
+  --girassol:#FFD20A;
+  --girassol-fundo:#FFE45C;
+  --coracao:#D7262E;
+  --azul:#1C2B6E;
+  --papel:#FFFCEF;
+  --papel-2:#FFF6CC;
+  --tinta:#1B1D33;
+  --tinta-suave:#4A4D66;
+  --pauta:#C9D7F2;
+  --margem:#E8747A;
+  --cartao:#FFFFFF;
+  --borda:#E9DFB3;
+  --link:#1C2B6E;
+  --ok:#1F7A4D;
+  --sombra:0 2px 0 rgba(27,29,51,.08), 0 10px 24px -12px rgba(27,29,51,.25);
+  --r:14px;
+  --gutter:clamp(16px,4vw,40px);
+  --f-display:"Lobster Two", "Brush Script MT", cursive;
+  --f-corpo:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --f-mao:"Caveat", "Comic Sans MS", cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papel:#11173A; --papel-2:#18204A; --tinta:#F6F1DC; --tinta-suave:#C3C4D9;
+    --pauta:#243063; --margem:#9E3A48; --cartao:#1A2250; --borda:#2C3872;
+    --link:#FFE45C; --ok:#6BD6A0; --coracao:#F0474F;
+    --sombra:0 2px 0 rgba(0,0,0,.25), 0 12px 28px -14px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#11173A; --papel-2:#18204A; --tinta:#F6F1DC; --tinta-suave:#C3C4D9;
+  --pauta:#243063; --margem:#9E3A48; --cartao:#1A2250; --borda:#2C3872;
+  --link:#FFE45C; --ok:#6BD6A0; --coracao:#F0474F;
+  --sombra:0 2px 0 rgba(0,0,0,.25), 0 12px 28px -14px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 17px/1.6 var(--f-corpo);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--link)}
+h1,h2,h3{text-wrap:balance;line-height:1.15;margin:0}
+p{margin:0}
+:focus-visible{outline:3px solid var(--coracao);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:var(--gutter)}
+.mao{font-family:var(--f-mao);font-weight:700}
+.eyebrow{font:500 13px/1 var(--f-corpo);letter-spacing:.14em;text-transform:uppercase;color:var(--coracao)}
+.h2{font:700 clamp(30px,4.6vw,46px)/1.1 var(--f-display);font-style:italic;color:var(--tinta)}
+.lead{color:var(--tinta-suave);max-width:60ch}
+.sec{padding-block:clamp(56px,8vw,96px)}
+.sec-head{display:grid;gap:12px;margin-bottom:36px}
+
+/* Topo */
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--azul);color:#fff}
+.topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px}
+.marca{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font:700 22px/1 var(--f-display);font-style:italic}
+.marca svg{width:34px;height:34px}
+.menu{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.menu a{color:#E6E9F7;text-decoration:none;font-size:15px;padding:8px 10px;border-radius:8px}
+.menu a:hover{background:rgba(255,255,255,.1);color:#fff}
+.menu .cta-mini{background:var(--girassol);color:#1B1D33;font-weight:700}
+.menu .cta-mini:hover{background:#FFE45C;color:#1B1D33}
+@media (max-width:820px){.menu a:not(.cta-mini){display:none}}
+
+/* Hero: a faixa amarela do logotipo */
+.hero{background:var(--girassol);color:#1B1D33;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:22px;background:
+  radial-gradient(circle at 11px -2px, transparent 12px, var(--papel) 13px) 0 0/22px 22px repeat-x}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;padding-block:48px 72px}
+.hero-txt{display:grid;gap:20px}
+.selo{justify-self:start;background:#1B1D33;color:var(--girassol);font:500 13px/1 var(--f-corpo);letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border-radius:999px}
+.hero h1{font:700 clamp(46px,8vw,92px)/.95 var(--f-display);font-style:italic;letter-spacing:-.01em}
+.hero h1 .de{color:var(--coracao)}
+.hero .sub{font-size:clamp(18px,2.2vw,21px);max-width:34ch;color:#2A2B40}
+.hero .bilhete{font:700 26px/1.1 var(--f-mao);color:#B3141C;transform:rotate(-2deg);justify-self:start}
+.acoes{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px/1 var(--f-corpo);text-decoration:none;border:0;cursor:pointer;padding:15px 22px;border-radius:999px;transition:transform .15s ease, box-shadow .15s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-verm{background:var(--coracao);color:#fff;box-shadow:0 4px 0 #8E1117}
+.btn-azul{background:#1C2B6E;color:#fff;box-shadow:0 4px 0 #0C1440}
+.btn-claro{background:#fff;color:#1B1D33;box-shadow:0 4px 0 rgba(27,29,51,.25)}
+.btn svg{width:20px;height:20px;flex:none}
+.mascote-box{position:relative;justify-self:center;width:min(100%,420px)}
+.mascote{width:100%;height:auto;overflow:visible}
+.mascote .braco-dir{transform-origin:292px 150px;animation:aceno 2.4s ease-in-out infinite}
+.mascote .corpo{transform-origin:200px 330px;animation:balanco 4s ease-in-out infinite}
+@keyframes aceno{0%,55%,100%{transform:rotate(0)}65%{transform:rotate(-16deg)}75%{transform:rotate(8deg)}85%{transform:rotate(-12deg)}}
+@keyframes balanco{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.balao{position:absolute;top:2%;right:0;background:#fff;color:#1B1D33;font:700 22px/1.1 var(--f-mao);padding:10px 16px;border-radius:18px;box-shadow:0 3px 0 rgba(27,29,51,.2);transform:rotate(4deg)}
+.balao::after{content:"";position:absolute;left:18px;bottom:-10px;border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+@media (max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;padding-block:32px 64px}
+  .mascote-box{width:min(78%,300px);order:-1}
+}
+
+/* Faixa de fatos (do perfil da escola) */
+.fatos{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--cartao);border:2px solid var(--borda);border-radius:var(--r);box-shadow:var(--sombra);margin-top:-8px;position:relative;z-index:2}
+.fato{padding:22px 20px;display:grid;gap:6px;border-right:2px dashed var(--borda)}
+.fato:last-child{border-right:0}
+.fato b{font:700 18px/1.2 var(--f-corpo)}
+.fato span{color:var(--tinta-suave);font-size:15px;line-height:1.45}
+.fato svg{width:30px;height:30px;color:var(--coracao)}
+@media (max-width:860px){.fatos{grid-template-columns:1fr 1fr}.fato:nth-child(2){border-right:0}.fato:nth-child(-n+2){border-bottom:2px dashed var(--borda)}}
+@media (max-width:460px){.fatos{grid-template-columns:1fr}.fato{border-right:0;border-bottom:2px dashed var(--borda)}.fato:last-child{border-bottom:0}}
+
+/* Caderno pautado */
+.caderno{background:
+  linear-gradient(90deg, transparent calc(var(--gutter) + 26px), var(--margem) calc(var(--gutter) + 26px), var(--margem) calc(var(--gutter) + 28px), transparent calc(var(--gutter) + 28px)),
+  repeating-linear-gradient(to bottom, var(--papel) 0 33px, var(--pauta) 33px 34px);
+}
+@media (max-width:600px){.caderno{background:repeating-linear-gradient(to bottom, var(--papel) 0 33px, var(--pauta) 33px 34px)}}
+
+/* Trilha do Maternal ao 5º ano */
+.trilha{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;list-style:none;padding:0;margin:0;counter-reset:etapa}
+.degrau{background:var(--cartao);border:2px solid var(--borda);border-radius:12px;padding:16px 12px 14px;display:grid;gap:6px;align-content:start;position:relative;box-shadow:var(--sombra)}
+.degrau .idade{font:500 12px/1 var(--f-corpo);letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave)}
+.degrau .serie{font:700 19px/1.15 var(--f-corpo)}
+.degrau .barra{height:8px;border-radius:99px;background:var(--girassol)}
+.degrau.fund .barra{background:var(--azul)}
+:root[data-theme="dark"] .degrau.fund .barra{background:#7C8CE0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .degrau.fund .barra{background:#7C8CE0}}
+.degrau:nth-child(1){margin-top:70px}.degrau:nth-child(2){margin-top:60px}.degrau:nth-child(3){margin-top:50px}.degrau:nth-child(4){margin-top:40px}
+.degrau:nth-child(5){margin-top:30px}.degrau:nth-child(6){margin-top:20px}.degrau:nth-child(7){margin-top:10px}.degrau:nth-child(8){margin-top:0}
+.degrau.ativo{border-color:var(--coracao);outline:3px solid var(--coracao);outline-offset:2px}
+.degrau.ativo::before{content:"aqui!";position:absolute;top:-30px;left:50%;transform:translateX(-50%) rotate(-4deg);font:700 22px/1 var(--f-mao);color:var(--coracao)}
+.etapas-legenda{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;font-size:15px;color:var(--tinta-suave)}
+.etapas-legenda i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;background:var(--girassol)}
+.etapas-legenda i.az{background:var(--azul)}
+@media (max-width:900px){
+  .trilha{grid-template-columns:repeat(4,1fr);row-gap:38px;padding-top:26px}
+  .degrau:nth-child(n){margin-top:0}
+}
+@media (max-width:480px){.trilha{grid-template-columns:1fr 1fr}}
+
+/* Descobridor de turma */
+.descobre{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+.painel{background:var(--cartao);border:2px solid var(--borda);border-radius:var(--r);padding:24px;box-shadow:var(--sombra);display:grid;gap:14px;align-content:start}
+.painel h3{font:700 22px/1.2 var(--f-corpo)}
+label{font-weight:500;font-size:15px;display:grid;gap:6px}
+input,select,textarea{font:400 16px/1.4 var(--f-corpo);color:var(--tinta);background:var(--papel);border:2px solid var(--borda);border-radius:10px;padding:12px 14px;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;box-shadow:0 0 0 3px rgba(28,43,110,.2)}
+.linha{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.resultado{background:var(--girassol);color:#1B1D33;border-radius:var(--r);padding:24px;display:grid;gap:10px;align-content:center;position:relative;overflow:hidden}
+.resultado .rotulo{font:500 13px/1 var(--f-corpo);letter-spacing:.12em;text-transform:uppercase}
+.resultado .turma{font:700 clamp(34px,5vw,52px)/1 var(--f-display);font-style:italic}
+.resultado .obs{font-size:15px;color:#33354D}
+.resultado .nota{font:700 22px/1.1 var(--f-mao);color:#B3141C}
+@media (max-width:760px){.descobre{grid-template-columns:1fr}.linha{grid-template-columns:1fr}}
+
+/* Por que escolher */
+.motivos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.motivo{display:grid;gap:10px;padding:24px;background:var(--cartao);border-radius:var(--r);border:2px solid var(--borda)}
+.motivo .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--papel-2)}
+.motivo .ic svg{width:30px;height:30px;color:var(--coracao)}
+.motivo h3{font:700 20px/1.25 var(--f-corpo)}
+.motivo p{color:var(--tinta-suave);font-size:16px}
+@media (max-width:860px){.motivos{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.motivos{grid-template-columns:1fr}}
+
+/* Calendário de projetos: agenda escolar */
+.agenda{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;list-style:none;padding:0;margin:0}
+.dia{background:var(--cartao);border-radius:12px;border:2px solid var(--borda);overflow:hidden;display:grid;grid-template-rows:auto 1fr;box-shadow:var(--sombra)}
+.dia .folha{display:flex;align-items:baseline;gap:8px;padding:10px 14px;background:var(--azul);color:#fff;font-variant-numeric:tabular-nums}
+.dia .folha b{font:700 26px/1 var(--f-corpo)}
+.dia .folha span{font:500 13px/1 var(--f-corpo);letter-spacing:.1em;text-transform:uppercase;color:#C9D0F0}
+.dia .txt{padding:14px;display:grid;gap:6px;align-content:start}
+.dia h3{font:700 17px/1.3 var(--f-corpo)}
+.dia p{font-size:15px;color:var(--tinta-suave);line-height:1.5}
+.dia.agora{border-color:var(--coracao)}
+.dia.agora .folha{background:var(--coracao)}
+.dia.agora .folha::after{content:"este mês";margin-left:auto;font:700 20px/1 var(--f-mao);letter-spacing:0;text-transform:none;color:#fff}
+@media (max-width:900px){.agenda{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.agenda{grid-template-columns:1fr}}
+
+/* Mural de fotos */
+.mural{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:28px;align-items:start}
+.polaroide{margin:0;background:#fff;padding:12px 12px 16px;border-radius:4px;box-shadow:0 14px 30px -14px rgba(0,0,0,.45);position:relative}
+.polaroide:nth-child(1){transform:rotate(-2.5deg)}
+.polaroide:nth-child(2){transform:rotate(2deg);margin-top:28px}
+.polaroide::before{content:"";position:absolute;top:-12px;left:50%;width:84px;height:24px;transform:translateX(-50%) rotate(-3deg);background:rgba(255,210,10,.75)}
+.polaroide img{width:100%;aspect-ratio:314/460;object-fit:cover;border-radius:2px}
+.polaroide figcaption{font:700 22px/1.15 var(--f-mao);color:#1B1D33;padding-top:10px;text-align:center}
+.mural-txt{display:grid;gap:16px;align-content:start}
+@media (max-width:860px){.mural{grid-template-columns:1fr 1fr}.mural-txt{grid-column:1/-1;order:-1}}
+@media (max-width:480px){.mural{grid-template-columns:1fr}.polaroide:nth-child(2){margin-top:0}}
+
+/* Matrícula */
+.matricula{background:var(--azul);color:#fff}
+.matricula .h2{color:#fff}
+.matricula .lead{color:#D5DAF2}
+.matricula .eyebrow{color:var(--girassol)}
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.form{background:var(--cartao);color:var(--tinta);border-radius:var(--r);padding:24px;display:grid;gap:14px}
+.form fieldset{border:0;padding:0;margin:0;display:grid;gap:8px}
+.form legend{font-weight:500;font-size:15px;padding:0;margin-bottom:6px}
+.chips{position:relative;display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;width:1px;height:1px}
+.chips label{display:inline-block;cursor:pointer;padding:9px 16px;border-radius:999px;border:2px solid var(--borda);background:var(--papel);font-weight:500}
+.chips input:checked + label{background:var(--girassol);border-color:#C9A300;color:#1B1D33}
+.chips input:focus-visible + label{outline:3px solid var(--coracao);outline-offset:2px}
+.recado{background:var(--papel-2);color:var(--tinta);border-radius:var(--r);padding:22px;display:grid;gap:14px;position:relative}
+.recado h3{font:700 20px/1.2 var(--f-corpo)}
+.recado pre{white-space:pre-wrap;word-break:break-word;margin:0;font:400 16px/1.55 var(--f-corpo);background:var(--cartao);border:2px dashed var(--borda);border-radius:12px;padding:16px}
+.recado .btn-azul{background:#1FA855;box-shadow:0 4px 0 #11703A}
+.aviso{font-size:14px;color:var(--tinta-suave)}
+.status{font-size:14px;color:var(--ok);min-height:1.2em}
+@media (max-width:860px){.mat-grid{grid-template-columns:1fr}}
+
+/* Contato */
+.contato{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:stretch}
+.info{display:grid;gap:16px;align-content:start}
+.item{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:16px;background:var(--cartao);border:2px solid var(--borda);border-radius:var(--r)}
+.item .ic{width:44px;height:44px;border-radius:12px;background:var(--girassol);display:grid;place-items:center;color:#1B1D33}
+.item .ic svg{width:24px;height:24px}
+.item b{display:block;font-weight:700}
+.item span,.item a{font-size:16px}
+.copiar{margin-left:6px;font:500 13px/1 var(--f-corpo);border:2px solid var(--borda);background:var(--papel);color:var(--tinta);border-radius:999px;padding:6px 10px;cursor:pointer}
+.mapa{background:var(--girassol);border-radius:var(--r);padding:24px;display:grid;gap:14px;align-content:end;min-height:320px;position:relative;overflow:hidden;color:#1B1D33}
+.mapa svg.ruas{position:absolute;inset:0;width:100%;height:100%}
+.mapa > *:not(.ruas){position:relative}
+.mapa h3{font:700 30px/1.05 var(--f-display);font-style:italic}
+
+/* Rodapé */
+.rodape{background:#1B1D33;color:#C9CBDD;padding-block:36px;font-size:15px}
+.rodape .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center}
+.rodape a{color:var(--girassol)}
+.rodape .marca{font-size:24px}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .mascote .braco-dir,.mascote .corpo{animation:none}
+  .btn{transition:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="coracao" viewBox="0 0 200 180"><path d="M100 176C44 130 4 98 4 56 4 24 28 4 56 4c20 0 34 10 44 26C110 14 124 4 144 4c28 0 52 20 52 52 0 42-40 74-96 120z"/></symbol>
+  </defs>
+</svg>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#inicio" aria-label="Escola Coração de Jesus, início">
+      <svg viewBox="0 0 200 180" aria-hidden="true"><use href="#coracao" width="200" height="180" fill="#D7262E"/><ellipse cx="80" cy="70" rx="17" ry="22" fill="#fff"/><ellipse cx="118" cy="70" rx="17" ry="22" fill="#fff"/><circle cx="86" cy="64" r="8" fill="#1B1D33"/><circle cx="124" cy="64" r="8" fill="#1B1D33"/></svg>
+      Coração de Jesus
+    </a>
+    <nav class="menu" aria-label="Seções">
+      <a href="#turmas">Turmas</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#contato">Contato</a>
+      <a class="cta-mini" href="#matricula">Matrícula</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-txt">
+        <span class="selo">Escola particular · Barreiro, Belém/PA</span>
+        <h1>Escola <span class="de">Coração</span> de Jesus</h1>
+        <p class="sub">Educação Infantil e Ensino Fundamental, do Maternal ao 5º ano, com turmas pela manhã e à tarde.</p>
+        <span class="bilhete">Matrículas abertas, venha conhecer!</span>
+        <div class="acoes">
+          <a class="btn btn-verm" href="#matricula">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>
+            Fazer pré-matrícula
+          </a>
+          <a class="btn btn-claro" href="#turmas">Qual a turma do meu filho?</a>
+        </div>
+      </div>
+      <div class="mascote-box">
+        <span class="balao" aria-hidden="true">Oi, família!</span>
+        <svg class="mascote" viewBox="0 0 400 420" role="img" aria-label="Mascote da escola: um coração vermelho sorridente acenando">
+          <g class="corpo">
+            <!-- pernas -->
+            <path d="M185 245 C180 320 176 360 170 382" stroke="#1B1D33" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <path d="M215 245 C220 320 226 360 232 382" stroke="#1B1D33" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <path d="M188 245 C184 320 180 360 174 382" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M212 245 C216 320 222 360 228 382" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <ellipse cx="160" cy="392" rx="28" ry="13" fill="#7A4A1E" stroke="#1B1D33" stroke-width="4"/>
+            <ellipse cx="244" cy="392" rx="28" ry="13" fill="#7A4A1E" stroke="#1B1D33" stroke-width="4"/>
+            <!-- braço esquerdo -->
+            <path d="M110 150 C70 150 40 120 28 86" stroke="#1B1D33" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <path d="M110 150 C70 150 40 120 28 86" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <g transform="translate(24 78) rotate(-30)">
+              <path d="M0 0 C-14 -6 -18 -22 -8 -30 M0 0 C-4 -20 2 -34 10 -32 M0 0 C8 -18 20 -26 24 -20 M0 0 C14 -8 26 -6 26 2 M0 0 C-14 4 -22 -2 -24 -8" stroke="#1B1D33" stroke-width="5" fill="#fff" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="2" cy="-8" r="14" fill="#fff" stroke="#1B1D33" stroke-width="4"/>
+            </g>
+            <!-- braço direito (acena) -->
+            <g class="braco-dir">
+              <path d="M292 150 C332 146 362 116 374 78" stroke="#1B1D33" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <path d="M292 150 C332 146 362 116 374 78" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <g transform="translate(378 68) rotate(20)">
+                <path d="M0 0 L-10 -30 M0 0 L0 -34 M0 0 L11 -31 M0 0 L22 -18 M0 0 L-22 -8" stroke="#1B1D33" stroke-width="9" stroke-linecap="round"/>
+                <path d="M0 0 L-10 -30 M0 0 L0 -34 M0 0 L11 -31 M0 0 L22 -18 M0 0 L-22 -8" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="0" cy="-4" r="15" fill="#fff" stroke="#1B1D33" stroke-width="4"/>
+              </g>
+            </g>
+            <!-- coração -->
+            <g transform="translate(60 8) scale(1.4)">
+              <use href="#coracao" width="200" height="180" fill="#D7262E" stroke="#8E1117" stroke-width="5"/>
+              <path d="M40 30 C30 40 26 54 30 68" stroke="#F4707A" stroke-width="9" fill="none" stroke-linecap="round" opacity=".8"/>
+              <g class="olhos">
+                <ellipse cx="78" cy="66" rx="21" ry="27" fill="#fff" stroke="#1B1D33" stroke-width="4"/>
+                <ellipse cx="124" cy="66" rx="21" ry="27" fill="#fff" stroke="#1B1D33" stroke-width="4"/>
+                <circle class="pupila" data-cx="84" data-cy="60" cx="84" cy="60" r="10" fill="#1B1D33"/>
+                <circle class="pupila" data-cx="130" data-cy="60" cx="130" cy="60" r="10" fill="#1B1D33"/>
+              </g>
+              <path d="M76 116 Q101 138 128 116" stroke="#1B1D33" stroke-width="6" fill="#fff" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="fatos" role="list">
+      <div class="fato" role="listitem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V6l8-3 8 3v13"/><path d="M9 19v-5h6v5"/></svg>
+        <b>Maternal ao 5º ano</b><span>Educação Infantil e Fundamental I no mesmo lugar</span>
+      </div>
+      <div class="fato" role="listitem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M4.9 6.9l14.2 10.2M19.1 6.9 4.9 17.1M9 3l3 3 3-3M9 21l3-3 3 3"/></svg>
+        <b>Salas climatizadas</b><span>Conforto para aprender no calor de Belém</span>
+      </div>
+      <div class="fato" role="listitem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>
+        <b>Professores qualificados</b><span>Equipe que acompanha cada criança de perto</span>
+      </div>
+      <div class="fato" role="listitem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <b>Manhã e tarde</b><span>Portões abrem às 07:30</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec caderno" id="turmas">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Turmas</span>
+        <h2 class="h2">Do primeiro rabisco ao 5º ano</h2>
+        <p class="lead">A criança pode entrar pequena e seguir com a mesma escola por toda a Educação Infantil e os anos iniciais do Ensino Fundamental.</p>
+      </div>
+
+      <ol class="trilha" id="trilha">
+        <li class="degrau" data-idade="3"><span class="idade">3 anos</span><span class="serie">Maternal</span><span class="barra"></span></li>
+        <li class="degrau" data-idade="4"><span class="idade">4 anos</span><span class="serie">Jardim I</span><span class="barra"></span></li>
+        <li class="degrau" data-idade="5"><span class="idade">5 anos</span><span class="serie">Jardim II</span><span class="barra"></span></li>
+        <li class="degrau fund" data-idade="6"><span class="idade">6 anos</span><span class="serie">1º ano</span><span class="barra"></span></li>
+        <li class="degrau fund" data-idade="7"><span class="idade">7 anos</span><span class="serie">2º ano</span><span class="barra"></span></li>
+        <li class="degrau fund" data-idade="8"><span class="idade">8 anos</span><span class="serie">3º ano</span><span class="barra"></span></li>
+        <li class="degrau fund" data-idade="9"><span class="idade">9 anos</span><span class="serie">4º ano</span><span class="barra"></span></li>
+        <li class="degrau fund" data-idade="10"><span class="idade">10 anos</span><span class="serie">5º ano</span><span class="barra"></span></li>
+      </ol>
+      <div class="etapas-legenda">
+        <span><i></i>Educação Infantil</span>
+        <span><i class="az"></i>Ensino Fundamental I</span>
+      </div>
+
+      <div class="descobre">
+        <form class="painel" id="form-turma" novalidate>
+          <h3>Descubra a turma pela data de nascimento</h3>
+          <div class="linha">
+            <label for="nasc">Data de nascimento
+              <input type="date" id="nasc" name="nasc" value="2021-06-15" min="2010-01-01">
+            </label>
+            <label for="ano-letivo">Ano letivo
+              <select id="ano-letivo" name="ano-letivo"></select>
+            </label>
+          </div>
+          <p class="aviso">O cálculo segue a data de corte de 31 de março usada no Brasil (Resolução CNE/CEB nº 2/2018): vale a idade que a criança tem completa até essa data. A secretaria confirma a turma na matrícula.</p>
+        </form>
+        <div class="resultado" aria-live="polite">
+          <span class="rotulo" id="res-rotulo">Turma indicada</span>
+          <span class="turma" id="res-turma">Jardim II</span>
+          <span class="obs" id="res-obs">5 anos completos até 31/03/2027</span>
+          <span class="nota" id="res-nota">Tem vaga pra ele(a) aqui!</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="diferenciais">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Por que a Coração de Jesus</span>
+        <h2 class="h2">Uma escola de bairro, com cuidado de família</h2>
+      </div>
+      <div class="motivos">
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M4.9 6.9l14.2 10.2M19.1 6.9 4.9 17.1"/></svg></div>
+          <h3>Salas climatizadas</h3>
+          <p>Em Belém faz calor o ano inteiro. Com ar-condicionado nas salas, a criança fica disposta e concentrada durante a aula.</p>
+        </article>
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></div>
+          <h3>Professores qualificados</h3>
+          <p>Turmas acompanhadas por professoras que conhecem cada aluno pelo nome e conversam com a família.</p>
+        </article>
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M4 9h16M9 5v4M15 5v4"/></svg></div>
+          <h3>Projetos o ano todo</h3>
+          <p>Datas importantes viram projeto: meio ambiente, cultura indígena, literatura infantil, cidadania e proteção da infância.</p>
+        </article>
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3>Dois turnos</h3>
+          <p>Turmas pela manhã e à tarde, para a rotina da escola caber na rotina da família.</p>
+        </article>
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 11-7 11z"/></svg></div>
+          <h3>Valores e acolhimento</h3>
+          <p>O coração está no nome e no dia a dia: respeito, paz e convivência são trabalhados em sala e nos eventos.</p>
+        </article>
+        <article class="motivo">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg></div>
+          <h3>Perto de casa</h3>
+          <p>Na Passagem Bom Jesus, no Barreiro. Dá para levar e buscar a pé.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec caderno" id="projetos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Agenda de projetos</span>
+        <h2 class="h2">O calendário que vira aprendizado</h2>
+        <p class="lead">Alguns dos projetos que as turmas já realizaram. Cada data rende painéis, apresentações e atividades em família.</p>
+      </div>
+      <ol class="agenda" id="agenda">
+        <li class="dia" data-mes="3"><div class="folha"><b>22</b><span>março</span></div><div class="txt"><h3>Dia Mundial da Água</h3><p>Economizar, reaproveitar e reduzir: as crianças levam a campanha para casa.</p></div></li>
+        <li class="dia" data-mes="4"><div class="folha"><b>18</b><span>abril</span></div><div class="txt"><h3>Sítio do Picapau Amarelo</h3><p>Dia do Livro Infantil e de Monteiro Lobato, com leitura e personagens.</p></div></li>
+        <li class="dia" data-mes="4"><div class="folha"><b>19</b><span>abril</span></div><div class="txt"><h3>Dia dos Povos Indígenas</h3><p>Mostra de alimentos, artesanato e histórias dos povos da Amazônia.</p></div></li>
+        <li class="dia" data-mes="5"><div class="folha"><b>18</b><span>maio</span></div><div class="txt"><h3>Maio Laranja: Faça Bonito</h3><p>Proteção da infância em linguagem de criança, com o semáforo do toque.</p></div></li>
+        <li class="dia" data-mes="5"><div class="folha"><b>2º dom.</b><span>maio</span></div><div class="txt"><h3>Mãe, sua presença</h3><p>Homenagem às mães com painel e apresentação das turmas.</p></div></li>
+        <li class="dia" data-mes="9"><div class="folha"><b>7</b><span>setembro</span></div><div class="txt"><h3>Desfile cívico</h3><p>Pelas ruas do Barreiro: "Paz é a gente que faz" e "Brincar sem uso de telas".</p></div></li>
+        <li class="dia" data-mes="10"><div class="folha"><b>12</b><span>outubro</span></div><div class="txt"><h3>Semana da Criança</h3><p>Uma semana inteira de brincadeiras, passeios e surpresas.</p></div></li>
+        <li class="dia" data-mes="12"><div class="folha"><b>dez</b><span>fim do ano</span></div><div class="txt"><h3>Natal em família</h3><p>Encerramento do ano com apresentação das turmas.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="escola">
+    <div class="wrap mural">
+      <figure class="polaroide">
+        <img src="img/mural-maio-laranja.jpg" alt="Painel amarelo feito à mão com uma flor grande, um semáforo de carinhas e as palavras Faça Bonito, Maio Laranja" width="314" height="460" loading="lazy">
+        <figcaption>Painel do Maio Laranja</figcaption>
+      </figure>
+      <figure class="polaroide">
+        <img src="img/mostra-povos-indigenas.jpg" alt="Mesa com frutas, farinha e cestos de palha diante de um painel sobre os povos indígenas" width="314" height="460" loading="lazy">
+        <figcaption>Mostra dos Povos Indígenas</figcaption>
+      </figure>
+      <div class="mural-txt">
+        <span class="eyebrow">Por dentro da escola</span>
+        <h2 class="h2">Cada parede conta o que a turma aprendeu</h2>
+        <p class="lead">Os painéis são feitos com as crianças e mudam a cada projeto. Quando a família chega, vê o que o filho estudou naquele mês.</p>
+        <p class="lead">No Instagram da escola tem foto de todos os eventos, do desfile ao Natal.</p>
+        <div class="acoes">
+          <a class="btn btn-azul" href="https://www.instagram.com/ecj_coracaodejesus/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            @ecj_coracaodejesus
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec matricula" id="matricula">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Matrícula</span>
+        <h2 class="h2">Garanta a vaga do seu filho</h2>
+        <p class="lead">Preencha os dados abaixo. O recado fica pronto para você enviar pelo WhatsApp da secretaria e marcar uma visita.</p>
+      </div>
+      <div class="mat-grid">
+        <form class="form" id="form-mat" novalidate>
+          <label for="resp">Seu nome
+            <input id="resp" name="resp" autocomplete="name" value="" placeholder="Ex.: Ana Souza">
+          </label>
+          <label for="crianca">Nome da criança
+            <input id="crianca" name="crianca" value="" placeholder="Ex.: Davi">
+          </label>
+          <label for="serie">Turma desejada
+            <select id="serie" name="serie">
+              <option>Maternal</option><option>Jardim I</option><option selected>Jardim II</option>
+              <option>1º ano</option><option>2º ano</option><option>3º ano</option><option>4º ano</option><option>5º ano</option>
+            </select>
+          </label>
+          <fieldset>
+            <legend>Turno</legend>
+            <div class="chips">
+              <input type="radio" name="turno" id="t-manha" value="manhã" checked><label for="t-manha">Manhã</label>
+              <input type="radio" name="turno" id="t-tarde" value="tarde"><label for="t-tarde">Tarde</label>
+              <input type="radio" name="turno" id="t-indif" value="qualquer turno"><label for="t-indif">Tanto faz</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Quero</legend>
+            <div class="chips">
+              <input type="checkbox" name="quero" id="q-valores" value="saber valores de matrícula e mensalidade" checked><label for="q-valores">Valores</label>
+              <input type="checkbox" name="quero" id="q-visita" value="agendar uma visita" checked><label for="q-visita">Agendar visita</label>
+              <input type="checkbox" name="quero" id="q-docs" value="saber os documentos necessários"><label for="q-docs">Documentos</label>
+            </div>
+          </fieldset>
+        </form>
+        <div class="recado">
+          <h3>Seu recado para a secretaria</h3>
+          <pre id="msg"></pre>
+          <div class="acoes">
+            <a class="btn btn-azul" id="wa" href="https://wa.me/5591993698373" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg>
+              Abrir no WhatsApp
+            </a>
+            <button class="btn btn-claro" type="button" id="copiar-msg">Copiar recado</button>
+          </div>
+          <p class="status" id="status-msg" role="status"></p>
+          <p class="aviso">O WhatsApp abre com o texto pronto. A mensagem só é enviada quando você tocar em enviar no app.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contato">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Contato</span>
+        <h2 class="h2">Venha nos visitar</h2>
+      </div>
+      <div class="contato">
+        <div class="info">
+          <div class="item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg></span>
+            <div><b>Endereço</b><span>Passagem Bom Jesus, 77, Barreiro<br>Belém, PA · CEP 66117-010</span></div>
+          </div>
+          <div class="item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+            <div><b>Telefone e WhatsApp</b><span id="fone">(91) 99369-8373</span><button class="copiar" type="button" id="copiar-fone">Copiar</button> <span class="status" id="status-fone" role="status"></span></div>
+          </div>
+          <div class="item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div><b>Funcionamento</b><span>Segunda a sexta · abre às 07:30<br>Turmas pela manhã e à tarde</span></div>
+          </div>
+          <div class="item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></span>
+            <div><b>Instagram</b><a href="https://www.instagram.com/ecj_coracaodejesus/" target="_blank" rel="noopener">@ecj_coracaodejesus</a></div>
+          </div>
+        </div>
+        <div class="mapa">
+          <svg class="ruas" viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g stroke="#fff" stroke-linecap="round" fill="none" opacity=".7">
+              <path d="M-20 60 L420 110" stroke-width="16"/>
+              <path d="M-20 200 L420 170" stroke-width="10"/>
+              <path d="M90 -20 L140 340" stroke-width="10"/>
+              <path d="M290 -20 L250 340" stroke-width="14"/>
+              <path d="M140 140 L270 132" stroke-width="6" stroke-dasharray="2 10"/>
+            </g>
+            <g transform="translate(204 104)">
+              <path d="M0 30 C-16 14 -22 4 -22 -6 A22 22 0 0 1 22 -6 C22 4 16 14 0 30z" fill="#D7262E" stroke="#1B1D33" stroke-width="3"/>
+              <circle cx="0" cy="-6" r="8" fill="#fff"/>
+            </g>
+          </svg>
+          <span class="eyebrow" style="color:#1B1D33">Barreiro · Belém</span>
+          <h3>Passagem Bom Jesus, 77</h3>
+          <div class="acoes">
+            <a class="btn btn-verm" href="https://maps.app.goo.gl/WM6xbyKqSxCv1BPd7" target="_blank" rel="noopener">Abrir rota no Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <span class="marca">Escola Coração de Jesus</span>
+    <span>Educação Infantil · Ensino Fundamental I · Belém/PA</span>
+    <a href="#inicio">Voltar ao topo</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  var TURMAS={3:"Maternal",4:"Jardim I",5:"Jardim II",6:"1º ano",7:"2º ano",8:"3º ano",9:"4º ano",10:"5º ano"};
+  var hoje=new Date();
+
+  // Anos letivos: o atual e o próximo (a partir do 2º semestre, o próximo vem primeiro).
+  var anoSel=document.getElementById("ano-letivo");
+  var a0=hoje.getFullYear(), anos=hoje.getMonth()>=6?[a0+1,a0]:[a0,a0+1];
+  anos.forEach(function(a){var o=document.createElement("option");o.value=a;o.textContent=a;anoSel.appendChild(o);});
+
+  function idadeNoCorte(nasc, ano){
+    var idade=ano-nasc.getFullYear();
+    var m=nasc.getMonth(), d=nasc.getDate();
+    if(m>2 || (m===2 && d>31)) idade--; // faz aniversário depois de 31 de março
+    return idade;
+  }
+
+  var nascEl=document.getElementById("nasc");
+  function calcular(){
+    var v=nascEl.value, ano=+anoSel.value;
+    var rot=document.getElementById("res-rotulo"), t=document.getElementById("res-turma"),
+        obs=document.getElementById("res-obs"), nota=document.getElementById("res-nota");
+    document.querySelectorAll(".degrau.ativo").forEach(function(e){e.classList.remove("ativo");});
+    if(!v){rot.textContent="Turma indicada";t.textContent="…";obs.textContent="Informe a data de nascimento.";nota.textContent="";return;}
+    var p=v.split("-"), nasc=new Date(+p[0],+p[1]-1,+p[2]);
+    var idade=idadeNoCorte(nasc,ano);
+    var corte="31/03/"+ano;
+    rot.textContent="Turma indicada para "+ano;
+    if(TURMAS[idade]){
+      t.textContent=TURMAS[idade];
+      obs.textContent=idade+" anos completos até "+corte;
+      nota.textContent="Tem vaga pra ele(a) aqui!";
+      var li=document.querySelector('.degrau[data-idade="'+idade+'"]'); if(li) li.classList.add("ativo");
+      var s=document.getElementById("serie"); s.value=TURMAS[idade]; montar();
+    }else if(idade<3){
+      t.textContent="Ainda pequenino";
+      obs.textContent=(idade<0?"Nascimento depois do corte":idade+(idade===1?" ano":" anos"))+" até "+corte+". O Maternal começa com 3 anos.";
+      nota.textContent="Fale com a secretaria sobre turmas para os menores.";
+    }else{
+      t.textContent="Após o 5º ano";
+      obs.textContent=idade+" anos até "+corte+". A escola atende até o 5º ano.";
+      nota.textContent="";
+    }
+  }
+  nascEl.addEventListener("input",calcular); anoSel.addEventListener("change",calcular);
+
+  // Destaca na agenda o projeto do mês atual.
+  var mesAtual=hoje.getMonth()+1;
+  var marcado=false;
+  document.querySelectorAll("#agenda .dia").forEach(function(li){
+    if(!marcado && +li.dataset.mes===mesAtual){li.classList.add("agora");marcado=true;}
+  });
+
+  // Recado para o WhatsApp.
+  var form=document.getElementById("form-mat"), msg=document.getElementById("msg"), wa=document.getElementById("wa");
+  function montar(){
+    var resp=form.resp.value.trim(), cri=form.crianca.value.trim(), serie=form.serie.value;
+    var turno=(form.querySelector('input[name="turno"]:checked')||{}).value||"qualquer turno";
+    var quero=[].map.call(form.querySelectorAll('input[name="quero"]:checked'),function(i){return i.value;});
+    var txt="Olá, Escola Coração de Jesus! "+(resp?"Sou "+resp+" e ":"")+"tenho interesse em matrícula"+
+      (cri?" para "+cri:"")+" no "+serie+", turno da "+turno.replace("qualquer turno","manhã ou tarde")+".";
+    if(quero.length){txt+="\nGostaria de "+(quero.length>1?quero.slice(0,-1).join(", ")+" e "+quero[quero.length-1]:quero[0])+".";}
+    txt+="\nObrigado(a)!";
+    msg.textContent=txt;
+    wa.href="https://wa.me/5591993698373?text="+encodeURIComponent(txt);
+  }
+  form.addEventListener("input",montar); form.addEventListener("change",montar);
+  form.addEventListener("submit",function(e){e.preventDefault();});
+  document.getElementById("form-turma").addEventListener("submit",function(e){e.preventDefault();});
+
+  function copiar(texto, alvo, origem){
+    function ok(){alvo.textContent="Copiado.";setTimeout(function(){alvo.textContent="";},2500);}
+    function falha(){
+      var r=document.createRange(); r.selectNodeContents(origem);
+      var s=getSelection(); s.removeAllRanges(); s.addRange(r);
+      alvo.textContent="Texto selecionado. Use Copiar do seu aparelho.";
+    }
+    try{navigator.clipboard.writeText(texto).then(ok,falha);}catch(e){falha();}
+  }
+  document.getElementById("copiar-msg").addEventListener("click",function(){copiar(msg.textContent,document.getElementById("status-msg"),msg);});
+  document.getElementById("copiar-fone").addEventListener("click",function(){var f=document.getElementById("fone");copiar(f.textContent,document.getElementById("status-fone"),f);});
+
+  // Os olhos do mascote acompanham o cursor.
+  var reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var svg=document.querySelector(".mascote"), pupilas=document.querySelectorAll(".pupila");
+  if(!reduz && svg){
+    window.addEventListener("pointermove",function(e){
+      var r=svg.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height*.3;
+      var dx=e.clientX-cx, dy=e.clientY-cy, d=Math.hypot(dx,dy)||1;
+      var k=Math.min(1,d/300);
+      pupilas.forEach(function(p){
+        p.setAttribute("cx",+p.dataset.cx+(dx/d)*7*k);
+        p.setAttribute("cy",+p.dataset.cy+(dy/d)*10*k);
+      });
+    },{passive:true});
+  }
+
+  calcular(); montar();
+})();
+</script>
+</body>
+</html>
