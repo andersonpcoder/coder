@@ -30,7 +30,7 @@ export function MensagensTab() {
         <CardHeader><CardTitle>Mensagens automáticas</CardTitle></CardHeader>
         <CardContent className="flex flex-col gap-5">
           <p className="text-sm text-muted">
-            Variáveis: <code>{"{nome}"}</code> <code>{"{data}"}</code> <code>{"{hora}"}</code> <code>{"{servico}"}</code> <code>{"{profissional}"}</code>. O link de confirmação é incluído automaticamente nos lembretes.
+            Variáveis: <code>{"{nome}"}</code> <code>{"{data}"}</code> <code>{"{hora}"}</code> <code>{"{servico}"}</code> <code>{"{profissional}"}</code> <code>{"{empresa}"}</code> <code>{"{link}"}</code>. Nos lembretes o link para confirmar, remarcar ou cancelar é incluído no fim se você não usar <code>{"{link}"}</code>.
             {!whatsappAllowed && " Envio por WhatsApp disponível a partir do plano Profissional."}
           </p>
           {KINDS.map((k) => (
@@ -51,18 +51,36 @@ export function MensagensTab() {
   );
 }
 
+const VARIABLES = ["nome", "data", "hora", "servico", "profissional", "empresa", "link"];
+
 function TemplateEditor({ kind, channel, label, disabled }: { kind: NotificationKind; channel: NotificationChannel; label: string; disabled: boolean }) {
   const { state, db, toast } = useStore();
   const existing = state.templates.find((t) => t.kind === kind && t.channel === channel);
   const [body, setBody] = useState(existing?.body ?? "");
   const [active, setActive] = useState(existing?.active ?? false);
+  const [providerTemplate, setProviderTemplate] = useState(existing?.providerTemplate ?? "");
+  const [providerParams, setProviderParams] = useState((existing?.providerParams ?? []).join(", "));
+  const usesCloudApi = state.integrations.some((i) => i.provider === "whatsapp_cloud" && i.active);
   useEffect(() => {
     setBody(existing?.body ?? "");
     setActive(existing?.active ?? false);
+    setProviderTemplate(existing?.providerTemplate ?? "");
+    setProviderParams((existing?.providerParams ?? []).join(", "));
   }, [existing]);
 
   const save = async () => {
-    const item: MessageTemplate = { id: existing?.id ?? newId(), kind, channel, body: body.trim(), active };
+    const params = providerParams.split(",").map((p) => p.trim().replace(/[{}]/g, "")).filter(Boolean);
+    const unknown = params.filter((p) => !VARIABLES.includes(p));
+    if (unknown.length) return toast(`Variável desconhecida: ${unknown.join(", ")}. Use: ${VARIABLES.join(", ")}.`, "erro");
+    const item: MessageTemplate = {
+      id: existing?.id ?? newId(),
+      kind,
+      channel,
+      body: body.trim(),
+      active,
+      providerTemplate: providerTemplate.trim() || undefined,
+      providerParams: params,
+    };
     if (!item.body) return toast("Escreva a mensagem.", "erro");
     if (await db.upsert("templates", [item])) toast("Mensagem salva.", "sucesso");
   };
@@ -77,6 +95,16 @@ function TemplateEditor({ kind, channel, label, disabled }: { kind: Notification
         </label>
       </div>
       <Textarea aria-label={`${label}: texto`} value={body} disabled={disabled} onChange={(e) => setBody(e.target.value)} rows={3} />
+      {channel === "whatsapp" && (usesCloudApi || providerTemplate) && (
+        <div className="grid gap-2 rounded-xl bg-surface-2 p-3 sm:grid-cols-2">
+          <Field label="Modelo aprovado na Meta" hint="Obrigatório na API oficial para mensagens fora da janela de 24h.">
+            {(id) => <Input id={id} placeholder="lembrete_24h" value={providerTemplate} disabled={disabled} onChange={(e) => setProviderTemplate(e.target.value)} />}
+          </Field>
+          <Field label="Variáveis na ordem ({{1}}, {{2}}…)" hint="Ex.: nome, hora, servico, link">
+            {(id) => <Input id={id} value={providerParams} disabled={disabled} onChange={(e) => setProviderParams(e.target.value)} />}
+          </Field>
+        </div>
+      )}
       <Button variant="outline" size="sm" className="self-start" disabled={disabled} onClick={save}>Salvar</Button>
       {disabled && <Badge tone="accent" className="self-start">Plano Profissional</Badge>}
     </div>

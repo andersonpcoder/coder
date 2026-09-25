@@ -6,7 +6,7 @@ import { Bell, Menu, Moon, Sun, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { formatTime } from "@/lib/format";
+import { deviceTimeZone, formatTime } from "@/lib/format";
 import { trialDaysLeft } from "@/lib/plans";
 import { useLookups, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -112,9 +112,24 @@ function TrialBanner() {
   return null;
 }
 
+/** Avisa quando o aparelho está num fuso diferente do da empresa. */
+function TimeZoneNotice() {
+  const { state } = useStore();
+  const [device, setDevice] = useState("");
+  useEffect(() => setDevice(deviceTimeZone()), []);
+  if (!device || device === state.company.timezone) return null;
+  return (
+    <p role="status" className="border-b border-warning/30 bg-warning-soft px-4 py-2 text-center text-xs text-text sm:px-6">
+      Este aparelho está no fuso {device.replace("_", " ")}, e a empresa usa {state.company.timezone.replace("_", " ")}. Os horários aparecem no fuso do aparelho.
+    </p>
+  );
+}
+
 export function Topbar() {
   const [open, setOpen] = useState(false);
   return (
+    <>
+    <TimeZoneNotice />
     <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-border bg-bg/85 px-4 backdrop-blur sm:px-6">
       <D.Root open={open} onOpenChange={setOpen}>
         <D.Trigger asChild>
@@ -148,5 +163,6 @@ export function Topbar() {
         <ThemeToggle />
       </div>
     </header>
+    </>
   );
 }

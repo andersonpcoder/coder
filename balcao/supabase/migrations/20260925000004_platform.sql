@@ -203,6 +203,14 @@ begin
   end if;
   select id into v_conversation from public.conversations
   where company_id = v_company and channel = 'site' and external_id = p_visitor;
+  -- Proteção contra spam: até 10 mensagens por minuto por visitante.
+  if v_conversation is not null and (
+    select count(*) from public.messages m
+    where m.conversation_id = v_conversation and m.direction = 'entrada'
+      and m.created_at > now() - interval '1 minute'
+  ) >= 10 then
+    raise exception 'Muitas mensagens seguidas. Aguarde um minuto.';
+  end if;
   if v_conversation is null then
     insert into public.customers (company_id, name, tags)
     values (v_company, coalesce(nullif(trim(p_name), ''), 'Visitante do site'), array['Site'])
@@ -237,7 +245,7 @@ language sql stable security definer set search_path = '' as $$
     'service_id', s.id, 'service', s.name, 'duration_min', s.duration_min,
     'professional_id', p.id, 'professional', p.name,
     'customer', split_part(cu.name, ' ', 1),
-    'company', c.name, 'slug', c.slug, 'primary_color', c.primary_color, 'logo_url', c.logo_url,
+    'company', c.name, 'slug', c.slug, 'primary_color', c.primary_color, 'logo_url', c.logo_url, 'timezone', c.timezone,
     'address', (select concat_ws(', ', u.address_line, u.city, u.state) from public.units u where u.company_id = c.id order by u.created_at limit 1)
   )
   from public.appointments a
@@ -357,3 +365,11 @@ language sql stable security definer set search_path = '' as $$
     and not exists (select 1 from public.companies where slug = p_slug);
 $$;
 grant execute on function public.slug_available to anon, authenticated;
+
+-- Modelo aprovado na Meta para a API oficial do WhatsApp: fora da janela de 24h
+-- só mensagens de modelo são entregues. provider_params lista, na ordem dos
+-- {{1}}, {{2}}..., as variáveis do Balcão (nome, data, hora, servico,
+-- profissional, empresa, link).
+alter table message_templates
+  add column provider_template text,
+  add column provider_params text[] not null default '{}';

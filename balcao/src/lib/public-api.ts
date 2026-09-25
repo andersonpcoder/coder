@@ -30,6 +30,7 @@ export interface PublicCompany {
   slug: string;
   logoUrl?: string;
   primaryColor: string;
+  timezone: string;
   address?: string;
   phone?: string;
   services: PublicService[];
@@ -50,6 +51,7 @@ export interface PublicAppointment {
   company: string;
   slug: string;
   primaryColor: string;
+  timezone: string;
   logoUrl?: string;
   address?: string;
 }
@@ -92,6 +94,7 @@ const supabaseApi: PublicApi = {
       slug: r.slug,
       logoUrl: r.logo_url ?? undefined,
       primaryColor: r.primary_color,
+      timezone: r.timezone ?? "America/Sao_Paulo",
       address: r.address || undefined,
       phone: r.phone ?? undefined,
       services: (r.services ?? []).map((s: any) => ({ id: s.id, name: s.name, category: s.category, durationMin: s.duration_min, priceCents: s.price_cents })),
@@ -135,6 +138,7 @@ const supabaseApi: PublicApi = {
       company: r.company,
       slug: r.slug,
       primaryColor: r.primary_color,
+      timezone: r.timezone ?? "America/Sao_Paulo",
       logoUrl: r.logo_url ?? undefined,
       address: r.address || undefined,
     };
@@ -185,6 +189,7 @@ const demoApi: PublicApi = {
       name: s.company.name,
       slug: s.company.slug,
       primaryColor: s.company.primaryColor,
+      timezone: s.company.timezone,
       address: s.company.address,
       phone: s.company.phone,
       logoUrl: s.company.logoUrl,
@@ -240,7 +245,7 @@ const demoApi: PublicApi = {
       status: a.status, start: a.start, end: a.end, priceCents: a.priceCents,
       serviceId: a.serviceId, service: svc?.name ?? "", durationMin: svc?.durationMin ?? 30,
       professionalId: a.professionalId, professional: pro?.name ?? "", customer: (cu?.name ?? "").split(" ")[0],
-      company: s.company.name, slug: s.company.slug, primaryColor: s.company.primaryColor, address: s.company.address,
+      company: s.company.name, slug: s.company.slug, primaryColor: s.company.primaryColor, timezone: s.company.timezone, address: s.company.address,
     };
   },
   async confirm(token) {

@@ -75,6 +75,33 @@ export async function sendWhatsApp(integration: IntegrationRow, phone: string, t
   }
 }
 
+/** Envio com modelo aprovado (WhatsApp Cloud API), obrigatório fora da janela de 24h. */
+export async function sendWhatsAppTemplate(
+  integration: IntegrationRow,
+  phone: string,
+  template: string,
+  params: string[],
+  language = "pt_BR",
+): Promise<void> {
+  if (integration.provider !== "whatsapp_cloud") throw new Error("Modelos só existem na API oficial");
+  if (!integration.secret) throw new Error("Token do WhatsApp não configurado");
+  const res = await fetch(`${GRAPH}/${integration.settings.phone_number_id}/messages`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${integration.secret}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      to: withCountry(phone.replace(/\D/g, "")),
+      type: "template",
+      template: {
+        name: template,
+        language: { code: language },
+        components: params.length ? [{ type: "body", parameters: params.map((text) => ({ type: "text", text: text || "-" })) }] : [],
+      },
+    }),
+  });
+  return check(res, "WhatsApp Cloud API (modelo)");
+}
+
 export async function sendInstagram(integration: IntegrationRow, recipientId: string, text: string): Promise<void> {
   if (!integration.secret) throw new Error("Token do Instagram não configurado");
   const res = await fetch(`${GRAPH}/me/messages`, {

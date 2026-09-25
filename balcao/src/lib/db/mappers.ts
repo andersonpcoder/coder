@@ -219,7 +219,15 @@ export const fromRow = {
     read: !!r.read_at,
     link: undef(r.link),
   }),
-  template: (r: Row): MessageTemplate => ({ id: r.id, kind: r.kind, channel: r.channel, body: r.body, active: r.active }),
+  template: (r: Row): MessageTemplate => ({
+    id: r.id,
+    kind: r.kind,
+    channel: r.channel,
+    body: r.body,
+    active: r.active,
+    providerTemplate: undef(r.provider_template),
+    providerParams: r.provider_params ?? [],
+  }),
   quickReply: (r: Row): QuickReply => ({ id: r.id, title: r.title, body: r.body }),
   integration: (r: Row): Integration => ({ id: r.id, provider: r.provider, settings: r.settings ?? {}, active: r.active }),
   invite: (r: Row): Invite => ({

@@ -17,7 +17,7 @@ import type { Role, User } from "@/lib/types";
 const ROLES: Role[] = ["admin", "recepcao", "profissional"];
 
 export function UsuariosTab() {
-  const { state, db, toast } = useStore();
+  const { state, db, supabase, toast } = useStore();
   const { currentUser } = useLookups();
   const [role, setRole] = useState<Role>("recepcao");
   const [professionalId, setProfessionalId] = useState("");
@@ -27,10 +27,14 @@ export function UsuariosTab() {
 
   const invite = async () => {
     if (role === "profissional" && !professionalId) return toast("Escolha qual profissional da agenda é esta pessoa.", "erro");
-    const l = await createInvite(db, role, { email: email.trim() || undefined, professionalId: role === "profissional" ? professionalId : undefined });
-    if (l) {
-      setLink(l);
-      setEmail("");
+    const to = email.trim();
+    const created = await createInvite(db, role, { email: to || undefined, professionalId: role === "profissional" ? professionalId : undefined });
+    if (!created) return;
+    setLink(created.link);
+    setEmail("");
+    if (to && supabase) {
+      const { error } = await supabase.functions.invoke("send-invite", { body: { invite_id: created.id, email: to } });
+      toast(error ? "Convite criado, mas o e-mail não saiu. Copie o link e envie." : `Convite enviado para ${to}.`, error ? "erro" : "sucesso");
     }
   };
   const copy = (l: string) => {
@@ -83,8 +87,11 @@ export function UsuariosTab() {
                 </Select>
               )}
             </Field>
-            {role === "profissional" ? (
-              <Field label="Profissional na agenda">
+            <Field label="E-mail (opcional)" hint={supabase ? "Enviamos o convite por e-mail." : undefined}>
+              {(id) => <Input id={id} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />}
+            </Field>
+            {role === "profissional" && (
+              <Field label="Profissional na agenda" className="sm:col-span-2">
                 {(id) => (
                   <Select id={id} value={professionalId} onChange={(e) => setProfessionalId(e.target.value)}>
                     <option value="">Selecione…</option>
@@ -92,8 +99,6 @@ export function UsuariosTab() {
                   </Select>
                 )}
               </Field>
-            ) : (
-              <Field label="E-mail (opcional, para lembrar)">{(id) => <Input id={id} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />}</Field>
             )}
           </div>
           <Button onClick={invite} className="self-start"><Link2 /> Gerar link de convite</Button>

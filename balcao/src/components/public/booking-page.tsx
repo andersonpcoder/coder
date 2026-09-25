@@ -8,7 +8,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { addMinutes } from "@/lib/dates";
-import { formatDayLong, formatDuration, formatPhone, formatTime, money } from "@/lib/format";
+import { formatDayLong, formatDuration, formatPhone, formatTime, money, setDisplayTimeZone } from "@/lib/format";
 import { publicApi, type PublicCompany, type PublicProfessional, type PublicService } from "@/lib/public-api";
 import { cn } from "@/lib/utils";
 import { BrandScope, googleCalendarUrl } from "./brand";
@@ -35,7 +35,10 @@ export function BookingPage({ slug }: { slug: string }) {
   useEffect(() => {
     publicApi()
       .company(slug)
-      .then(setCompany)
+      .then((c) => {
+        setDisplayTimeZone(c?.timezone);
+        setCompany(c);
+      })
       .catch(() => setCompany(null));
   }, [slug]);
 

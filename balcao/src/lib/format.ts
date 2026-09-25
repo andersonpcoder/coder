@@ -15,8 +15,22 @@ export function money(cents: number): string {
   return brl.format(cents / 100);
 }
 
+let displayTimeZone: string | undefined;
+
+/**
+ * Fixa o fuso de exibição. A página pública usa o fuso da empresa, para o
+ * cliente ver o horário do estabelecimento mesmo estando em outro estado.
+ */
+export function setDisplayTimeZone(tz: string | undefined) {
+  displayTimeZone = tz;
+}
+
+export function deviceTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
 function fmt(date: Date | string, options: Intl.DateTimeFormatOptions): string {
-  return new Intl.DateTimeFormat("pt-BR", options).format(
+  return new Intl.DateTimeFormat("pt-BR", displayTimeZone ? { ...options, timeZone: displayTimeZone } : options).format(
     typeof date === "string" ? new Date(date) : date,
   );
 }

@@ -70,8 +70,8 @@ export function ProfessionalDialog({ open, professional, onClose }: { open: bool
 
   const invite = async () => {
     if (!professional) return;
-    const link = await createInvite(db, "profissional", { professionalId: professional.id });
-    if (link) setInviteLink(link);
+    const created = await createInvite(db, "profissional", { professionalId: professional.id });
+    if (created) setInviteLink(created.link);
   };
 
   return (

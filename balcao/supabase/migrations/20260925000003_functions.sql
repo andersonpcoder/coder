@@ -69,6 +69,16 @@ begin
 end;
 $$;
 
+-- Telefone só com dígitos e sem o código do país, como o app guarda.
+create function public.normalize_phone(p_phone text) returns text
+language sql immutable as $$
+  select case
+    when d ~ '^55\d{10,11}$' then substr(d, 3)
+    else d
+  end
+  from (select regexp_replace(coalesce(p_phone, ''), '\D', '', 'g') as d) x;
+$$;
+
 -- Página pública ----------------------------------------------------------------
 -- O cliente final não tem login: as funções abaixo expõem só o necessário.
 
@@ -169,8 +179,23 @@ begin
     raise exception 'Horário não está mais disponível';
   end if;
 
+  -- Proteção contra abuso: no máximo 3 horários futuros por telefone.
+  if (
+    select count(*) from public.appointments a
+    join public.customers c on c.id = a.customer_id
+    where a.company_id = v_company
+      and c.phone = public.normalize_phone(p_phone)
+      and a.status in ('agendado', 'confirmado')
+      and a.starts_at > now()
+  ) >= 3 then
+    raise exception 'Você já tem 3 horários marcados. Para mais, fale com o estabelecimento.';
+  end if;
+  if length(public.normalize_phone(p_phone)) not between 10 and 11 or length(trim(p_name)) < 2 then
+    raise exception 'Informe nome e WhatsApp com DDD';
+  end if;
+
   insert into public.customers (company_id, name, phone, lgpd_consent_at)
-  values (v_company, p_name, regexp_replace(p_phone, '\D', '', 'g'), now())
+  values (v_company, trim(p_name), public.normalize_phone(p_phone), now())
   on conflict (company_id, phone) where phone is not null
   do update set lgpd_consent_at = now()
   returning id into v_customer;

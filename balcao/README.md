@@ -101,111 +101,40 @@ balcao/
 | `billing-checkout` | Abre o pagamento da assinatura (Stripe, Asaas ou Mercado Pago) |
 | `billing-webhook` | Atualiza a assinatura com as notificações do provedor |
 | `billing-cancel` | Cancela a assinatura no provedor |
+| `send-invite` | Envia por e-mail o convite de equipe |
 | `api` | API pública do plano Empresa (agendamentos, clientes, horários) |
 
 Resposta "1", "sim" ou "confirmo" no WhatsApp confirma o agendamento das
 próximas 48 horas.
 
-## Publicar (Supabase + Vercel)
+## Publicar
 
-### 1. Supabase
+O passo a passo completo, com as contas a criar e os valores a copiar, está em
+**[DEPLOY.md](DEPLOY.md)**. Resumo:
 
-1. Crie um projeto em https://supabase.com (região São Paulo, `sa-east-1`).
-2. Aplique o banco com a CLI:
-   ```bash
-   npm install -g supabase
-   supabase login
-   cd balcao
-   supabase link --project-ref SEU_PROJECT_REF
-   supabase db push
-   psql "$(supabase db url)" -f supabase/seed.sql   # opcional: empresa de exemplo
-   ```
-   As migrações também criam o bucket público `logos` no Storage.
-3. **Authentication > URL Configuration:** Site URL `https://seudominio.com` e
-   Redirect URLs `https://seudominio.com/**`.
-4. **Authentication > Providers:** e-mail já vem ativo. Para o Google, crie as
-   credenciais OAuth no Google Cloud (URI de redirecionamento
-   `https://SEU_PROJECT_REF.supabase.co/auth/v1/callback`) e cole client ID e
-   secret.
-5. **Authentication > SMTP:** configure um SMTP próprio (Resend, SES,
-   Brevo) para confirmação de e-mail e recuperação de senha em produção.
+1. Crie o projeto no Supabase e preencha `supabase/.env.production`.
+2. Rode `bash scripts/deploy-supabase.sh` (banco, funções, segredos e agendamentos).
+3. Importe o repositório na Vercel com a pasta `balcao` e três variáveis.
+4. Configure URLs de login, webhooks de cobrança e, por empresa, o WhatsApp.
 
-### 2. Edge Functions e segredos
+## Testes
 
-```bash
-supabase functions deploy send-reminders send-message meta-webhook whatsapp-webhook \
-  billing-checkout billing-webhook billing-cancel api
+| Comando | O que cobre |
+|---|---|
+| `npm run lint` | Tipos (TypeScript) |
+| `npm test` | Regras de agenda, conflitos, recorrência, CSV, planos, preços e mapeamento do banco |
+| `npm run test:db` | Banco num Postgres real: isolamento entre empresas, papéis, limites de plano, página pública, chat, convites, LGPD, aniversário |
+| `npm run test:e2e` | Navegador (modo demonstração): agenda, fila e TV, atendimentos, página pública, clientes, permissões, celular |
+| `deno check supabase/functions/*/index.ts` | Tipos das Edge Functions |
 
-supabase secrets set \
-  PUBLIC_APP_URL=https://seudominio.com \
-  CRON_SECRET=um-segredo-longo \
-  RESEND_API_KEY=... EMAIL_FROM="Balcão <lembretes@seudominio.com>" \
-  META_APP_SECRET=... \
-  BILLING_PROVIDER=stripe
-```
+O workflow `.github/workflows/balcao.yaml` roda tudo isso a cada mudança em `balcao/`.
 
-O `config.toml` já libera sem JWT as funções chamadas por terceiros
-(webhooks, cron e API); elas validam a origem pelo próprio segredo.
+Durante o desenvolvimento, o app também foi testado de ponta a ponta contra o
+Auth e o banco do Supabase rodando localmente: cadastro, onboarding, login,
+recuperação de senha com o e-mail gerado pelo Auth, convites, página pública,
+chat do site e as Edge Functions (API, webhooks da Meta e da Z-API, lembretes e
+eventos de cobrança assinados do Stripe e do Asaas).
 
-Cobrança, conforme o provedor escolhido em `BILLING_PROVIDER`:
-
-| Provedor | Segredos | Webhook |
-|---|---|---|
-| Stripe | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_BASICO`, `STRIPE_PRICE_PROFISSIONAL`, `STRIPE_PRICE_EMPRESA` | `.../functions/v1/billing-webhook?provider=stripe` (eventos `checkout.session.completed`, `customer.subscription.*`, `invoice.payment_failed`) |
-| Asaas | `ASAAS_API_KEY`, `ASAAS_WEBHOOK_TOKEN`, `ASAAS_BASE_URL` (sandbox: `https://api-sandbox.asaas.com/v3`) | `.../functions/v1/billing-webhook?provider=asaas` |
-| Mercado Pago | `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET` | `.../functions/v1/billing-webhook?provider=mercadopago` (tópicos de assinatura) |
-
-Pix recorrente: o Asaas gera a cobrança Pix todo mês. Stripe e Mercado Pago
-fazem assinatura só com cartão.
-
-### 3. Agendamentos (pg_cron)
-
-Habilite `pg_cron` e `pg_net` em **Database > Extensions**, troque
-`SEU_PROJECT_REF` e `CRON_SECRET` em `supabase/cron.sql` e rode no SQL Editor.
-Ele agenda o envio de mensagens a cada 5 minutos e a geração diária de
-aniversários e retornos.
-
-### 4. WhatsApp e Instagram
-
-Cada empresa configura em **Configurações > Integrações**, que mostra a URL do
-webhook e o token de verificação:
-
-- **WhatsApp Cloud API (oficial):** app na Meta com o produto WhatsApp, número
-  verificado e token permanente. Fora da janela de 24 horas a Meta só entrega
-  mensagens com **modelo aprovado**: cadastre os lembretes como modelos e troque o
-  envio em `_shared/messaging.ts` para `type: "template"`.
-- **Z-API ou Evolution API:** conecte o número pelo QR Code e cole no provedor a
-  URL de webhook mostrada no Balcão.
-- **Instagram:** conta profissional ligada a uma página, com permissão
-  `instagram_manage_messages`, e o mesmo webhook da Meta.
-
-### 5. Vercel
-
-1. Importe o repositório em https://vercel.com/new e defina **Root Directory**
-   como `balcao`.
-2. Variáveis de ambiente (veja `.env.example`): `NEXT_PUBLIC_SUPABASE_URL`,
-   `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`.
-3. Faça o deploy e aponte o domínio em **Domains**. Os links públicos ficam em
-   `https://seudominio.com/nome-da-empresa`.
-
-## Como foi testado
-
-- Migrações, seed e funções SQL num Postgres 16 com o GoTrue (Auth) e o
-  PostgREST do Supabase rodando localmente.
-- Testes de ponta a ponta no navegador (Playwright) contra esse ambiente:
-  cadastro, onboarding, agenda com arrastar e soltar gravando no banco,
-  clientes, importação CSV, exportar e excluir dados, página pública,
-  confirmar, remarcar e cancelar pelo link, chat do site com resposta pela
-  caixa de entrada, recuperação de senha com o e-mail real do GoTrue, convites
-  de recepção e de profissional com as permissões de cada papel, limites de
-  plano e o modo demonstração.
-- Edge Functions rodando no Deno contra o mesmo ambiente: API pública,
-  webhooks da Meta e da Z-API (cliente novo, mensagem duplicada, confirmação por
-  "Sim"), `send-message`, `send-reminders`, geração de aniversários e o webhook de
-  cobrança com eventos assinados do Stripe e do Asaas.
-
-Não testado aqui, por depender de contas externas: envio real pelo WhatsApp,
-Instagram e e-mail, checkout real no Stripe, Asaas e Mercado Pago, login com
-Google, upload no Storage e o Realtime do Supabase (sem ele, os dados de outros
-dispositivos aparecem ao recarregar a página). Faça esses testes no ambiente de homologação com as
-contas sandbox de cada provedor antes de abrir para clientes.
+Dependem de contas reais e devem ser conferidos no primeiro deploy (lista em
+DEPLOY.md): envio pelo WhatsApp, Instagram e e-mail, checkout nos provedores de
+cobrança, login com Google, envio de logo e o Realtime.

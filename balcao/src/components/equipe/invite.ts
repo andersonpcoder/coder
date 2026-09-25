@@ -3,8 +3,12 @@
 import type { Db } from "@/lib/store";
 import type { Invite, Role } from "@/lib/types";
 
-/** Cria um convite e devolve o link para enviar à pessoa. */
-export async function createInvite(db: Db, role: Role, opts: { email?: string; professionalId?: string } = {}): Promise<string | null> {
+/** Cria um convite e devolve o id e o link para enviar à pessoa. */
+export async function createInvite(
+  db: Db,
+  role: Role,
+  opts: { email?: string; professionalId?: string } = {},
+): Promise<{ id: string; link: string } | null> {
   const invite: Invite = {
     id: crypto.randomUUID(),
     role,
@@ -14,5 +18,5 @@ export async function createInvite(db: Db, role: Role, opts: { email?: string; p
     createdAt: new Date().toISOString(),
   };
   const ok = await db.upsert("invites", [invite]);
-  return ok ? `${window.location.origin}/convite/${invite.token}` : null;
+  return ok ? { id: invite.id, link: `${window.location.origin}/convite/${invite.token}` } : null;
 }

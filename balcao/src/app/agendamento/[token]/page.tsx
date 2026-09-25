@@ -9,7 +9,7 @@ import { BrandScope } from "@/components/public/brand";
 import { SlotPicker } from "@/components/public/slot-picker";
 import { StatusBadge } from "@/components/shared/status";
 import { Button } from "@/components/ui/button";
-import { formatDayLong, formatTime, money } from "@/lib/format";
+import { formatDayLong, formatTime, money, setDisplayTimeZone } from "@/lib/format";
 import { publicApi, type PublicAppointment } from "@/lib/public-api";
 
 export default function GerenciarAgendamentoPage() {
@@ -21,7 +21,17 @@ export default function GerenciarAgendamentoPage() {
   const [done, setDone] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const reload = useCallback(() => publicApi().appointment(token).then(setAppt).catch(() => setAppt(null)), [token]);
+  const reload = useCallback(
+    () =>
+      publicApi()
+        .appointment(token)
+        .then((a) => {
+          setDisplayTimeZone(a?.timezone);
+          setAppt(a);
+        })
+        .catch(() => setAppt(null)),
+    [token],
+  );
   useEffect(() => {
     reload();
   }, [reload]);

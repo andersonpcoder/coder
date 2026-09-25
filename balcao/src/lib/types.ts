@@ -63,6 +63,10 @@ export interface MessageTemplate {
   channel: NotificationChannel;
   body: string;
   active: boolean;
+  /** Nome do modelo aprovado na Meta (só WhatsApp Cloud API). */
+  providerTemplate?: string;
+  /** Variáveis do Balcão na ordem dos parâmetros {{1}}, {{2}}... do modelo. */
+  providerParams?: string[];
 }
 
 export interface QuickReply {

@@ -6,3 +6,7 @@ next-env.d.ts
 .env*.local
 .vercel
 supabase/.temp/
+test-results/
+playwright-report/
+.env.production
+supabase/.env.production
