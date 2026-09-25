@@ -43,9 +43,9 @@ As regras valem no banco (RLS), não só na tela.
 
 | Plano | Preço padrão | Inclui |
 |---|---|---|
-| Básico | R$ 49,90 | 1 profissional, agenda, página pública, lembretes por e-mail |
-| Profissional | R$ 99,90 | Até 5 profissionais, fila, WhatsApp, relatórios |
-| Empresa | R$ 199,90 | Ilimitado, várias unidades, caixa de entrada unificada, API |
+| Básico | R$ 19,90 | 1 profissional, agenda, página pública, lembretes por e-mail |
+| Profissional | R$ 39,90 | Até 5 profissionais, fila, WhatsApp, relatórios |
+| Empresa | R$ 79,90 | Ilimitado, várias unidades, caixa de entrada unificada, API |
 
 Teste grátis de 14 dias com tudo do plano Empresa. Os preços ficam em
 `src/lib/plans.ts` e `supabase/functions/_shared/billing.ts` (mantenha iguais).

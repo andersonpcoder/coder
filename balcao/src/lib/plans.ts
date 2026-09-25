@@ -16,7 +16,7 @@ export const PLANS: Record<PlanTier, PlanInfo> = {
   basico: {
     tier: "basico",
     name: "Básico",
-    priceCents: 4990,
+    priceCents: 1990,
     maxProfessionals: 1,
     features: [],
     highlights: ["1 profissional", "Agenda completa", "Página pública de agendamento", "Lembretes por e-mail"],
@@ -24,7 +24,7 @@ export const PLANS: Record<PlanTier, PlanInfo> = {
   profissional: {
     tier: "profissional",
     name: "Profissional",
-    priceCents: 9990,
+    priceCents: 3990,
     maxProfessionals: 5,
     features: ["fila", "whatsapp", "relatorios"],
     highlights: ["Até 5 profissionais", "Fila de atendimento e painel de TV", "Lembretes por WhatsApp", "Relatórios"],
@@ -32,7 +32,7 @@ export const PLANS: Record<PlanTier, PlanInfo> = {
   empresa: {
     tier: "empresa",
     name: "Empresa",
-    priceCents: 19990,
+    priceCents: 7990,
     maxProfessionals: null,
     features: ["fila", "whatsapp", "relatorios", "atendimentos", "unidades", "api"],
     highlights: ["Profissionais ilimitados", "Várias unidades", "Caixa de entrada unificada", "API"],

@@ -68,7 +68,7 @@ confirmação de cadastro nem a recuperação de senha.
 1. Em **Suas integrações**, crie uma aplicação e anote o **Access Token** de produção.
 2. O segredo do webhook aparece ao configurar as notificações no passo 7.
 
-Os preços padrão são R$ 49,90, R$ 99,90 e R$ 199,90. Para mudar, edite
+Os preços padrão são R$ 19,90, R$ 39,90 e R$ 79,90. Para mudar, edite
 `src/lib/plans.ts` e `supabase/functions/_shared/billing.ts` (os testes avisam
 se ficarem diferentes). No Stripe, os preços valem os cadastrados lá.
 

@@ -3,7 +3,7 @@ export type Plan = "basico" | "profissional" | "empresa";
 export type Provider = "stripe" | "asaas" | "mercadopago";
 
 /** Preço mensal em centavos. Mantenha igual a src/lib/plans.ts. */
-export const PRICES: Record<Plan, number> = { basico: 4990, profissional: 9990, empresa: 19990 };
+export const PRICES: Record<Plan, number> = { basico: 1990, profissional: 3990, empresa: 7990 };
 export const PLAN_NAMES: Record<Plan, string> = { basico: "Básico", profissional: "Profissional", empresa: "Empresa" };
 
 export const provider = (Deno.env.get("BILLING_PROVIDER") ?? "stripe") as Provider;
