@@ -19,9 +19,11 @@ test("agenda: cria agendamento e recusa conflito", async ({ page }) => {
   await enterDemo(page);
   await page.goto("/agenda");
   const dialog = page.getByRole("dialog");
-  const next = new Date(Date.now() + 7 * 86400000);
-  while (next.getDay() === 0 || next.getDay() === 1) next.setDate(next.getDate() + 1);
-  const date = next.toISOString().slice(0, 10);
+  // Uma quarta-feira depois do período coberto pelos dados de exemplo (28 dias),
+  // em que a Marina trabalha e a agenda está livre.
+  const next = new Date(Date.now() + 40 * 86400000);
+  while (next.getDay() !== 3) next.setDate(next.getDate() + 1);
+  const date = `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
 
   const fill = async (customerIndex: number) => {
     await page.getByRole("button", { name: "Novo agendamento" }).click();
