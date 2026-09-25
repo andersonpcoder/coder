@@ -128,7 +128,7 @@ O passo a passo completo, com as contas a criar e os valores a copiar, está em
 | `npm test` | Regras de agenda, conflitos, recorrência, CSV, planos, preços e mapeamento do banco |
 | `npm run test:db` | Banco num Postgres real: isolamento entre empresas, papéis, limites de plano, página pública, chat, convites, LGPD, aniversário |
 | `npm run test:e2e` | Navegador (modo demonstração): agenda, fila e TV, atendimentos, página pública, clientes, permissões, celular |
-| `deno check supabase/functions/*/index.ts` | Tipos das Edge Functions |
+| `deno check --node-modules-dir=none supabase/functions/*/index.ts` | Tipos das Edge Functions |
 
 O workflow `.github/workflows/balcao.yaml` roda tudo isso a cada mudança em `balcao/`.
 
