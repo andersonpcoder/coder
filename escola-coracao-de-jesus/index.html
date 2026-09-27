@@ -198,6 +198,35 @@ input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;bo
 @media (max-width:860px){.mural{grid-template-columns:1fr 1fr}.mural-txt{grid-column:1/-1;order:-1}}
 @media (max-width:480px){.mural{grid-template-columns:1fr}.polaroide:nth-child(2){margin-top:0}}
 
+/* Nossa casa: foto da fachada */
+.casa{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(24px,4vw,48px);align-items:center}
+.foto-grande{margin:0;position:relative}
+.foto-grande img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);border:6px solid var(--cartao);box-shadow:var(--sombra)}
+.foto-grande figcaption{font:700 22px/1.2 var(--f-mao);color:var(--tinta-suave);margin-top:10px}
+.casa-txt{display:grid;gap:16px;align-content:start}
+@media (max-width:860px){.casa{grid-template-columns:1fr}}
+
+/* Desfile de 7 de Setembro */
+.desfile{background:var(--papel-2)}
+.mosaico{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mosaico figure{margin:0;position:relative;overflow:hidden;border-radius:12px;background:var(--cartao)}
+.mosaico img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3;transition:transform .4s ease}
+.mosaico figure:hover img{transform:scale(1.03)}
+.mosaico .destaque{grid-column:span 2;grid-row:span 3}
+.mosaico .destaque img{aspect-ratio:auto}
+.mosaico figcaption{position:absolute;left:10px;bottom:10px;right:10px;background:rgba(27,29,51,.82);color:#fff;font-size:14px;line-height:1.35;padding:8px 12px;border-radius:8px}
+@media (max-width:760px){.mosaico{grid-template-columns:1fr 1fr}.mosaico .destaque{grid-column:1/-1;grid-row:auto}.mosaico .destaque img{aspect-ratio:4/3}}
+@media (max-width:460px){.mosaico{grid-template-columns:1fr}}
+.alas{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;list-style:none;padding:0;margin:32px 0 0}
+.ala{--cor:#1C2B6E;background:var(--cartao);border-radius:12px;border:2px solid var(--borda);border-top:8px solid var(--cor);padding:18px;display:grid;gap:10px;align-content:start}
+.ala h3{font:700 18px/1.25 var(--f-corpo)}
+.ala p{font-size:15px;color:var(--tinta-suave);line-height:1.5}
+.ala .faixas{display:flex;flex-wrap:wrap;gap:6px}
+.ala .faixas span{font:700 12px/1 var(--f-corpo);letter-spacing:.06em;text-transform:uppercase;background:var(--cor);color:#fff;padding:6px 9px;border-radius:6px}
+.ala.abertura{--cor:#1C2B6E}.ala.inclusao{--cor:#1E8A4C}.ala.agua{--cor:#2F7FD0}.ala.telas{--cor:#D7262E}.ala.paz{--cor:#8A4FC8}
+@media (max-width:1000px){.alas{grid-template-columns:1fr 1fr}.ala.abertura{grid-column:1/-1}}
+@media (max-width:520px){.alas{grid-template-columns:1fr}.ala.abertura{grid-column:auto}}
+
 /* Matrícula */
 .matricula{background:var(--azul);color:#fff}
 .matricula .h2{color:#fff}
@@ -244,6 +273,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;bo
   html{scroll-behavior:auto}
   .mascote .braco-dir,.mascote .corpo{animation:none}
   .btn{transition:none}
+  .mosaico img{transition:none}
 }
 </style>
 </head>
@@ -265,6 +295,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;bo
       <a href="#turmas">Turmas</a>
       <a href="#diferenciais">Diferenciais</a>
       <a href="#projetos">Projetos</a>
+      <a href="#desfile">Desfile</a>
       <a href="#contato">Contato</a>
       <a class="cta-mini" href="#matricula">Matrícula</a>
     </nav>
@@ -353,6 +384,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;bo
       </div>
     </div>
   </div>
+
+  <section class="sec" id="nossa-casa">
+    <div class="wrap casa">
+      <figure class="foto-grande">
+        <img src="img/fachada-equipe.jpg" alt="Fachada amarela da Escola de Jesus com o coração na placa, equipe de professoras, alunos com as bandeiras do Pará e do Brasil e o mascote coração" width="1400" height="1050">
+        <figcaption>Nossa equipe na porta da escola, no dia do desfile</figcaption>
+      </figure>
+      <div class="casa-txt">
+        <span class="eyebrow">Nossa casa</span>
+        <h2 class="h2">Procure a placa amarela com o coração</h2>
+        <p class="lead">A escola fica na Passagem Bom Jesus, 77, no Barreiro. A placa mostra tudo o que oferecemos: Educação Infantil com Maternal, Jardim I e II, e Ensino Fundamental I do 1º ao 5º ano.</p>
+        <p class="lead">O coração da placa também existe em tamanho de gente: é o nosso mascote, que sai com as crianças nos eventos.</p>
+      </div>
+    </div>
+  </section>
 
   <section class="sec caderno" id="turmas">
     <div class="wrap">
@@ -454,10 +500,64 @@ input:focus,select:focus,textarea:focus{border-color:var(--azul);outline:none;bo
         <li class="dia" data-mes="4"><div class="folha"><b>19</b><span>abril</span></div><div class="txt"><h3>Dia dos Povos Indígenas</h3><p>Mostra de alimentos, artesanato e histórias dos povos da Amazônia.</p></div></li>
         <li class="dia" data-mes="5"><div class="folha"><b>18</b><span>maio</span></div><div class="txt"><h3>Maio Laranja: Faça Bonito</h3><p>Proteção da infância em linguagem de criança, com o semáforo do toque.</p></div></li>
         <li class="dia" data-mes="5"><div class="folha"><b>2º dom.</b><span>maio</span></div><div class="txt"><h3>Mãe, sua presença</h3><p>Homenagem às mães com painel e apresentação das turmas.</p></div></li>
-        <li class="dia" data-mes="9"><div class="folha"><b>7</b><span>setembro</span></div><div class="txt"><h3>Desfile cívico</h3><p>Pelas ruas do Barreiro: "Paz é a gente que faz" e "Brincar sem uso de telas".</p></div></li>
+        <li class="dia" data-mes="9"><div class="folha"><b>7</b><span>setembro</span></div><div class="txt"><h3>Desfile cívico</h3><p>Pelas ruas do Barreiro, com alas sobre água, inclusão, paz e menos telas. <a href="#desfile">Ver fotos</a></p></div></li>
         <li class="dia" data-mes="10"><div class="folha"><b>12</b><span>outubro</span></div><div class="txt"><h3>Semana da Criança</h3><p>Uma semana inteira de brincadeiras, passeios e surpresas.</p></div></li>
         <li class="dia" data-mes="12"><div class="folha"><b>dez</b><span>fim do ano</span></div><div class="txt"><h3>Natal em família</h3><p>Encerramento do ano com apresentação das turmas.</p></div></li>
       </ol>
+    </div>
+  </section>
+
+  <section class="sec desfile" id="desfile">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Desfile de 7 de Setembro</span>
+        <h2 class="h2">O Barreiro parou para ver a gente passar</h2>
+        <p class="lead">Todo ano a escola desfila pelas ruas do bairro. Cada turma leva um tema trabalhado em sala, com faixas e fantasias feitas pelas professoras e pelas crianças.</p>
+      </div>
+      <div class="mosaico">
+        <figure class="destaque">
+          <img src="img/desfile-abertura.jpg" alt="Alunas com as bandeiras do Pará e do Brasil abrindo o desfile numa rua enfeitada de verde e amarelo" width="1400" height="1050" loading="lazy">
+          <figcaption>Abertura: as bandeiras do Pará e do Brasil puxam o desfile</figcaption>
+        </figure>
+        <figure>
+          <img src="img/porta-bandeiras.jpg" alt="Três alunas porta-bandeiras em frente ao portão da escola decorado com balões" width="1400" height="1050" loading="lazy">
+          <figcaption>Porta-bandeiras prontas para sair</figcaption>
+        </figure>
+        <figure>
+          <img src="img/bandeira-da-escola.jpg" alt="Professora segurando a bandeira amarela da Escola de Jesus com o coração" width="1400" height="1050" loading="lazy">
+          <figcaption>A bandeira amarela da escola</figcaption>
+        </figure>
+        <figure>
+          <img src="img/desfile-rua.jpg" alt="Desfile passando pela rua com vizinhos e famílias assistindo das calçadas" width="1400" height="1050" loading="lazy">
+          <figcaption>Famílias e vizinhos nas calçadas</figcaption>
+        </figure>
+      </div>
+      <ul class="alas">
+        <li class="ala abertura">
+          <h3>Pelotão de abertura</h3>
+          <p>Bandeiras do Pará, do Brasil e da escola, com a direção, as professoras e o mascote coração.</p>
+        </li>
+        <li class="ala agua">
+          <h3>Água, fonte de vida</h3>
+          <p>Os pequenos de azul, com bambolês e a mensagem "Cada gota conta! Não desperdice".</p>
+          <div class="faixas"><span>Repense</span><span>Reaproveite</span><span>Reduza</span><span>Reutilize</span></div>
+        </li>
+        <li class="ala telas">
+          <h3>Menos tela, mais infância</h3>
+          <p>"O brincar sem o uso das telas": jogo da velha, dominó e amarelinha gigantes, e um alerta sobre o excesso de celular.</p>
+          <div class="faixas"><span>Brincar</span><span>Conviver</span><span>Tela demais</span></div>
+        </li>
+        <li class="ala inclusao">
+          <h3>Com amor as peças se encaixam</h3>
+          <p>A turma de verde levou o coração de quebra-cabeça, símbolo da inclusão e do respeito às diferenças.</p>
+          <div class="faixas"><span>Inclusão</span><span>Respeito</span><span>Direitos</span></div>
+        </li>
+        <li class="ala paz">
+          <h3>Paz é a gente que faz</h3>
+          <p>Campanha de combate à violência contra a mulher, com placas feitas pelos alunos: "Quem ama cuida".</p>
+          <div class="faixas"><span>Respeito</span><span>Proteção</span><span>Justiça</span></div>
+        </li>
+      </ul>
     </div>
   </section>
 
