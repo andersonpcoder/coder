@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Naza's | Salão de Beleza em Belém (Batista Campos)</title>
+<meta name="description" content="Studio Naza's, salão de beleza em Belém/PA. Luzes, loiro, luzes mel, ruivo, escova, unhas em gel e maquiagem no Ed. Belém Metropolitan, Batista Campos. Agende seu horário!">
+<meta name="keywords" content="salão de beleza em Belém, luzes Belém, unhas em gel Belém, loiro Belém, salão Batista Campos, Studio Naza's">
+<meta name="theme-color" content="#4A0F24">
+<link rel="canonical" href="https://studionazas.com.br/">
+<link rel="icon" href="img/logo.jpg" type="image/jpeg">
+<link rel="apple-touch-icon" href="img/logo.jpg">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Studio Naza's | Realçando sua Beleza">
+<meta property="og:description" content="Salão de beleza em Belém/PA: luzes, loiro, ruivo, escova, unhas em gel e make. Agende seu horário.">
+<meta property="og:image" content="img/03-loiro-de-resultado_3.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  "name": "Studio Naza's",
+  "slogan": "Realçando sua Beleza",
+  "image": "img/logo.jpg",
+  "telephone": "+55 91 98280-1050",
+  "url": "https://studionazas.com.br/",
+  "sameAs": ["https://www.instagram.com/studionazas/"],
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Conselheiro Furtado, 2391, Ed. Belém Metropolitan, Térreo",
+    "addressLocality": "Belém",
+    "addressRegion": "PA",
+    "postalCode": "66040-100",
+    "addressCountry": "BR"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": -1.4561893, "longitude": -48.4779059 },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  }],
+  "areaServed": "Belém, PA"
+}
+</script>
+
+<style>
+:root {
+  --vinho: #4A0F24;
+  --vinho-2: #5E1A33;
+  --vinho-3: #2E0716;
+  --rose: #E8C8C4;
+  --rose-2: #F3E1DE;
+  --off: #FAF6F4;
+  --ouro: #C9A24B;
+  --texto: #3A2A2F;
+  --suave: #7A6168;
+  --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --raio: 18px;
+  --sombra: 0 18px 40px -22px rgba(74, 15, 36, .45);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--texto);
+  background: var(--off);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.15; margin: 0; color: var(--vinho); }
+p { margin: 0 0 1em; }
+.wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2px solid var(--ouro); outline-offset: 3px; }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: 48px; padding: .85em 1.7em;
+  border-radius: 999px; border: 1px solid transparent;
+  font: 500 .82rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
+  transition: transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn-rose { background: var(--rose); color: var(--vinho); box-shadow: 0 10px 30px -12px rgba(232, 200, 196, .6); }
+.btn-rose:hover { background: #fff; }
+.btn-vinho { background: var(--vinho); color: var(--rose-2); }
+.btn-vinho:hover { background: var(--vinho-2); box-shadow: var(--sombra); }
+.btn-linha { border-color: currentColor; color: var(--rose); background: transparent; }
+.btn-linha:hover { background: rgba(232, 200, 196, .12); }
+.btn-linha-vinho { border-color: var(--vinho); color: var(--vinho); background: transparent; }
+.btn-linha-vinho:hover { background: var(--vinho); color: var(--rose-2); }
+
+/* Títulos de seção */
+section { padding: 88px 0; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .8em;
+  font-size: .72rem; letter-spacing: .32em; text-transform: uppercase; color: var(--ouro); font-weight: 500;
+}
+.eyebrow::before, .eyebrow::after { content: ""; width: 26px; height: 1px; background: currentColor; }
+.titulo { text-align: center; margin-bottom: 48px; }
+.titulo h2 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin-top: .25em; }
+.titulo h2 em { color: var(--ouro); font-weight: 400; }
+.titulo p { max-width: 580px; margin: 1em auto 0; color: var(--suave); }
+
+/* Header */
+.header {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  transition: background .35s ease, box-shadow .35s ease, padding .35s ease;
+  padding: 14px 0;
+}
+.header.solido { background: rgba(74, 15, 36, .96); backdrop-filter: blur(8px); box-shadow: 0 6px 24px -12px rgba(0, 0, 0, .5); padding: 8px 0; }
+.header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.marca { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--rose); }
+.marca img { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(232, 200, 196, .4); }
+.marca span { font-family: var(--serif); font-size: 1.35rem; letter-spacing: .04em; }
+.menu { display: none; }
+.menu a {
+  color: var(--rose-2); text-decoration: none; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: .5em 0; position: relative;
+}
+.menu a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ouro); transform: scaleX(0); transition: transform .3s ease; }
+.menu a:hover::after { transform: scaleX(1); }
+.header .btn { display: none; min-height: 40px; padding: .7em 1.3em; font-size: .7rem; }
+.hamb {
+  width: 46px; height: 46px; border: 1px solid rgba(232, 200, 196, .45); border-radius: 50%;
+  background: transparent; color: var(--rose); cursor: pointer; display: grid; place-items: center;
+}
+.hamb span, .hamb span::before, .hamb span::after { display: block; width: 18px; height: 1.5px; background: currentColor; position: relative; transition: transform .3s ease, background .3s; }
+.hamb span::before, .hamb span::after { content: ""; position: absolute; left: 0; }
+.hamb span::before { top: -6px; }
+.hamb span::after { top: 6px; }
+.menu-aberto .hamb span { background: transparent; }
+.menu-aberto .hamb span::before { transform: translateY(6px) rotate(45deg); }
+.menu-aberto .hamb span::after { transform: translateY(-6px) rotate(-45deg); }
+
+.gaveta {
+  position: fixed; inset: 0; z-index: 40; background: var(--vinho-3);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility .35s;
+}
+.menu-aberto .gaveta { opacity: 1; visibility: visible; }
+.gaveta a:not(.btn) { font-family: var(--serif); font-size: 2rem; color: var(--rose-2); text-decoration: none; }
+.gaveta .btn { margin-top: 12px; }
+
+/* Hero */
+.hero {
+  position: relative; min-height: 100svh; padding: 110px 0 64px;
+  display: flex; align-items: center; color: var(--rose-2);
+  background:
+    radial-gradient(1200px 600px at 85% 10%, rgba(201, 162, 75, .14), transparent 60%),
+    linear-gradient(160deg, var(--vinho) 0%, var(--vinho-3) 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content: ""; position: absolute; width: 780px; height: 780px; border-radius: 50%;
+  border: 1px solid rgba(232, 200, 196, .12); left: -380px; bottom: -380px;
+}
+.hero-grid { display: grid; gap: 44px; align-items: center; position: relative; }
+.hero-texto { text-align: center; }
+.hero-logo { width: min(210px, 56vw); margin: 0 auto 18px; animation: gira-entra 1.4s ease both; }
+.hero h1 {
+  color: var(--rose-2); font-size: clamp(2.8rem, 11vw, 5rem); font-weight: 400; font-style: italic;
+  animation: sobe 1s .2s ease both;
+}
+.hero h1 b { font-weight: 500; font-style: normal; color: var(--rose); display: block; }
+.hero-sub { max-width: 440px; margin: 18px auto 30px; color: rgba(243, 225, 222, .8); animation: sobe 1s .35s ease both; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; animation: sobe 1s .5s ease both; }
+.hero-info { margin-top: 28px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(232, 200, 196, .7); animation: sobe 1s .65s ease both; }
+.hero-info span { color: var(--ouro); padding: 0 .5em; }
+
+.hero-foto { position: relative; width: min(420px, 88%); margin-inline: auto; animation: sobe 1.2s .3s ease both; }
+.hero-foto .arco {
+  border-radius: 999px 999px var(--raio) var(--raio); overflow: hidden; aspect-ratio: 3 / 4;
+  border: 1px solid rgba(201, 162, 75, .5); padding: 10px; background: rgba(232, 200, 196, .06);
+}
+.hero-foto .arco img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px 999px 12px 12px; }
+.selo {
+  position: absolute; left: -12px; bottom: 36px; background: var(--off); color: var(--vinho);
+  border-radius: 14px; padding: 12px 16px; box-shadow: var(--sombra); max-width: 190px;
+  font-size: .78rem; line-height: 1.4;
+}
+.selo strong { font-family: var(--serif); font-size: 1.25rem; display: block; font-weight: 600; }
+.estrela { color: var(--ouro); letter-spacing: .1em; }
+
+.rolar { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 22px; height: 36px; border: 1px solid rgba(232, 200, 196, .5); border-radius: 12px; display: none; }
+.rolar::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--ouro); animation: rolar 1.8s infinite; }
+
+/* Sobre */
+.sobre-grid { display: grid; gap: 48px; align-items: center; }
+.sobre-fotos { position: relative; display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+.sobre-fotos img { border-radius: var(--raio); width: 100%; height: 100%; object-fit: cover; box-shadow: var(--sombra); }
+.sobre-fotos .f1 { grid-row: span 2; aspect-ratio: 3 / 4; }
+.sobre-fotos .f2, .sobre-fotos .f3 { aspect-ratio: 4 / 3; }
+.sobre-texto h2 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin: .25em 0 .6em; }
+.sobre-texto h2 em { color: var(--ouro); font-weight: 400; }
+.sobre-texto p { color: var(--suave); }
+.pilares { list-style: none; padding: 0; margin: 28px 0 32px; display: grid; gap: 14px; }
+.pilares li { display: flex; gap: 14px; align-items: flex-start; }
+.pilares .ic { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--rose-2); color: var(--vinho); display: grid; place-items: center; }
+.pilares .ic svg { width: 20px; height: 20px; }
+.pilares strong { display: block; color: var(--vinho); font-weight: 600; font-size: .95rem; }
+.pilares small { color: var(--suave); font-size: .86rem; }
+
+/* Serviços */
+.servicos { background: linear-gradient(180deg, var(--off), var(--rose-2)); }
+.cards { display: grid; gap: 20px; }
+.card {
+  background: #fff; border-radius: var(--raio); padding: 32px 26px 26px; position: relative;
+  border: 1px solid rgba(74, 15, 36, .08); box-shadow: 0 12px 30px -24px rgba(74, 15, 36, .5);
+  display: flex; flex-direction: column; transition: transform .35s ease, box-shadow .35s ease;
+}
+.card:hover { transform: translateY(-6px); box-shadow: var(--sombra); }
+.card .ic {
+  width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--vinho); color: var(--rose); margin-bottom: 20px; position: relative;
+}
+.card .ic::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(201, 162, 75, .55); }
+.card .ic svg { width: 28px; height: 28px; }
+.card h3 { font-size: 1.9rem; }
+.card > p { color: var(--suave); font-size: .92rem; margin: .5em 0 1.2em; }
+.precos { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
+.precos li {
+  display: flex; align-items: baseline; gap: 8px; padding: 9px 0; font-size: .9rem;
+  border-bottom: 1px dashed rgba(74, 15, 36, .14);
+}
+.precos li:last-child { border-bottom: 0; }
+.precos .nome { flex: 1; }
+.precos .nome small { display: block; color: var(--suave); font-size: .76rem; }
+.precos .valor { font-weight: 600; color: var(--vinho); white-space: nowrap; }
+.precos .consulta { font-weight: 500; color: var(--ouro); font-size: .78rem; letter-spacing: .04em; white-space: nowrap; }
+.card .btn { width: 100%; }
+.card.destaque { background: var(--vinho); color: var(--rose-2); border-color: transparent; }
+.card.destaque h3 { color: var(--rose); }
+.card.destaque > p, .card.destaque .precos .nome small { color: rgba(243, 225, 222, .75); }
+.card.destaque .ic { background: var(--rose); color: var(--vinho); }
+.card.destaque .precos li { border-color: rgba(232, 200, 196, .2); }
+.card.destaque .precos .valor { color: var(--rose); }
+.tag { position: absolute; top: 18px; right: 18px; background: var(--ouro); color: var(--vinho-3); font-size: .65rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+.nota { text-align: center; color: var(--suave); font-size: .82rem; margin-top: 28px; }
+
+/* Galeria */
+.antes-depois { display: grid; gap: 28px; align-items: center; margin-bottom: 64px; }
+.ad {
+  position: relative; aspect-ratio: 4 / 5; border-radius: var(--raio); overflow: hidden;
+  box-shadow: var(--sombra); user-select: none; touch-action: pan-y; max-width: 480px; width: 100%; margin-inline: auto;
+  --pos: 50%;
+}
+.ad img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.ad .depois { clip-path: inset(0 0 0 var(--pos)); }
+.ad .linha { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: var(--off); pointer-events: none; }
+.ad .puxador {
+  position: absolute; top: 50%; left: var(--pos); width: 48px; height: 48px; margin: -24px 0 0 -24px;
+  border-radius: 50%; background: var(--off); color: var(--vinho); display: grid; place-items: center; box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+  pointer-events: none;
+}
+.ad .puxador svg { width: 22px; height: 22px; }
+.ad .rot { position: absolute; top: 14px; padding: 4px 12px; border-radius: 999px; background: rgba(46, 7, 22, .7); color: var(--rose-2); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; pointer-events: none; }
+.ad .rot.a { left: 14px; }
+.ad .rot.d { right: 14px; }
+.ad input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+.ad-texto h3 { font-size: clamp(1.9rem, 5vw, 2.6rem); margin: .3em 0 .5em; }
+.ad-texto p { color: var(--suave); }
+
+.grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.item {
+  position: relative; border: 0; padding: 0; margin: 0; border-radius: 14px; overflow: hidden; cursor: zoom-in;
+  aspect-ratio: 3 / 4; background: var(--rose-2); display: block; width: 100%;
+}
+.item img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.item:hover img, .item:focus-visible img { transform: scale(1.06); }
+.item figcaption {
+  position: absolute; inset: auto 0 0; padding: 36px 12px 12px; text-align: left;
+  background: linear-gradient(transparent, rgba(46, 7, 22, .85));
+  color: var(--rose-2); font-family: var(--serif); font-size: 1.05rem; line-height: 1.25;
+}
+.item .qtd { position: absolute; top: 10px; right: 10px; background: rgba(46, 7, 22, .7); color: var(--rose-2); font-size: .66rem; padding: 3px 8px; border-radius: 999px; letter-spacing: .08em; }
+.galeria-cta { text-align: center; margin-top: 36px; }
+
+/* Lightbox */
+.lb {
+  position: fixed; inset: 0; z-index: 100; background: rgba(20, 3, 10, .95);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 12px 24px;
+  opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
+}
+.lb.aberto { opacity: 1; visibility: visible; }
+.lb img { max-height: calc(100svh - 150px); max-width: min(100%, 900px); object-fit: contain; border-radius: 10px; transition: opacity .25s ease; }
+.lb-legenda { color: var(--rose-2); font-family: var(--serif); font-size: 1.3rem; margin-top: 14px; text-align: center; }
+.lb-legenda small { display: block; font-family: var(--sans); font-size: .72rem; letter-spacing: .2em; color: var(--ouro); margin-top: 2px; }
+.lb button {
+  position: absolute; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(232, 200, 196, .4);
+  background: rgba(46, 7, 22, .6); color: var(--rose-2); cursor: pointer; display: grid; place-items: center;
+}
+.lb button svg { width: 22px; height: 22px; }
+.lb .fechar { top: 12px; right: 12px; }
+.lb .ant { left: 10px; top: 50%; transform: translateY(-50%); }
+.lb .prox { right: 10px; top: 50%; transform: translateY(-50%); }
+
+/* Depoimentos */
+.depo { background: var(--vinho); color: var(--rose-2); position: relative; overflow: hidden; }
+.depo .titulo h2 { color: var(--rose); }
+.depo .titulo p { color: rgba(243, 225, 222, .7); }
+.depo-lista { display: grid; gap: 18px; }
+.depo-card {
+  border: 1px solid rgba(232, 200, 196, .2); border-radius: var(--raio); padding: 28px 24px;
+  background: rgba(255, 255, 255, .03); position: relative;
+}
+.depo-card::before { content: "\201C"; position: absolute; top: -8px; right: 18px; font-family: var(--serif); font-size: 6rem; color: rgba(201, 162, 75, .35); line-height: 1; }
+.depo-card blockquote { margin: 10px 0 18px; font-family: var(--serif); font-size: 1.9rem; font-style: italic; color: var(--rose-2); line-height: 1.2; }
+.depo-card figcaption { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(232, 200, 196, .7); }
+.depo-cta { text-align: center; margin-top: 40px; }
+
+/* Contato */
+.contato-grid { display: grid; gap: 28px; }
+.info { background: #fff; border-radius: var(--raio); padding: 32px 26px; box-shadow: 0 12px 30px -24px rgba(74, 15, 36, .5); border: 1px solid rgba(74, 15, 36, .08); }
+.info-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(74, 15, 36, .08); }
+.info-item:first-child { padding-top: 0; }
+.info-item:last-of-type { border-bottom: 0; }
+.info-item .ic { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--rose-2); color: var(--vinho); display: grid; place-items: center; }
+.info-item .ic svg { width: 20px; height: 20px; }
+.info-item h3 { font-family: var(--sans); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ouro); font-weight: 600; margin-bottom: 4px; }
+.info-item p { margin: 0; font-size: .95rem; }
+.info-item a { color: var(--vinho); font-weight: 500; }
+.horario { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.horario td { padding: 2px 0; }
+.horario td:last-child { text-align: right; }
+.horario .fechado { color: var(--suave); }
+.horario .hoje td { color: var(--vinho); font-weight: 600; }
+.info .acoes { display: grid; gap: 10px; margin-top: 22px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.mapa { border-radius: var(--raio); overflow: hidden; min-height: 340px; box-shadow: var(--sombra); background: var(--rose-2); }
+.mapa iframe { width: 100%; height: 100%; min-height: 340px; border: 0; display: block; filter: saturate(.85); }
+
+/* CTA final */
+.cta-final {
+  text-align: center; color: var(--rose-2); padding: 96px 0;
+  background:
+    linear-gradient(rgba(46, 7, 22, .82), rgba(46, 7, 22, .9)),
+    url("img/05-espetaculo-de-cabelo_1.webp") center 30% / cover;
+}
+.cta-final h2 { color: var(--rose-2); font-size: clamp(2.4rem, 7vw, 3.8rem); font-style: italic; font-weight: 400; margin: .3em 0 .4em; }
+.cta-final p { color: rgba(243, 225, 222, .8); max-width: 480px; margin: 0 auto 30px; }
+.cta-final .hero-ctas { animation: none; }
+
+/* Rodapé */
+.rodape { background: var(--vinho-3); color: rgba(243, 225, 222, .75); padding: 56px 0 100px; text-align: center; font-size: .88rem; }
+.rodape img { width: 120px; margin: 0 auto 18px; }
+.rodape .slogan { font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--rose); margin-bottom: 18px; }
+.rodape .insta { display: inline-flex; align-items: center; gap: 8px; color: var(--rose); text-decoration: none; font-weight: 500; letter-spacing: .06em; }
+.rodape .insta svg { width: 20px; height: 20px; }
+.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: center; margin: 22px 0; }
+.rodape nav a { text-decoration: none; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; }
+.rodape nav a:hover { color: var(--ouro); }
+.rodape small { display: block; margin-top: 22px; padding-top: 22px; border-top: 1px solid rgba(232, 200, 196, .12); font-size: .74rem; color: rgba(243, 225, 222, .5); }
+
+/* WhatsApp flutuante */
+.whats {
+  position: fixed; right: 16px; bottom: 16px; z-index: 60; width: 60px; height: 60px; border-radius: 50%;
+  background: #25D366; color: #fff; display: grid; place-items: center; box-shadow: 0 10px 28px -6px rgba(0, 0, 0, .45);
+  transition: transform .25s ease;
+}
+.whats:hover { transform: scale(1.08); }
+.whats svg { width: 32px; height: 32px; }
+.whats::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #25D366; z-index: -1; animation: pulso 2.4s infinite; }
+.whats-balao {
+  position: absolute; right: 72px; top: 50%; transform: translateY(-50%); white-space: nowrap;
+  background: #fff; color: var(--vinho); font-size: .78rem; font-weight: 500; padding: 8px 14px; border-radius: 999px;
+  box-shadow: var(--sombra); opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.whats:hover .whats-balao, .whats.mostra .whats-balao { opacity: 1; }
+
+/* Animações ao rolar */
+.revela { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--d, 0s); }
+.revela.visivel { opacity: 1; transform: none; }
+@keyframes sobe { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes gira-entra { from { opacity: 0; transform: rotate(-40deg) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes pulso { 0% { transform: scale(1); opacity: .55; } 80%, 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes rolar { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .revela { opacity: 1; transform: none; }
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .grade { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .depo-lista { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Desktop */
+@media (min-width: 960px) {
+  section { padding: 120px 0; }
+  .menu { display: flex; gap: 28px; }
+  .header .btn { display: inline-flex; }
+  .hamb, .gaveta { display: none; }
+  .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 64px; }
+  .hero-texto { text-align: left; }
+  .hero-logo { margin: 0 0 18px; width: 190px; }
+  .hero-sub { margin-left: 0; }
+  .hero-ctas { justify-content: flex-start; }
+  .hero-foto { width: 100%; max-width: 440px; }
+  .selo { left: -40px; }
+  .rolar { display: block; }
+  .sobre-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+  .cards { grid-template-columns: repeat(4, 1fr); }
+  .antes-depois { grid-template-columns: 1fr 1fr; gap: 64px; }
+  .grade { grid-template-columns: repeat(4, 1fr); }
+  .depo-lista { grid-template-columns: repeat(4, 1fr); }
+  .contato-grid { grid-template-columns: 1fr 1.25fr; gap: 32px; }
+  .mapa, .mapa iframe { min-height: 100%; }
+  .whats { right: 26px; bottom: 26px; }
+}
+</style>
+</head>
+<body>
+
+<!--
+  PENDÊNCIAS PARA CONFIRMAR COM A CLIENTE
+  1. WhatsApp principal: usando (91) 98280-1050 (Google). No Trinks aparece (91) 98102-5897.
+     Para trocar, altere WHATS_NUMERO no script ao final da página e o telefone no JSON-LD.
+  2. Tabela de preços: valores de referência do Trinks; itens "sob consulta" aguardam a tabela oficial.
+  3. Depoimentos: usar depoimentos reais com o nome das clientes (seção #depoimentos).
+  4. Domínio: ajustar o link canonical e a URL no JSON-LD quando o domínio for definido.
+-->
+
+<a class="sr-only" href="#sobre">Pular para o conteúdo</a>
+
+<header class="header" id="topo">
+  <div class="wrap">
+    <a class="marca" href="#inicio" aria-label="Studio Naza's, voltar ao início">
+      <img src="img/logo.jpg" alt="" width="46" height="46">
+      <span>Studio Naza's</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-rose js-agendar" href="#contato">Agendar</a>
+    <button class="hamb" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="gaveta"><span></span></button>
+  </div>
+</header>
+
+<nav class="gaveta" id="gaveta" aria-label="Menu">
+  <a href="#sobre">Sobre</a>
+  <a href="#servicos">Serviços</a>
+  <a href="#galeria">Galeria</a>
+  <a href="#depoimentos">Depoimentos</a>
+  <a href="#contato">Contato</a>
+  <a class="btn btn-rose js-agendar" href="#contato">Agende seu horário</a>
+</nav>
+
+<main>
+  <!-- 1. HERO -->
+  <section class="hero" id="inicio">
+    <div class="wrap hero-grid">
+      <div class="hero-texto">
+        <img class="hero-logo" src="img/logo-rose.png" width="900" height="900" alt="Logo Studio Naza's, Salão de Beleza: monograma NS">
+        <h1>Realçando <b>sua Beleza</b></h1>
+        <p class="hero-sub">Salão de beleza em Belém especializado em luzes, loiros e ruivos, escova, unhas em gel e make. Um espaço acolhedor, feito para você.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-rose js-agendar" href="#contato">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+            Agende seu horário
+          </a>
+          <a class="btn btn-linha" href="#galeria">Ver trabalhos</a>
+        </div>
+        <p class="hero-info">Terça a sábado<span>·</span>9h às 18h<span>·</span>Batista Campos</p>
+      </div>
+      <div class="hero-foto">
+        <div class="arco">
+          <img src="img/03-loiro-de-resultado_3.webp" width="1052" height="1400" alt="Cliente com cabelo longo em loiro iluminado com luzes, feito no Studio Naza's" fetchpriority="high">
+        </div>
+        <div class="selo">
+          <span class="estrela" aria-hidden="true">★★★★★</span>
+          <strong>Loiro de resultado</strong>
+          Luzes, mel e ruivo com técnica e cuidado.
+        </div>
+      </div>
+    </div>
+    <a class="rolar" href="#sobre" aria-label="Rolar para a seção Sobre"></a>
+  </section>
+
+  <!-- 2. SOBRE -->
+  <section id="sobre">
+    <div class="wrap sobre-grid">
+      <div class="sobre-fotos revela">
+        <img class="f1" src="img/07-transformacao-luzes_5-sm.webp" width="512" height="640" loading="lazy" alt="Profissional do Studio Naza's fazendo escova em uma cliente">
+        <img class="f2" src="img/08-equipe-2019_1-sm.webp" width="640" height="480" loading="lazy" alt="Equipe do Studio Naza's sorrindo no salão">
+        <img class="f3" src="img/07-transformacao-luzes_4-sm.webp" width="512" height="640" loading="lazy" alt="Profissionais atendendo clientes no salão">
+      </div>
+      <div class="sobre-texto revela" style="--d:.15s">
+        <span class="eyebrow">Sobre nós</span>
+        <h2>Carinho e dedicação em <em>cada detalhe</em></h2>
+        <p>O Studio Naza's nasceu para ser mais do que um salão: é um espaço onde cada cliente é recebida com atenção, escuta e carinho. Sob o cuidado da Nazaré Matos e de uma equipe apaixonada pelo que faz, trabalhamos para renovar o seu visual e, principalmente, a sua autoestima.</p>
+        <p>Do loiro perfeito às unhas em gel delicadas, cada serviço é pensado para realçar a beleza que já é sua, no coração de Batista Campos.</p>
+        <ul class="pilares">
+          <li>
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-9A5.2 5.2 0 0 1 12 6.5 5.2 5.2 0 0 1 21.3 12C19 16.6 12 21 12 21Z"/></svg></span>
+            <div><strong>Atendimento acolhedor</strong><small>Um espaço inclusivo e seguro para todas as pessoas, LGBTQIA+ friendly.</small></div>
+          </li>
+          <li>
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7L12 3Z"/></svg></span>
+            <div><strong>Especialistas em cor</strong><small>Luzes, loiros, mel e ruivos com diagnóstico e acabamento impecável.</small></div>
+          </li>
+          <li>
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div><strong>Horário marcado</strong><small>Agendamento prático para você aproveitar sem pressa.</small></div>
+          </li>
+        </ul>
+        <a class="btn btn-vinho js-agendar" href="#contato">Agende seu horário</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SERVIÇOS -->
+  <section class="servicos" id="servicos">
+    <div class="wrap">
+      <div class="titulo revela">
+        <span class="eyebrow">Serviços</span>
+        <h2>Tudo para você <em>brilhar</em></h2>
+        <p>Do cabelo às unhas, cuidamos de cada detalhe com produtos de qualidade e muito carinho.</p>
+      </div>
+      <div class="cards">
+        <article class="card revela">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg></span>
+          <h3>Cabelo</h3>
+          <p>Coloração, luzes e finalização para um resultado de salão todos os dias.</p>
+          <ul class="precos">
+            <li><span class="nome">Luzes e loiro</span><span class="consulta">sob avaliação</span></li>
+            <li><span class="nome">Luzes mel</span><span class="consulta">sob avaliação</span></li>
+            <li><span class="nome">Ruivo <small>coloração e retoque</small></span><span class="consulta">sob avaliação</span></li>
+            <li><span class="nome">Escova e prancha</span><span class="valor">R$ 90</span></li>
+            <li><span class="nome">Corte feminino <small>com higienização e secagem</small></span><span class="valor">R$ 70</span></li>
+            <li><span class="nome">Aplicação de coloração <small>produto da cliente</small></span><span class="valor">R$ 70</span></li>
+          </ul>
+          <a class="btn btn-linha-vinho js-agendar" data-servico="Cabelo" href="#contato">Agendar</a>
+        </article>
+
+        <article class="card revela" style="--d:.1s">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 21V10a3 3 0 0 1 6 0v11"/><path d="M9 12h6"/><path d="M10 6.5C10 4 11 3 12 3s2 1 2 3.5"/></svg></span>
+          <h3>Unhas</h3>
+          <p>Unhas em gel com acabamento natural e delicado, além de manicure e pedicure.</p>
+          <ul class="precos">
+            <li><span class="nome">Unhas em gel <small>acabamento natural</small></span><span class="consulta">sob consulta</span></li>
+            <li><span class="nome">Esmaltação em gel</span><span class="valor">R$ 20</span></li>
+            <li><span class="nome">Mão e pé</span><span class="valor">R$ 60</span></li>
+            <li><span class="nome">Esmaltação mãos ou pés</span><span class="valor">R$ 20</span></li>
+          </ul>
+          <a class="btn btn-linha-vinho js-agendar" data-servico="Unhas" href="#contato">Agendar</a>
+        </article>
+
+        <article class="card revela" style="--d:.2s">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m14 4 6 6-8.5 8.5a3 3 0 0 1-4.2 0l-1.8-1.8a3 3 0 0 1 0-4.2L14 4Z"/><path d="m4 20 2.5-2.5"/></svg></span>
+          <h3>Make &amp; sobrancelha</h3>
+          <p>Maquiagem para o dia a dia, festas e eventos, e design de sobrancelhas.</p>
+          <ul class="precos">
+            <li><span class="nome">Maquiagem</span><span class="consulta">sob consulta</span></li>
+            <li><span class="nome">Design de sobrancelha</span><span class="valor">R$ 35</span></li>
+            <li><span class="nome">Design com henna</span><span class="valor">R$ 60</span></li>
+          </ul>
+          <a class="btn btn-linha-vinho js-agendar" data-servico="Make" href="#contato">Agendar</a>
+        </article>
+
+        <article class="card destaque revela" style="--d:.3s">
+          <span class="tag">Especial</span>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M12 8v13M3 12h18M12 8S10.5 3 7.5 4 9 8 12 8Zm0 0s1.5-5 4.5-4S15 8 12 8Z"/></svg></span>
+          <h3>Combos</h3>
+          <p>Pacotes de serviços com valor especial para você se cuidar por completo.</p>
+          <ul class="precos">
+            <li><span class="nome">Cor + escova <small>sua cor renovada e finalizada</small></span><span class="consulta">consulte</span></li>
+            <li><span class="nome">Escova + mão e pé</span><span class="consulta">consulte</span></li>
+            <li><span class="nome">Make + escova <small>ideal para eventos</small></span><span class="consulta">consulte</span></li>
+          </ul>
+          <a class="btn btn-rose js-agendar" data-servico="Combos" href="#contato">Quero um combo</a>
+        </article>
+      </div>
+      <p class="nota">Valores de referência, sujeitos a avaliação conforme comprimento e volume do cabelo. Consulte-nos pelo WhatsApp.</p>
+    </div>
+  </section>
+
+  <!-- 4. GALERIA / ANTES E DEPOIS -->
+  <section id="galeria">
+    <div class="wrap">
+      <div class="titulo revela">
+        <span class="eyebrow">Galeria</span>
+        <h2>Antes <em>&amp;</em> depois</h2>
+        <p>Resultados reais de clientes reais. Toque nas fotos para ampliar.</p>
+      </div>
+
+      <div class="antes-depois">
+        <div class="ad revela" id="ad">
+          <img src="img/07-transformacao-luzes_2-sm.webp" width="512" height="640" alt="Antes: cabelo escuro e sem brilho" loading="lazy">
+          <img class="depois" src="img/07-transformacao-luzes_3-sm.webp" width="512" height="640" alt="Depois: cabelo com luzes iluminadas e escova" loading="lazy">
+          <span class="rot a">Antes</span><span class="rot d">Depois</span>
+          <span class="linha"></span>
+          <span class="puxador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span>
+          <label class="sr-only" for="ad-range">Comparar antes e depois</label>
+          <input id="ad-range" type="range" min="0" max="100" value="50">
+        </div>
+        <div class="ad-texto revela" style="--d:.15s">
+          <span class="eyebrow">Transformação</span>
+          <h3>Transformação incrível: luzes impecáveis</h3>
+          <p>Arraste para comparar. Do cabelo escuro e sem vida para um iluminado cheio de movimento, com técnica, paciência e o cuidado que o seu fio merece.</p>
+          <a class="btn btn-vinho js-agendar" data-servico="Luzes" href="#contato">Quero essa transformação</a>
+        </div>
+      </div>
+
+      <div class="grade" id="grade"></div>
+
+      <div class="galeria-cta">
+        <a class="btn btn-linha-vinho" href="https://www.instagram.com/studionazas/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+          Mais no @studionazas
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DEPOIMENTOS -->
+  <!-- TODO: substituir pelos depoimentos reais com o nome das clientes. -->
+  <section class="depo" id="depoimentos">
+    <div class="wrap">
+      <div class="titulo revela">
+        <span class="eyebrow">Feedbacks</span>
+        <h2>O que dizem <em>nossas clientes</em></h2>
+        <p>O carinho de quem sai daqui se sentindo ainda mais linda.</p>
+      </div>
+      <div class="depo-lista">
+        <figure class="depo-card revela">
+          <span class="estrela" aria-label="5 estrelas">★★★★★</span>
+          <blockquote>Lindíssimo!</blockquote>
+          <figcaption>Cliente Studio Naza's</figcaption>
+        </figure>
+        <figure class="depo-card revela" style="--d:.1s">
+          <span class="estrela" aria-label="5 estrelas">★★★★★</span>
+          <blockquote>Perfeito!</blockquote>
+          <figcaption>Cliente Studio Naza's</figcaption>
+        </figure>
+        <figure class="depo-card revela" style="--d:.2s">
+          <span class="estrela" aria-label="5 estrelas">★★★★★</span>
+          <blockquote>Belíssimo!</blockquote>
+          <figcaption>Cliente Studio Naza's</figcaption>
+        </figure>
+        <figure class="depo-card revela" style="--d:.3s">
+          <span class="estrela" aria-label="5 estrelas">★★★★★</span>
+          <blockquote>Arrasaram!</blockquote>
+          <figcaption>Cliente Studio Naza's</figcaption>
+        </figure>
+      </div>
+      <div class="depo-cta revela">
+        <a class="btn btn-linha" href="https://www.instagram.com/studionazas/" target="_blank" rel="noopener">Ver mais no Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. CONTATO -->
+  <section id="contato">
+    <div class="wrap">
+      <div class="titulo revela">
+        <span class="eyebrow">Contato</span>
+        <h2>Venha nos <em>visitar</em></h2>
+        <p>Estamos no térreo do Ed. Belém Metropolitan, em Batista Campos. Agende pelo WhatsApp e garanta seu horário.</p>
+      </div>
+      <div class="contato-grid">
+        <div class="info revela">
+          <div class="info-item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+            <div>
+              <h3>Endereço</h3>
+              <p>Ed. Belém Metropolitan, Térreo<br>Av. Conselheiro Furtado, 2391<br>Batista Campos, Belém/PA<br>CEP 66040-100</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div style="flex:1">
+              <h3>Horário</h3>
+              <table class="horario" id="horario">
+                <tr data-dia="2"><td>Terça a sábado</td><td>9h às 18h</td></tr>
+                <tr data-dia="0" class="fechado"><td>Domingo e segunda</td><td>Fechado</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5a.6.6 0 0 0 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.4ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span>
+            <div>
+              <h3>WhatsApp</h3>
+              <p><a class="js-whats" href="#">(91) 98280-1050</a></p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></span>
+            <div>
+              <h3>Instagram</h3>
+              <p><a href="https://www.instagram.com/studionazas/" target="_blank" rel="noopener">@studionazas</a></p>
+            </div>
+          </div>
+          <div class="acoes">
+            <a class="btn btn-vinho js-whats" href="#">Agende seu horário</a>
+            <a class="btn btn-linha-vinho" href="https://www.google.com/maps/dir/?api=1&amp;destination=-1.4561893,-48.4779059" target="_blank" rel="noopener">Como chegar</a>
+          </div>
+        </div>
+        <div class="mapa revela" style="--d:.15s">
+          <iframe title="Mapa: Studio Naza's no Ed. Belém Metropolitan, Belém/PA" src="https://www.google.com/maps?q=-1.4561893,-48.4779059&amp;z=17&amp;hl=pt-BR&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="wrap revela">
+      <span class="eyebrow">Studio Naza's</span>
+      <h2>Pronta para se sentir ainda mais linda?</h2>
+      <p>Garanta seu horário e venha viver a experiência Studio Naza's.</p>
+      <div class="hero-ctas" style="justify-content:center">
+        <a class="btn btn-rose js-whats" href="#">Agende seu horário</a>
+        <a class="btn btn-linha" href="https://www.trinks.com/studio-nasas" target="_blank" rel="noopener">Agendar on-line</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 7. RODAPÉ -->
+<footer class="rodape">
+  <div class="wrap">
+    <img src="img/logo-rose.png" width="900" height="900" alt="Studio Naza's, Salão de Beleza" loading="lazy">
+    <p class="slogan">Realçando sua Beleza</p>
+    <a class="insta" href="https://www.instagram.com/studionazas/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+      @studionazas
+    </a>
+    <nav aria-label="Rodapé">
+      <a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#galeria">Galeria</a><a href="#depoimentos">Depoimentos</a><a href="#contato">Contato</a>
+    </nav>
+    <p>Ed. Belém Metropolitan, Térreo · Batista Campos, Belém/PA<br>Terça a sábado, 9h às 18h</p>
+    <small>© <span id="ano">2026</span> Studio Naza's · Salão de Beleza. Todos os direitos reservados.</small>
+  </div>
+</footer>
+
+<a class="whats js-whats" href="#" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5a.6.6 0 0 0 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.4ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+  <span class="whats-balao">Agende pelo WhatsApp</span>
+</a>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada" aria-hidden="true">
+  <button class="fechar" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <button class="ant" type="button" aria-label="Foto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 5-7 7 7 7"/></svg></button>
+  <img id="lb-img" src="" alt="">
+  <p class="lb-legenda" id="lb-legenda"></p>
+  <button class="prox" type="button" aria-label="Próxima foto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 5 7 7-7 7"/></svg></button>
+</div>
+
+<script>
+(function () {
+  // Número principal do WhatsApp (somente dígitos, com DDI 55 e DDD).
+  var WHATS_NUMERO = "5591982801050";
+  var MSG = "Olá! Vim pelo site e gostaria de agendar um horário no Studio Naza's.";
+
+  function linkWhats(servico) {
+    var texto = servico ? MSG.replace("um horário", "um horário (" + servico + ")") : MSG;
+    return "https://wa.me/" + WHATS_NUMERO + "?text=" + encodeURIComponent(texto);
+  }
+
+  // Todos os botões de agendamento abrem o WhatsApp com a mensagem pronta.
+  document.querySelectorAll(".js-whats, .js-agendar").forEach(function (a) {
+    a.href = linkWhats(a.dataset.servico);
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+
+  // Header sólido ao rolar.
+  var header = document.getElementById("topo");
+  function aoRolar() { header.classList.toggle("solido", window.scrollY > 40); }
+  window.addEventListener("scroll", aoRolar, { passive: true });
+  aoRolar();
+
+  // Menu mobile.
+  var hamb = document.querySelector(".hamb");
+  function menu(abrir) {
+    document.body.classList.toggle("menu-aberto", abrir);
+    hamb.setAttribute("aria-expanded", abrir);
+    hamb.setAttribute("aria-label", abrir ? "Fechar menu" : "Abrir menu");
+    document.body.style.overflow = abrir ? "hidden" : "";
+  }
+  hamb.addEventListener("click", function () { menu(!document.body.classList.contains("menu-aberto")); });
+  document.querySelectorAll(".gaveta a").forEach(function (a) { a.addEventListener("click", function () { menu(false); }); });
+
+  // Galeria: cada álbum abre no lightbox e permite navegar por todas as fotos.
+  var albuns = [
+    { legenda: "Luzes mel 🍯", fotos: ["04-luzes-mel"] },
+    { legenda: "Aqui você tem um loiro de resultado", fotos: ["03-loiro-de-resultado_1", "03-loiro-de-resultado_2", "03-loiro-de-resultado_3"] },
+    { legenda: "Retoque de ruivo", fotos: ["01-retoque-de-ruivo_1", "01-retoque-de-ruivo_2", "01-retoque-de-ruivo_3"] },
+    { legenda: "Escova atualizada", fotos: ["02-escova-atualizada_1", "02-escova-atualizada_2", "02-escova-atualizada_3"] },
+    { legenda: "Um espetáculo de cabelo", fotos: ["05-espetaculo-de-cabelo_1", "05-espetaculo-de-cabelo_2", "05-espetaculo-de-cabelo_3"] },
+    { legenda: "Transformação incrível: luzes impecáveis", fotos: ["07-transformacao-luzes_1", "07-transformacao-luzes_2", "07-transformacao-luzes_3", "07-transformacao-luzes_4", "07-transformacao-luzes_5"] },
+    { legenda: "Unhas em gel naturais", fotos: ["06-unhas-em-gel"] },
+    { legenda: "Nossa equipe", fotos: ["08-equipe-2019_1", "08-equipe-2019_2", "08-equipe-2019_3", "08-equipe-2019_4"] }
+  ];
+  var lista = [];
+  var grade = document.getElementById("grade");
+  albuns.forEach(function (al, i) {
+    var inicio = lista.length;
+    al.fotos.forEach(function (f, j) {
+      lista.push({ src: "img/" + f + ".webp", legenda: al.legenda, pos: j + 1, total: al.fotos.length });
+    });
+    var capa = al.fotos[al.fotos.length > 2 ? al.fotos.length - 1 : 0];
+    if (al.legenda.indexOf("Transformação") === 0) capa = al.fotos[0];
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "item revela";
+    btn.style.setProperty("--d", (i % 4) * 0.08 + "s");
+    btn.setAttribute("aria-label", "Ampliar: " + al.legenda);
+    btn.innerHTML =
+      '<figure style="margin:0;height:100%">' +
+      '<img src="img/' + capa + '-sm.webp" alt="' + al.legenda.replace(/"/g, "") + ', trabalho do Studio Naza\'s" loading="lazy">' +
+      (al.fotos.length > 1 ? '<span class="qtd">' + al.fotos.length + " fotos</span>" : "") +
+      "<figcaption>" + al.legenda + "</figcaption></figure>";
+    btn.addEventListener("click", function () { abrir(inicio + al.fotos.indexOf(capa)); });
+    grade.appendChild(btn);
+  });
+
+  var lb = document.getElementById("lb");
+  var lbImg = document.getElementById("lb-img");
+  var lbLeg = document.getElementById("lb-legenda");
+  var atual = 0, ultimoFoco = null;
+  function mostrar(i) {
+    atual = (i + lista.length) % lista.length;
+    var it = lista[atual];
+    lbImg.style.opacity = 0;
+    lbImg.onload = function () { lbImg.style.opacity = 1; };
+    lbImg.src = it.src;
+    lbImg.alt = it.legenda;
+    lbLeg.innerHTML = it.legenda + (it.total > 1 ? "<small>" + it.pos + " / " + it.total + "</small>" : "");
+  }
+  function abrir(i) {
+    ultimoFoco = document.activeElement;
+    mostrar(i);
+    lb.classList.add("aberto");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    lb.querySelector(".fechar").focus();
+  }
+  function fechar() {
+    lb.classList.remove("aberto");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (ultimoFoco) ultimoFoco.focus();
+  }
+  lb.querySelector(".fechar").addEventListener("click", fechar);
+  lb.querySelector(".ant").addEventListener("click", function () { mostrar(atual - 1); });
+  lb.querySelector(".prox").addEventListener("click", function () { mostrar(atual + 1); });
+  lb.addEventListener("click", function (e) { if (e.target === lb) fechar(); });
+  document.addEventListener("keydown", function (e) {
+    if (!lb.classList.contains("aberto")) {
+      if (e.key === "Escape" && document.body.classList.contains("menu-aberto")) menu(false);
+      return;
+    }
+    if (e.key === "Escape") fechar();
+    if (e.key === "ArrowLeft") mostrar(atual - 1);
+    if (e.key === "ArrowRight") mostrar(atual + 1);
+  });
+  var toqueX = null;
+  lb.addEventListener("touchstart", function (e) { toqueX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", function (e) {
+    if (toqueX === null) return;
+    var dx = e.changedTouches[0].clientX - toqueX;
+    if (Math.abs(dx) > 50) mostrar(atual + (dx < 0 ? 1 : -1));
+    toqueX = null;
+  });
+
+  // Comparador antes e depois.
+  var ad = document.getElementById("ad");
+  var range = document.getElementById("ad-range");
+  range.addEventListener("input", function () { ad.style.setProperty("--pos", range.value + "%"); });
+
+  // Destaca o dia de hoje no horário.
+  var dia = new Date().getDay();
+  var linha = document.querySelector('#horario tr[data-dia="' + (dia >= 2 ? 2 : 0) + '"]');
+  if (linha) linha.classList.add("hoje");
+
+  // Animações ao rolar.
+  var revelaveis = document.querySelectorAll(".revela");
+  if ("IntersectionObserver" in window) {
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("visivel"); obs.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    revelaveis.forEach(function (el) { obs.observe(el); });
+  } else {
+    revelaveis.forEach(function (el) { el.classList.add("visivel"); });
+  }
+
+  // Mostra o balão do WhatsApp por alguns segundos após a abertura.
+  var whats = document.querySelector(".whats");
+  setTimeout(function () { whats.classList.add("mostra"); }, 2500);
+  setTimeout(function () { whats.classList.remove("mostra"); }, 7500);
+
+  document.getElementById("ano").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
