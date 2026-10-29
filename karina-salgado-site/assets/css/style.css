@@ -660,10 +660,37 @@ h1, h2, h3, h4 {
 }
 
 .beyond-block {
+  position: relative;
   background: var(--color-dark);
   color: #fff;
   padding: var(--section-space) 0;
   margin-top: var(--section-space);
+  overflow: hidden;
+}
+
+.beyond-block-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.beyond-block-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+.beyond-block-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.94));
+}
+
+.beyond-block > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .beyond-block .section-head p {
